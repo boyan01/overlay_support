@@ -26,6 +26,7 @@ class HomePage extends StatelessWidget {
           SizedBox(height: 16),
           _Title(title: "Notification"),
           Wrap(
+            spacing: 8,
             children: <Widget>[
               RaisedButton(
                 onPressed: () {
@@ -33,8 +34,26 @@ class HomePage extends StatelessWidget {
                       Text("this is a message from simple notification"),
                       background: Colors.green);
                 },
-                child: Text("simple"),
-              )
+                child: Text("simple Auto Dismiss"),
+              ),
+              RaisedButton(
+                onPressed: () {
+                  NotificationEntry entry;
+                  entry = showSimpleNotification(
+                    context,
+                    Text("you got a simple message"),
+                    trailing: FlatButton(
+                        textColor: Colors.yellow,
+                        onPressed: () {
+                          entry.dismiss();
+                        },
+                        child: Text('Dismiss')),
+                    background: Colors.green,
+                    autoDismiss: false,
+                  );
+                },
+                child: Text("simple fixed"),
+              ),
             ],
           )
         ],
