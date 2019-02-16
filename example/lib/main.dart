@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  kNotificationSlideDuration = const Duration(milliseconds: 500);
+  kNotificationDuration = const Duration(milliseconds: 1500);
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -23,10 +27,8 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(title: Text("overlay support example")),
       body: ListView(
         children: <Widget>[
-          SizedBox(height: 16),
-          _Title(title: "Notification"),
-          Wrap(
-            spacing: 8,
+          _Section(
+            title: 'Notification',
             children: <Widget>[
               RaisedButton(
                 onPressed: () {
@@ -55,7 +57,39 @@ class HomePage extends StatelessWidget {
                 child: Text("simple fixed"),
               ),
             ],
-          )
+          ),
+          _Section(title: 'toast', children: [
+            RaisedButton(
+              onPressed: () {
+                toast(context, 'this is a message from toast');
+              },
+              child: Text('toast'),
+            )
+          ]),
+        ],
+      ),
+    );
+  }
+}
+
+class _Section extends StatelessWidget {
+  final String title;
+
+  final List<Widget> children;
+
+  const _Section({Key key, @required this.title, @required this.children})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(height: 16),
+          _Title(title: title),
+          Wrap(spacing: 8, children: children),
         ],
       ),
     );
