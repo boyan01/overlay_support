@@ -75,8 +75,7 @@ class AnimatedOverlayState extends State<AnimatedOverlay>
     });
     return completer.future
       /*set time out more 50 milliseconds*/
-      ..timeout(widget.animationDuration ??
-          kNotificationSlideDuration + const Duration(milliseconds: 50));
+      ..timeout(widget.animationDuration + const Duration(milliseconds: 50));
   }
 
   @override
