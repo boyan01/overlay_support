@@ -1,10 +1,12 @@
 # overlay_support
 
-provider support for overlay, easy to build toast and internal notification
+provider support for overlay, easy to build toast and internal notification.
 
 ## A picture is worth a thousand words
 
-![simple notification](./_preview/simple_notification.gif)
+![simple notification](./_preview/notification.gif)
+
+![simple toast](./_preview/toast.gif)
 
 ## How To Use
 
@@ -27,10 +29,6 @@ showSimpleNotification(context,
     Text("this is a message from simple notification"),
     background: Colors.green);
 ```
-
-## TODO
-
-- [ ] add toast support
 
 ## License 
 
