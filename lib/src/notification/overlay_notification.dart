@@ -1,15 +1,7 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:overlay_support/src/notification/notification.dart';
-
-///The length of time the notification is fully displayed
-Duration kNotificationDuration = const Duration(milliseconds: 2000);
-
-///Notification display or hidden animation duration
-Duration kNotificationSlideDuration = const Duration(milliseconds: 300);
-
-typedef NotificationTapCallback = void Function(NotificationEntry entry);
+import 'package:overlay_support/src/overlay.dart';
 
 /// popup a notification at the top of screen
 ///
@@ -19,33 +11,13 @@ typedef NotificationTapCallback = void Function(NotificationEntry entry);
 NotificationEntry showOverlayNotification(
     BuildContext context, WidgetBuilder builder,
     {bool autoDismiss = true}) {
-  assert(autoDismiss != null);
-
-  GlobalKey<OverlayNotificationState> key = GlobalKey();
-  NotificationEntry notification;
-
-  final entry = OverlayEntry(builder: (context) {
+  return showOverlay(context, (context, t) {
     return Column(
       children: <Widget>[
-        OverlayNotification(
-          key: key,
-          builder: builder,
-        )
+        TopSlideNotification(builder: builder, progress: t),
       ],
     );
-  });
-
-  notification = NotificationEntry(entry, key);
-
-  Overlay.of(context).insert(entry);
-
-  if (autoDismiss) {
-    Future.delayed(kNotificationDuration + kNotificationSlideDuration)
-        .whenComplete(() {
-      notification.dismiss();
-    });
-  }
-  return notification;
+  }, autoDismiss: autoDismiss);
 }
 
 ///show a simple notification above the top of window
@@ -57,8 +29,7 @@ NotificationEntry showSimpleNotification(BuildContext context, Widget content,
     Color background,
     Color foreground,
     bool autoDismiss = true}) {
-  NotificationEntry entry;
-  entry = showOverlayNotification(context, (context) {
+  final entry = showOverlayNotification(context, (context) {
     return Material(
       color: background ?? Theme.of(context)?.accentColor,
       elevation: 16,
@@ -79,28 +50,4 @@ NotificationEntry showSimpleNotification(BuildContext context, Widget content,
     );
   }, autoDismiss: autoDismiss);
   return entry;
-}
-
-class NotificationEntry {
-  final OverlayEntry _entry;
-  final GlobalKey<OverlayNotificationState> _key;
-
-  NotificationEntry(this._entry, this._key);
-
-  bool _dismissed = false;
-
-  ///dismiss notification
-  void dismiss({bool animate = true}) {
-    if (_dismissed) {
-      return;
-    }
-    _dismissed = true;
-    if (!animate) {
-      _entry.remove();
-      return;
-    }
-    _key.currentState.hide().whenComplete(() {
-      _entry.remove();
-    });
-  }
 }
