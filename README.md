@@ -12,9 +12,8 @@ provider support for overlay, easy to build toast and internal notification.
 
 1. add dependencies into you project pubspec.yaml file
 ```
-    overlay_support:
-    git:
-      url: git://github.com/boyan01/overlay_support.git
+dependencies:
+  overlay_support: ^0.0.1
 ```
 2. import package into your dart file
 
