@@ -1,3 +1,4 @@
-## [0.0.1] - TODO: Add release date.
+## [0.0.1] - 2019/2/16
 
-* TODO: Describe initial release.
+* support notification
+* support toast
