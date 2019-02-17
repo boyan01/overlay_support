@@ -1,4 +1,4 @@
-# overlay_support
+# overlay_support [![Pub](https://img.shields.io/pub/v/overlay_support.svg)](https://pub.dartlang.org/packages/overlay_support)
 
 provider support for overlay, easy to build toast and internal notification.
 
@@ -13,7 +13,7 @@ provider support for overlay, easy to build toast and internal notification.
 1. add dependencies into you project pubspec.yaml file
 ```
 dependencies:
-  overlay_support: ^0.0.1
+  overlay_support: ^0.0.2
 ```
 2. import package into your dart file
 
