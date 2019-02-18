@@ -30,7 +30,9 @@ NotificationEntry showOverlay(
   if (autoDismiss) {
     Future.delayed(kNotificationDuration + kNotificationSlideDuration)
         .whenComplete(() {
-      notification.dismiss();
+      //ensure entry has been inserted into screen
+      WidgetsBinding.instance
+          .scheduleFrameCallback((_) => notification.dismiss());
     });
   }
   return notification;
@@ -67,15 +69,15 @@ class AnimatedOverlayState extends State<AnimatedOverlay>
 
   Future hide() {
     final completer = Completer();
-    _controller.reverse(from: _controller.value);
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.dismissed) {
         completer.complete();
       }
     });
+    _controller.reverse(from: _controller.value);
     return completer.future
-      /*set time out more 50 milliseconds*/
-      ..timeout(widget.animationDuration + const Duration(milliseconds: 50));
+      /*set time out more 1 milliseconds*/
+      ..timeout(widget.animationDuration + const Duration(milliseconds: 1));
   }
 
   @override
