@@ -76,8 +76,8 @@ class AnimatedOverlayState extends State<AnimatedOverlay>
     });
     _controller.reverse(from: _controller.value);
     return completer.future
-      /*set time out more 1 milliseconds*/
-      ..timeout(widget.animationDuration + const Duration(milliseconds: 1));
+        /*set time out more 16 milliseconds (Maybe we don not need this assertion)*/
+        /*..timeout(widget.animationDuration + const Duration(milliseconds: 16))*/;
   }
 
   @override
