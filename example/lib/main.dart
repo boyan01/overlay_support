@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:overlay_support_example/notification/ios_toast.dart';
+
+import 'notification/custom_notification.dart';
 
 void main() {
   kNotificationSlideDuration = const Duration(milliseconds: 500);
@@ -56,6 +59,26 @@ class HomePage extends StatelessWidget {
                 },
                 child: Text("simple fixed"),
               ),
+              RaisedButton(
+                onPressed: () {
+                  NotificationEntry entry;
+                  entry = showOverlayNotification(context, (_) {
+                    return MessageNotification(
+                      onReplay: () {
+                        entry.dismiss();
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return SimpleDialog(
+                                title: Text('message'),
+                              );
+                            });
+                      },
+                    );
+                  }, duration: Duration(milliseconds: 4000));
+                },
+                child: Text('custom message notification'),
+              ),
             ],
           ),
           _Section(title: 'toast', children: [
@@ -66,6 +89,22 @@ class HomePage extends StatelessWidget {
               child: Text('toast'),
             )
           ]),
+          _Section(title: 'custom', children: [
+            RaisedButton(
+              onPressed: () {
+                showOverlay(context, (_, t) {
+                  return Theme(
+                    data: Theme.of(context),
+                    child: Opacity(
+                      opacity: t,
+                      child: IosStyleToast(),
+                    ),
+                  );
+                });
+              },
+              child: Text('show iOS Style Dialog'),
+            )
+          ])
         ],
       ),
     );

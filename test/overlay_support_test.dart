@@ -27,6 +27,21 @@ void main() {
       //already hidden
       expect(find.text('message'), findsNothing);
     });
+
+    testWidgets('toast zero duration', (tester) async {
+      await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
+        return FlatButton(
+            onPressed: () {
+              toast(context, 'message', duration: Duration.zero);
+            },
+            child: Text('toast'));
+      })));
+      await tester.pump();
+      await tester.tap(find.byType(FlatButton));
+      await tester.pump();
+
+      expect(find.text('message'), findsNothing);
+    });
   });
 
   group('notification', () {
