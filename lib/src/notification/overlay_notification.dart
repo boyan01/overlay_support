@@ -5,19 +5,26 @@ import 'package:overlay_support/src/overlay.dart';
 
 /// popup a notification at the top of screen
 ///
-/// [autoDismiss] true : dismiss after duration [kNotificationSlideDuration]
-///               false: need manually close notification by [NotificationEntry#dismiss]
+///[duration] the notification display duration , overlay will auto dismiss after [duration]
+///if null , will be set to [kNotificationDuration]
+///if zero , will not auto dismiss in the future
 ///
 NotificationEntry showOverlayNotification(
-    BuildContext context, WidgetBuilder builder,
-    {bool autoDismiss = true}) {
+  BuildContext context,
+  WidgetBuilder builder, {
+  @Deprecated('use duration insted') bool autoDismiss = true,
+  Duration duration,
+}) {
+  if (duration == null) {
+    duration = autoDismiss ? kNotificationDuration : Duration.zero;
+  }
   return showOverlay(context, (context, t) {
     return Column(
       children: <Widget>[
         TopSlideNotification(builder: builder, progress: t),
       ],
     );
-  }, autoDismiss: autoDismiss);
+  }, duration: duration);
 }
 
 ///show a simple notification above the top of window
@@ -28,11 +35,12 @@ NotificationEntry showSimpleNotification(BuildContext context, Widget content,
     EdgeInsetsGeometry contentPadding,
     Color background,
     Color foreground,
+    double elevation = 16,
     bool autoDismiss = true}) {
   final entry = showOverlayNotification(context, (context) {
     return Material(
       color: background ?? Theme.of(context)?.accentColor,
-      elevation: 16,
+      elevation: elevation,
       child: SafeArea(
           child: ListTileTheme(
         textColor:
@@ -48,6 +56,6 @@ NotificationEntry showSimpleNotification(BuildContext context, Widget content,
         ),
       )),
     );
-  }, autoDismiss: autoDismiss);
+  }, duration: autoDismiss ? null : Duration.zero);
   return entry;
 }

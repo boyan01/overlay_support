@@ -8,10 +8,19 @@ typedef Widget AnimatedOverlayWidgetBuilder(
     BuildContext context, double progress);
 
 ///basic api to show overlay widget
+///
+///[duration] the overlay display duration , overlay will auto dismiss after [duration]
+///if null , will be set to [kNotificationDuration]
+///if zero , will not auto dismiss in the future
+///
 NotificationEntry showOverlay(
-    BuildContext context, AnimatedOverlayWidgetBuilder builder,
-    {bool autoDismiss = true, Curve curve}) {
-  assert(autoDismiss != null);
+  BuildContext context,
+  AnimatedOverlayWidgetBuilder builder, {
+  Curve curve,
+  Duration duration,
+}) {
+  duration ??= kNotificationDuration;
+  final autoDismiss = duration != Duration.zero;
 
   GlobalKey<AnimatedOverlayState> key = GlobalKey();
 
@@ -28,8 +37,7 @@ NotificationEntry showOverlay(
   Overlay.of(context).insert(entry);
 
   if (autoDismiss) {
-    Future.delayed(kNotificationDuration + kNotificationSlideDuration)
-        .whenComplete(() {
+    Future.delayed(duration + kNotificationSlideDuration).whenComplete(() {
       //ensure entry has been inserted into screen
       WidgetsBinding.instance
           .scheduleFrameCallback((_) => notification.dismiss());
