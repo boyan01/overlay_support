@@ -1,3 +1,8 @@
+## [0.1.0] - 2019/3/5
+
+* expose showOverlay method to help build custom overlay
+* mark autoDismiss param as Deprecate, replace by duration param
+
 ## [0.0.4] - 2019/3/2
 
 * bug fix
