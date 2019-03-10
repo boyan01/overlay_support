@@ -1,6 +1,6 @@
 # overlay_support_example
 
-exmaple for overlay_support
+example for overlay_support
 
 ## Simple Usage
 
