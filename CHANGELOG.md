@@ -1,3 +1,7 @@
+## [0.2.0] - 2019/5/15
+
+* fix: call NotificationEntry#dismiss immediately when we showNotification cause an exception
+
 ## [0.1.0] - 2019/3/5
 
 * expose showOverlay method to help build custom overlay

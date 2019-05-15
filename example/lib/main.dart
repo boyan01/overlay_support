@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:overlay_support_example/notification/ios_toast.dart';
 
 import 'notification/custom_notification.dart';
+import 'notification/ios_toast.dart';
 
 void main() {
   kNotificationSlideDuration = const Duration(milliseconds: 500);
