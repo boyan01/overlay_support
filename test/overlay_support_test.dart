@@ -87,6 +87,29 @@ void main() {
       //already hidden
       expect(find.text('message'), findsNothing);
     });
+
+    testWidgets('notification hide by manual immediately', (tester) async {
+      await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
+        return FlatButton(
+            onPressed: () {
+              final entry = showSimpleNotification(context, Text('message'),
+                  autoDismiss: false);
+              //dismiss immediately
+              entry.dismiss();
+            },
+            child: Text('notification'));
+      })));
+      await tester.pump();
+      await tester.tap(find.byType(FlatButton));
+
+      await tester.pump();
+      //we got a notification in first frame
+      expect(find.text('message'), findsOneWidget);
+
+      //but in second frame, this notification has been dismissed
+      await tester.pump();
+      expect(find.text('message'), findsNothing);
+    });
   });
 }
 
