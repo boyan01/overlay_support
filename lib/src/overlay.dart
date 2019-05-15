@@ -38,9 +38,7 @@ NotificationEntry showOverlay(
 
   if (autoDismiss) {
     Future.delayed(duration + kNotificationSlideDuration).whenComplete(() {
-      //ensure entry has been inserted into screen
-      WidgetsBinding.instance
-          .scheduleFrameCallback((_) => notification.dismiss());
+      notification.dismiss();
     });
   }
   return notification;
@@ -71,11 +69,20 @@ class AnimatedOverlayState extends State<AnimatedOverlay>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
 
+  TickerFuture _forwarding;
+
   void show() {
-    _controller.forward(from: _controller.value);
+    _forwarding = _controller.forward(from: _controller.value);
   }
 
-  Future hide() {
+  Future hide({bool waitShow = true}) async {
+    if (waitShow) {
+      if (_forwarding == null) {
+        show();
+      }
+      await _forwarding;
+    }
+
     final completer = Completer();
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.dismissed) {
@@ -83,9 +90,7 @@ class AnimatedOverlayState extends State<AnimatedOverlay>
       }
     });
     _controller.reverse(from: _controller.value);
-    return completer.future
-        /*set time out more 16 milliseconds (Maybe we don not need this assertion)*/
-        /*..timeout(widget.animationDuration + const Duration(milliseconds: 16))*/;
+    return await completer.future;
   }
 
   @override
