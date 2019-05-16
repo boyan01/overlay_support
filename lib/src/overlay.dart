@@ -34,7 +34,10 @@ NotificationEntry showOverlay(
 
   NotificationEntry notification = NotificationEntry(entry, key);
 
-  Overlay.of(context).insert(entry);
+  final OverlayState overlay = context.rootAncestorStateOfType(
+      const TypeMatcher<OverlayState>());
+  assert(overlay != null, "can not find OverlayState");
+  overlay.insert(entry);
 
   if (autoDismiss) {
     Future.delayed(duration + kNotificationSlideDuration).whenComplete(() {
