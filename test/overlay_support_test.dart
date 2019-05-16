@@ -111,6 +111,46 @@ void main() {
       expect(find.text('message'), findsNothing);
     });
   });
+
+  testWidgets('notification dismiss in duplicate Overlay', (tester) async {
+    await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
+      return FlatButton(
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return Overlay(initialEntries: [
+                OverlayEntry(builder: (context) {
+                  return Builder(
+                    builder: (context) {
+                      return RaisedButton(
+                          onPressed: () {
+                            showSimpleNotification(context, Text('message'));
+                            Navigator.pop(context);
+                          },
+                          child: Text('popup'));
+                    },
+                  );
+                })
+              ]);
+            }));
+          },
+          child: Text('new'));
+    })));
+    await tester.pump();
+    await tester.tap(find.byType(FlatButton));
+
+    await tester.pump();
+    await tester.pump();
+    await tester.tap(find.byType(RaisedButton));
+
+    await tester.pump();
+    await tester.pump();
+    expect(find.text('popup'), findsNothing);
+    expect(find.text('message'), findsOneWidget);
+
+    await tester.pump(const Duration(milliseconds: 50));
+    //already hidden
+    expect(find.text('message'), findsNothing);
+  });
 }
 
 class _FakeOverlay extends StatelessWidget {
@@ -120,17 +160,8 @@ class _FakeOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-        textDirection: TextDirection.ltr,
-        child: MediaQuery(
-          data: MediaQueryData(size: const Size(400, 800)),
-          child: Overlay(
-            initialEntries: [
-              OverlayEntry(builder: (context) {
-                return child;
-              }),
-            ],
-          ),
-        ));
+    return MaterialApp(
+      home: child,
+    );
   }
 }
