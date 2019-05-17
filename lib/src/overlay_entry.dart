@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 import 'package:overlay_support/src/overlay.dart';
 
@@ -9,16 +11,25 @@ class NotificationEntry {
 
   bool _dismissed = false;
 
+  ///to known when notification has been dismissed
+  Completer dismissEnd = Completer();
+
+  ///to known when notification hide
+  Completer dismissStart = Completer();
+
   ///dismiss notification
   ///animate = false , remove entry immediately
-  ///animate = true, remove entry with animation of [AnimatedOverlayState.hide]
+  ///animate = true, remove entry after [AnimatedOverlayState.hide]
   void dismiss({bool animate = true}) {
     if (_dismissed) {
+      //avoid duplicate call
       return;
     }
     _dismissed = true;
+    dismissStart.complete();
     if (!animate) {
       _entry.remove();
+      dismissEnd.complete();
       return;
     }
 
@@ -26,6 +37,7 @@ class NotificationEntry {
       if (_key.currentState != null) {
         _key.currentState.hide().whenComplete(() {
           _entry.remove();
+          dismissEnd.complete();
         });
       } else {
         //we need show animation before remove this entry
