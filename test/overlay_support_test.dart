@@ -46,10 +46,11 @@ void main() {
 
   group('notification', () {
     testWidgets('notification functional test', (tester) async {
+      NotificationEntry entry;
       await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
             onPressed: () {
-              showSimpleNotification(context, Text('message'));
+              entry = showSimpleNotification(context, Text('message'));
             },
             child: Text('notification'));
       })));
@@ -57,11 +58,14 @@ void main() {
       await tester.tap(find.byType(FlatButton));
       await tester.pump();
 
+      assert(!entry.dismissEnd.isCompleted);
+      assert(!entry.dismissStart.isCompleted);
       expect(find.text('message'), findsOneWidget);
       await tester.pump(const Duration(milliseconds: 50));
 
       //already hidden
       expect(find.text('message'), findsNothing);
+      assert(entry.dismissEnd.isCompleted);
     });
 
     testWidgets('notification hide manually', (tester) async {
