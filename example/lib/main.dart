@@ -100,7 +100,7 @@ class HomePage extends StatelessWidget {
                       child: IosStyleToast(),
                     ),
                   );
-                });
+                }, key: ValueKey('nihao'));
               },
               child: Text('show iOS Style Dialog'),
             )

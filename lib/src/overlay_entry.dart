@@ -1,11 +1,33 @@
-import 'dart:async';
+part of 'overlay.dart';
 
-import 'package:flutter/widgets.dart';
-import 'package:overlay_support/src/overlay.dart';
+class OverlaySupportEntry extends NotificationEntry {
+  static final _entries = <_OverlayKey, OverlaySupportEntry>{};
 
+  static OverlaySupportEntry of(BuildContext context) {
+    final key = _KeyedOverlay.of(context);
+    assert(key != null, 'can not find _OverlayKey');
+    return null;
+  }
+
+  OverlaySupportEntry(_OverlayKey key, OverlayEntry entry) : super(entry, key) {
+    assert(() {
+      if (_entries[key] != null) {
+        throw FlutterError(
+            'there still a OverlaySupportEntry associactd with $key');
+      }
+      return true;
+    }());
+    _entries[key] = this;
+    dismissEnd.future.whenComplete(() {
+      _entries.remove(key);
+    });
+  }
+}
+
+@Deprecated('use OverlaySupportEntry instead , will be remove in 1.0')
 class NotificationEntry {
   final OverlayEntry _entry;
-  final GlobalKey<AnimatedOverlayState> _key;
+  final _OverlayKey _key;
 
   NotificationEntry(this._entry, this._key);
 
@@ -17,9 +39,11 @@ class NotificationEntry {
   ///to known when notification hide
   Completer dismissStart = Completer();
 
+  GlobalKey<_AnimatedOverlayState> get _stateKey => _key._globalKey;
+
   ///dismiss notification
   ///animate = false , remove entry immediately
-  ///animate = true, remove entry after [AnimatedOverlayState.hide]
+  ///animate = true, remove entry after [_AnimatedOverlayState.hide]
   void dismiss({bool animate = true}) {
     if (_dismissed) {
       //avoid duplicate call
@@ -34,8 +58,8 @@ class NotificationEntry {
     }
 
     void animateRemove() {
-      if (_key.currentState != null) {
-        _key.currentState.hide().whenComplete(() {
+      if (_stateKey.currentState != null) {
+        _stateKey.currentState.hide().whenComplete(() {
           _entry.remove();
           dismissEnd.complete();
         });
