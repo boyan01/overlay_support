@@ -5,7 +5,7 @@ import 'package:overlay_support/overlay_support.dart';
 void main() {
   setUp(() {
     kNotificationSlideDuration = Duration.zero;
-    kNotificationDuration = const Duration(milliseconds: 20);
+    kNotificationDuration = const Duration(milliseconds: 1);
   });
 
   group('toast', () {
@@ -46,11 +46,10 @@ void main() {
 
   group('notification', () {
     testWidgets('notification functional test', (tester) async {
-      NotificationEntry entry;
       await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
             onPressed: () {
-              entry = showSimpleNotification(context, Text('message'));
+              showSimpleNotification(context, Text('message'));
             },
             child: Text('notification'));
       })));
@@ -58,18 +57,15 @@ void main() {
       await tester.tap(find.byType(FlatButton));
       await tester.pump();
 
-      assert(!entry.dismissEnd.isCompleted);
-      assert(!entry.dismissStart.isCompleted);
       expect(find.text('message'), findsOneWidget);
       await tester.pump(const Duration(milliseconds: 50));
 
       //already hidden
       expect(find.text('message'), findsNothing);
-      assert(entry.dismissEnd.isCompleted);
     });
 
     testWidgets('notification hide manually', (tester) async {
-      NotificationEntry entry;
+      OverlaySupportEntry entry;
       await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
             onPressed: () {
@@ -90,6 +86,8 @@ void main() {
 
       //already hidden
       expect(find.text('message'), findsNothing);
+
+      await tester.pump(const Duration(milliseconds: 50));
     });
 
     testWidgets('notification hide by manual immediately', (tester) async {
@@ -110,8 +108,7 @@ void main() {
       //we got a notification in first frame
       expect(find.text('message'), findsOneWidget);
 
-      //but in second frame, this notification has been dismissed
-      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
       expect(find.text('message'), findsNothing);
     });
   });

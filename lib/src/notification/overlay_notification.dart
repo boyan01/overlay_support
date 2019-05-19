@@ -9,11 +9,12 @@ import 'package:overlay_support/src/overlay.dart';
 ///if null , will be set to [kNotificationDuration]
 ///if zero , will not auto dismiss in the future
 ///
-NotificationEntry showOverlayNotification(
+OverlaySupportEntry showOverlayNotification(
   BuildContext context,
   WidgetBuilder builder, {
   @Deprecated('use duration insted') bool autoDismiss = true,
   Duration duration,
+  Key key,
 }) {
   if (duration == null) {
     duration = autoDismiss ? kNotificationDuration : Duration.zero;
@@ -24,11 +25,11 @@ NotificationEntry showOverlayNotification(
         TopSlideNotification(builder: builder, progress: t),
       ],
     );
-  }, duration: duration);
+  }, duration: duration, key: key);
 }
 
 ///show a simple notification above the top of window
-NotificationEntry showSimpleNotification(BuildContext context, Widget content,
+OverlaySupportEntry showSimpleNotification(BuildContext context, Widget content,
     {Widget leading,
     Widget subtitle,
     Widget trailing,
@@ -36,6 +37,7 @@ NotificationEntry showSimpleNotification(BuildContext context, Widget content,
     Color background,
     Color foreground,
     double elevation = 16,
+    Key key,
     bool autoDismiss = true}) {
   final entry = showOverlayNotification(context, (context) {
     return Material(
@@ -56,6 +58,6 @@ NotificationEntry showSimpleNotification(BuildContext context, Widget content,
         ),
       )),
     );
-  }, duration: autoDismiss ? null : Duration.zero);
+  }, duration: autoDismiss ? null : Duration.zero, key: key);
   return entry;
 }
