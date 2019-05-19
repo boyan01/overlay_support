@@ -21,7 +21,5 @@ class _KeyedOverlay extends StatelessWidget {
 }
 
 class _OverlayKey extends ValueKey<Key> {
-  final GlobalKey<_AnimatedOverlayState> _globalKey = GlobalKey();
-
-  _OverlayKey(Key key) : super(key);
+  _OverlayKey(Key key) : super(key ?? UniqueKey());
 }
