@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
 
@@ -26,7 +27,6 @@ OverlaySupportEntry showOverlay(
   Key key,
 }) {
   duration ??= kNotificationDuration;
-  final autoDismiss = duration != Duration.zero;
 
   final OverlayState overlay =
       context.rootAncestorStateOfType(const TypeMatcher<OverlayState>());
@@ -42,37 +42,45 @@ OverlaySupportEntry showOverlay(
     assert(element != null,
         'we got a supportEntry ,but element is null. you call reported to : \nhttps://github.com/boyan01/overlay_support/issues');
 
+    //update the overlay widget
     element.owner.lockState(() {
-      //update the overlay widget
       element.update(_AnimatedOverlay(
-          key: supportEntry._stateKey, builder: builder, curve: curve));
+        key: supportEntry._stateKey,
+        builder: builder,
+        curve: curve,
+        duration: duration,
+        animationDuration: kNotificationSlideDuration,
+      ));
     });
     return supportEntry;
   }
 
+  final stateKey = GlobalKey<_AnimatedOverlayState>();
   OverlaySupportEntry entry =
       OverlaySupportEntry(overlayKey, OverlayEntry(builder: (context) {
     return _KeyedOverlay(
       key: overlayKey,
       child: _AnimatedOverlay(
-        key: overlayKey._globalKey,
+        key: stateKey,
         builder: builder,
         curve: curve,
+        animationDuration: kNotificationSlideDuration,
+        duration: duration,
       ),
     );
-  }));
+  }), stateKey);
 
   overlay.insert(entry._entry);
 
-  if (autoDismiss) {
-    Future.delayed(duration + kNotificationSlideDuration).whenComplete(() {
-      entry.dismiss();
-    });
-  }
   return entry;
 }
 
 class _AnimatedOverlay extends StatefulWidget {
+  ///overlay display total duration
+  ///zero means overlay display forever
+  final Duration duration;
+
+  ///overlay show/hide animation duration
   final Duration animationDuration;
 
   final AnimatedOverlayWidgetBuilder builder;
@@ -81,12 +89,14 @@ class _AnimatedOverlay extends StatefulWidget {
 
   _AnimatedOverlay(
       {@required Key key,
-      Duration animationDuration,
+      @required this.animationDuration,
       Curve curve,
-      @required this.builder})
-      : animationDuration = animationDuration ?? kNotificationSlideDuration,
-        curve = curve ?? Curves.easeInOut,
-        assert(animationDuration == null || animationDuration >= Duration.zero),
+      @required this.builder,
+      @required this.duration})
+      : curve = curve ?? Curves.easeInOut,
+        assert(animationDuration != null && animationDuration >= Duration.zero),
+        assert(duration != null && duration >= Duration.zero),
+        assert(builder != null),
         super(key: key);
 
   @override
@@ -94,37 +104,72 @@ class _AnimatedOverlay extends StatefulWidget {
 }
 
 class _AnimatedOverlayState extends State<_AnimatedOverlay>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   AnimationController _controller;
 
   TickerFuture _forwarding;
 
+  CancelableOperation _showTask;
+
+  CancelableOperation _dismissTask;
+
   void show() {
+    _dismissTask?.cancel();
+    _showTask?.cancel();
+
     _forwarding = _controller.forward(from: _controller.value);
+    _showTask = CancelableOperation.fromFuture(
+        Future.wait([_forwarding, Future.delayed(widget.duration)]))
+      ..value.whenComplete(() {
+        _showTask = null;
+        if (widget.duration != Duration.zero) {
+          hide();
+        }
+      });
   }
 
-  Future hide({bool waitShow = true}) async {
-    if (waitShow) {
-      if (_forwarding == null) {
-        show();
-      }
+  void hide({bool immediately = false}) async {
+
+    _dismissTask?.cancel();
+    _showTask?.cancel();
+
+    if (!immediately && _showTask != null) {
       await _forwarding;
     }
-
-    final completer = Completer();
-    _controller.addStatusListener((status) {
-      if (status == AnimationStatus.dismissed) {
-        completer.complete();
-      }
-    });
-    _controller.reverse(from: _controller.value);
-    return await completer.future;
+    final reverse = _controller.reverse(from: _controller.value);
+    _dismissTask = CancelableOperation.fromFuture(reverse)
+      ..value.whenComplete(() {
+        OverlaySupportEntry.of(context).dismiss(animate: false);
+      });
   }
 
   @override
   void didUpdateWidget(_AnimatedOverlay oldWidget) {
     super.didUpdateWidget(oldWidget);
-    debugPrint('update widget : $widget');
+    WidgetsBinding.instance.scheduleFrameCallback((_) {
+      bool needShow = widget.duration != oldWidget.duration ||
+          widget.builder != oldWidget.builder ||
+          widget.key != oldWidget.key ||
+          widget.curve != oldWidget.curve ||
+          widget.animationDuration != oldWidget.animationDuration;
+
+      if (widget.duration != oldWidget.duration) {
+        _controller?.dispose();
+        _controller = AnimationController(
+            vsync: this,
+            duration: widget.animationDuration,
+            debugLabel: 'AnimatedOverlayShowHideAnimation');
+      }
+      if (needShow) {
+        _showTask?.cancel();
+        _dismissTask?.cancel();
+        _showTask = null;
+        _dismissTask = null;
+        setState(() {
+          show();
+        });
+      }
+    });
   }
 
   @override
@@ -139,7 +184,9 @@ class _AnimatedOverlayState extends State<_AnimatedOverlay>
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
+    _dismissTask?.cancel();
+    _showTask?.cancel();
     super.dispose();
   }
 

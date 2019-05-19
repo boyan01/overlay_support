@@ -6,10 +6,12 @@ class OverlaySupportEntry extends NotificationEntry {
   static OverlaySupportEntry of(BuildContext context) {
     final key = _KeyedOverlay.of(context);
     assert(key != null, 'can not find _OverlayKey');
-    return null;
+    return OverlaySupportEntry._entries[key];
   }
 
-  OverlaySupportEntry(_OverlayKey key, OverlayEntry entry) : super(entry, key) {
+  OverlaySupportEntry(_OverlayKey key, OverlayEntry entry,
+      GlobalKey<_AnimatedOverlayState> stateKey)
+      : super(entry, key, stateKey) {
     assert(() {
       if (_entries[key] != null) {
         throw FlutterError(
@@ -18,9 +20,6 @@ class OverlaySupportEntry extends NotificationEntry {
       return true;
     }());
     _entries[key] = this;
-    dismissEnd.future.whenComplete(() {
-      _entries.remove(key);
-    });
   }
 }
 
@@ -28,41 +27,34 @@ class OverlaySupportEntry extends NotificationEntry {
 class NotificationEntry {
   final OverlayEntry _entry;
   final _OverlayKey _key;
+  final GlobalKey<_AnimatedOverlayState> _stateKey;
 
-  NotificationEntry(this._entry, this._key);
+  NotificationEntry(this._entry, this._key, this._stateKey);
 
   bool _dismissed = false;
 
   ///to known when notification has been dismissed
-  Completer dismissEnd = Completer();
+  final Completer _dismissedCompleter = Completer();
 
-  ///to known when notification hide
-  Completer dismissStart = Completer();
-
-  GlobalKey<_AnimatedOverlayState> get _stateKey => _key._globalKey;
+  Future get dismissed => _dismissedCompleter.future;
 
   ///dismiss notification
   ///animate = false , remove entry immediately
   ///animate = true, remove entry after [_AnimatedOverlayState.hide]
   void dismiss({bool animate = true}) {
-    if (_dismissed) {
+    if ( _dismissedCompleter.isCompleted) {
       //avoid duplicate call
       return;
     }
-    _dismissed = true;
-    dismissStart.complete();
     if (!animate) {
-      _entry.remove();
-      dismissEnd.complete();
+      _dismissedCompleter.complete();
+      _dismissEntry();
       return;
     }
 
     void animateRemove() {
       if (_stateKey.currentState != null) {
-        _stateKey.currentState.hide().whenComplete(() {
-          _entry.remove();
-          dismissEnd.complete();
-        });
+        _stateKey.currentState.hide();
       } else {
         //we need show animation before remove this entry
         //so need ensure entry has been inserted into screen
@@ -71,5 +63,14 @@ class NotificationEntry {
     }
 
     animateRemove();
+  }
+
+  void _dismissEntry() {
+    if(_dismissed){
+      return;
+    }
+    _dismissed = true;
+    OverlaySupportEntry._entries.remove(_key);
+    _entry.remove();
   }
 }
