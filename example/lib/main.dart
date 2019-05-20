@@ -76,6 +76,7 @@ class HomePage extends StatelessWidget {
                       },
                     );
                   }, duration: Duration(milliseconds: 4000));
+                  entry.dismiss();
                 },
                 child: Text('custom message notification'),
               ),

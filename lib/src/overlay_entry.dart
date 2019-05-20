@@ -1,12 +1,25 @@
 part of 'overlay.dart';
 
+///
+/// [OverlaySupportEntry] represent a overlay popup by [showOverlay]
+///
+/// provide function [dismiss] to dismiss a Notification/Overlay
+///
 class OverlaySupportEntry extends NotificationEntry {
   static final _entries = <_OverlayKey, OverlaySupportEntry>{};
 
-  static OverlaySupportEntry of(BuildContext context) {
+  static OverlaySupportEntry of(BuildContext context,
+      {Widget requireForDebug}) {
     final key = _KeyedOverlay.of(context);
-    assert(key != null, 'can not find _OverlayKey');
-    return OverlaySupportEntry._entries[key];
+    assert(() {
+      if (key == null && requireForDebug != null) {
+        throw FlutterError('No _KeyedOverlay widget found.\n'
+            '${requireForDebug.runtimeType} require an _KeyedOverlay widget ancestor for correct operation.\n'
+            'if can only get OverlaySupportEntry in scope such as showOverlay() ');
+      }
+      return true;
+    }());
+    return OverlaySupportEntry?._entries[key];
   }
 
   OverlaySupportEntry(_OverlayKey key, OverlayEntry entry,
@@ -42,7 +55,7 @@ class NotificationEntry {
   ///animate = false , remove entry immediately
   ///animate = true, remove entry after [_AnimatedOverlayState.hide]
   void dismiss({bool animate = true}) {
-    if ( _dismissedCompleter.isCompleted) {
+    if (_dismissedCompleter.isCompleted) {
       //avoid duplicate call
       return;
     }
@@ -66,7 +79,7 @@ class NotificationEntry {
   }
 
   void _dismissEntry() {
-    if(_dismissed){
+    if (_dismissed) {
       return;
     }
     _dismissed = true;

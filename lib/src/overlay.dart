@@ -8,7 +8,11 @@ part 'overlay_entry.dart';
 
 part 'overlay_key.dart';
 
-///progress : from 0 - 1
+/// to build a widget with animated value
+/// [progress] : the progress of overlay animation from 0 - 1
+///
+/// a simple use case is [TopSlideNotification] in [showOverlayNotification]
+///
 typedef Widget AnimatedOverlayWidgetBuilder(
     BuildContext context, double progress);
 
@@ -17,6 +21,26 @@ typedef Widget AnimatedOverlayWidgetBuilder(
 ///[duration] the overlay display duration , overlay will auto dismiss after [duration]
 ///if null , will be set to [kNotificationDuration]
 ///if zero , will not auto dismiss in the future
+///
+///[builder], see [AnimatedOverlayWidgetBuilder]
+///
+///[curve], adjust the rate of change of an animation
+///
+///[key] to identify a OverlayEntry.
+///
+/// for example:
+/// ```dart
+/// final key = ValueKey('my overlay');
+///
+/// //step 1: popup a overlay
+/// showOverlay(context, builder, key: key);
+///
+/// //step 2: popup a overlay use the same key
+/// showOverlay(context, builder2, key: key);
+/// ```
+/// if the notification1 of step1 is showing, the step2 will update previous notification1 instead of pop up a new notification.
+///
+/// if you want notification1' exist to reject step2, please see [RejectKey]
 ///
 ///
 OverlaySupportEntry showOverlay(
@@ -142,7 +166,8 @@ class _AnimatedOverlayState extends State<_AnimatedOverlay>
     final reverse = _controller.reverse(from: _controller.value);
     _dismissTask = CancelableOperation.fromFuture(reverse)
       ..value.whenComplete(() {
-        OverlaySupportEntry.of(context).dismiss(animate: false);
+        OverlaySupportEntry.of(context, requireForDebug: widget)
+            .dismiss(animate: false);
       });
   }
 

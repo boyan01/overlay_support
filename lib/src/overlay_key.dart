@@ -27,11 +27,11 @@ class _KeyedOverlay extends StatelessWidget {
 /// final rejectKey = RejectKey('simple');
 ///
 /// //popup a simple message on top of screen
-/// showSimpleNotification(context, Text('reject example'), rejectKey);
+/// showSimpleNotification(context, Text('reject example'), key: rejectKey);
 ///
 /// //when previous notification is showing, popup again whit this key
 /// //this notification will be rejected.
-/// showSimpleNotification(context, Text('reject example 2'), rejectKey);
+/// showSimpleNotification(context, Text('reject example 2'), key: rejectKey);
 ///
 /// ```
 class RejectKey extends ValueKey<Key> {
