@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
 
@@ -30,58 +33,72 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(title: Text("overlay support example")),
       body: ListView(
         children: <Widget>[
-          _Section(
-            title: 'Notification',
-            children: <Widget>[
-              RaisedButton(
-                onPressed: () {
-                  showSimpleNotification(context,
-                      Text("this is a message from simple notification"),
-                      background: Colors.green);
-                },
-                child: Text("simple Auto Dismiss"),
-              ),
-              RaisedButton(
-                onPressed: () {
-                  NotificationEntry entry;
-                  entry = showSimpleNotification(
-                    context,
-                    Text("you got a simple message"),
-                    trailing: FlatButton(
+          _Section(title: 'Notification', children: <Widget>[
+            RaisedButton(
+              onPressed: () {
+                showSimpleNotification(
+                    context, Text("this is a message from simple notification"),
+                    background: Colors.green);
+              },
+              child: Text("Auto Dimiss Notification"),
+            ),
+            RaisedButton(
+              onPressed: () {
+                showSimpleNotification(
+                  context,
+                  Text("you got a simple message"),
+                  trailing: Builder(builder: (context) {
+                    return FlatButton(
                         textColor: Colors.yellow,
                         onPressed: () {
-                          entry.dismiss();
+                          OverlaySupportEntry.of(context).dismiss();
                         },
-                        child: Text('Dismiss')),
-                    background: Colors.green,
-                    autoDismiss: false,
+                        child: Text('Dismiss'));
+                  }),
+                  background: Colors.green,
+                  autoDismiss: false,
+                );
+              },
+              child: Text("Fixed Notification"),
+            )
+          ]),
+          _Section(title: 'Custom notification', children: <Widget>[
+            RaisedButton(
+              onPressed: () {
+                showOverlayNotification(context, (context) {
+                  return MessageNotification(
+                    message: messages[3],
+                    onReplay: () {
+                      OverlaySupportEntry.of(context).dismiss();
+                      toast(context, 'you checked this message');
+                    },
                   );
-                },
-                child: Text("simple fixed"),
-              ),
-              RaisedButton(
-                onPressed: () {
-                  NotificationEntry entry;
-                  entry = showOverlayNotification(context, (_) {
+                }, duration: Duration(milliseconds: 4000));
+              },
+              child: Text('custom message notification'),
+            ),
+            RaisedButton(
+              onPressed: () async {
+                final random = Random();
+                for (var i = 0; i < messages.length; i++) {
+                  await Future.delayed(
+                      Duration(milliseconds: 200 + random.nextInt(1000)));
+                  showOverlayNotification(context, (context) {
                     return MessageNotification(
+                      message: messages[i],
                       onReplay: () {
-                        entry.dismiss();
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return SimpleDialog(
-                                title: Text('message'),
-                              );
-                            });
+                        OverlaySupportEntry.of(context).dismiss();
+                        toast(context, 'you checked this message');
                       },
                     );
-                  }, duration: Duration(milliseconds: 4000));
-                  entry.dismiss();
-                },
-                child: Text('custom message notification'),
-              ),
-            ],
-          ),
+                  },
+                      duration: Duration(milliseconds: 4000),
+                      key: const ValueKey('message'));
+                }
+              },
+              child: Text('message sequence'),
+            ),
+          ]),
           _Section(title: 'toast', children: [
             RaisedButton(
               onPressed: () {
