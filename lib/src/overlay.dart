@@ -37,6 +37,10 @@ OverlaySupportEntry showOverlay(
 
   final supportEntry = OverlaySupportEntry._entries[overlayKey];
   if (supportEntry != null) {
+    if (key is RejectKey) {
+      //do nothing for reject key
+      return supportEntry;
+    }
     //already got a entry is showing, so we just update this notification
     final StatefulElement element = supportEntry._stateKey.currentContext;
     assert(element != null,
@@ -129,7 +133,6 @@ class _AnimatedOverlayState extends State<_AnimatedOverlay>
   }
 
   void hide({bool immediately = false}) async {
-
     _dismissTask?.cancel();
     _showTask?.cancel();
 
