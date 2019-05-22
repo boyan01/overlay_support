@@ -1,3 +1,7 @@
+## [0.3.0] - 2019/5/22
+
+* add key parameter for showOverlay
+
 ## [0.2.0] - 2019/5/15
 
 * fix: call NotificationEntry#dismiss immediately when we showNotification cause an exception
