@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:overlay_support/src/overlay.dart';
 
 void main() {
   setUp(() {
@@ -151,6 +152,129 @@ void main() {
     await tester.pump(const Duration(milliseconds: 50));
     //already hidden
     expect(find.text('message'), findsNothing);
+  });
+
+  group('key', () {
+    testWidgets('overlay with the normal key', (tester) async {
+      kNotificationSlideDuration = Duration(milliseconds: 200);
+      kNotificationDuration = const Duration(milliseconds: 1000);
+      await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
+        return Column(
+          children: <Widget>[
+            FlatButton(
+                onPressed: () {
+                  showSimpleNotification(context, Text('message'),
+                      autoDismiss: false, key: ValueKey('hello'));
+                },
+                child: Text('notification')),
+            FlatButton(
+                onPressed: () {
+                  showSimpleNotification(context, Text('message2'),
+                      autoDismiss: false, key: ValueKey('hello'));
+                },
+                child: Text('notification2')),
+          ],
+        );
+      })));
+      await tester.tap(find.text('notification'));
+      await tester.pump();
+      expect(find.text('message'), findsOneWidget);
+
+      await tester.tap(find.text('notification2'));
+      await tester.pump();
+      expect(find.text('message'), findsOneWidget);
+      expect(find.text('message2'), findsOneWidget);
+
+      await tester.pump(const Duration(milliseconds: 1250));
+    });
+
+    testWidgets('overlay with the reject key', (tester) async {
+      kNotificationSlideDuration = Duration(milliseconds: 200);
+      kNotificationDuration = const Duration(milliseconds: 1000);
+      await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
+        return Column(
+          children: <Widget>[
+            FlatButton(
+                onPressed: () {
+                  showSimpleNotification(context, Text('message'),
+                      autoDismiss: false, key: RejectKey('hello'));
+                },
+                child: Text('notification')),
+            FlatButton(
+                onPressed: () {
+                  showSimpleNotification(context, Text('message2'),
+                      autoDismiss: false, key: RejectKey('hello'));
+                },
+                child: Text('notification2')),
+          ],
+        );
+      })));
+      await tester.tap(find.text('notification'));
+      await tester.pump();
+      expect(find.text('message'), findsOneWidget);
+
+      await tester.tap(find.text('notification2'));
+      await tester.pump();
+      expect(find.text('message'), findsOneWidget);
+
+      //find nothing because message2 was been rejected
+      expect(find.text('message2'), findsNothing);
+
+      await tester.pump(const Duration(milliseconds: 1250));
+    });
+  });
+
+  group('overlay support entry', () {
+    testWidgets('find OverlaySupportEntry by context', (tester) async {
+      OverlaySupportEntry entry;
+      await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
+        return FlatButton(
+            onPressed: () {
+              showSimpleNotification(context, Text('message'),
+                  trailing: Builder(builder: (context) {
+                return FlatButton(
+                  onPressed: () {
+                    entry = OverlaySupportEntry.of(context);
+                  },
+                  child: Text('entry'),
+                );
+              }), autoDismiss: false);
+            },
+            child: Text('notification'));
+      })));
+
+      await tester.tap(find.text('notification'));
+      await tester.pump();
+      expect(find.text('entry'), findsOneWidget);
+
+      await tester.tap(find.text('entry'));
+      await tester.pump();
+
+      assert(entry != null);
+    });
+
+    testWidgets('overlay support entry dimissed', (tester) async {
+      OverlaySupportEntry entry;
+      await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
+        return FlatButton(
+            onPressed: () {
+              entry = showSimpleNotification(context, Text('message'),
+                  autoDismiss: true);
+            },
+            child: Text('notification'));
+      })));
+
+      await tester.tap(find.text('notification'));
+      await tester.pump();
+
+      assert(entry != null);
+      bool dismissed = false;
+      entry.dismissed.whenComplete(() {
+        dismissed = true;
+      });
+      await tester.pump(Duration(milliseconds: 100));
+      assert(dismissed);
+    });
   });
 }
 
