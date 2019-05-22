@@ -13,27 +13,27 @@ class _KeyedOverlay extends StatelessWidget {
   }
 }
 
-///[showOverlay] with this key will be rejected if a overlay with the same key is being showing
+///[showOverlay] with block other show with the same [ModalKey]
 ///
 /// for example
 /// ```dart
-/// final rejectKey = RejectKey('simple');
+/// final modalKey = ModalKey('simple');
 ///
 /// //popup a simple message on top of screen
-/// showSimpleNotification(context, Text('reject example'), key: rejectKey);
+/// showSimpleNotification(context, Text('modal example'), key: modalKey);
 ///
 /// //when previous notification is showing, popup again whit this key
 /// //this notification will be rejected.
-/// showSimpleNotification(context, Text('reject example 2'), key: rejectKey);
+/// showSimpleNotification(context, Text('modal example 2'), key: modalKey);
 ///
 /// ```
-class RejectKey<T> extends ValueKey<T> {
-  RejectKey(T value) : super(value);
+class ModalKey<T> extends ValueKey<T> {
+  ModalKey(T value) : super(value);
 
   @override
   bool operator ==(other) {
     if (other.runtimeType != runtimeType) return false;
-    final RejectKey<T> typedOther = other;
+    final ModalKey<T> typedOther = other;
     return value == typedOther.value;
   }
 

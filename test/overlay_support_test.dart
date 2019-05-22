@@ -188,7 +188,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 1250));
     });
 
-    testWidgets('overlay with the reject key', (tester) async {
+    testWidgets('overlay with the modal key', (tester) async {
       kNotificationSlideDuration = Duration(milliseconds: 200);
       kNotificationDuration = const Duration(milliseconds: 1000);
       await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
@@ -197,13 +197,13 @@ void main() {
             FlatButton(
                 onPressed: () {
                   showSimpleNotification(context, Text('message'),
-                      autoDismiss: false, key: RejectKey('hello'));
+                      autoDismiss: false, key: ModalKey('hello'));
                 },
                 child: Text('notification')),
             FlatButton(
                 onPressed: () {
                   showSimpleNotification(context, Text('message2'),
-                      autoDismiss: false, key: RejectKey('hello'));
+                      autoDismiss: false, key: ModalKey('hello'));
                 },
                 child: Text('notification2')),
           ],

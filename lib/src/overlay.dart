@@ -41,7 +41,7 @@ typedef Widget AnimatedOverlayWidgetBuilder(
 ///
 /// if the notification1 of step1 is showing, the step2 will dismiss previous notification1.
 ///
-/// if you want notification1' exist to reject step2, please see [RejectKey]
+/// if you want notification1' exist to prevent step2, please see [ModalKey]
 ///
 ///
 OverlaySupportEntry showOverlay(
@@ -63,7 +63,7 @@ OverlaySupportEntry showOverlay(
   final overlayKey = _OverlayKey(key);
 
   final supportEntry = OverlaySupportEntry._entries[overlayKey];
-  if (supportEntry != null && key is RejectKey) {
+  if (supportEntry != null && key is ModalKey) {
     //do nothing for reject key
     return supportEntry;
   }
