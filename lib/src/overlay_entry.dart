@@ -7,19 +7,24 @@ part of 'overlay.dart';
 ///
 class OverlaySupportEntry extends NotificationEntry {
   static final _entries = <_OverlayKey, OverlaySupportEntry>{};
+  static final _entriesGlobal = <GlobalKey, OverlaySupportEntry>{};
 
   static OverlaySupportEntry of(BuildContext context,
       {Widget requireForDebug}) {
-    final key = _KeyedOverlay.of(context);
+    final animatedOverlay = context.ancestorWidgetOfExactType(_AnimatedOverlay);
     assert(() {
-      if (key == null && requireForDebug != null) {
-        throw FlutterError('No _KeyedOverlay widget found.\n'
-            '${requireForDebug.runtimeType} require an _KeyedOverlay widget ancestor for correct operation.\n'
-            'if can only get OverlaySupportEntry in scope such as showOverlay() ');
+      if (animatedOverlay == null && requireForDebug != null) {
+        throw FlutterError('No _AnimatedOverlay widget found.\n'
+            '${requireForDebug.runtimeType} require an OverlaySupportEntry for corrent operation\n'
+            'is that you called this method from the right scope? ');
       }
       return true;
     }());
-    return OverlaySupportEntry?._entries[key];
+
+    final key = animatedOverlay.key;
+    assert(key is GlobalKey);
+
+    return OverlaySupportEntry._entriesGlobal[key];
   }
 
   OverlaySupportEntry(_OverlayKey key, OverlayEntry entry,
@@ -33,6 +38,7 @@ class OverlaySupportEntry extends NotificationEntry {
       return true;
     }());
     _entries[key] = this;
+    _entriesGlobal[stateKey] = this;
   }
 }
 
@@ -44,6 +50,7 @@ class NotificationEntry {
 
   NotificationEntry(this._entry, this._key, this._stateKey);
 
+  ///this overlay has been dismissed
   bool _dismissed = false;
 
   ///to known when notification has been dismissed
@@ -55,19 +62,22 @@ class NotificationEntry {
   ///animate = false , remove entry immediately
   ///animate = true, remove entry after [_AnimatedOverlayState.hide]
   void dismiss({bool animate = true}) {
-    if (_dismissedCompleter.isCompleted) {
+    if (_dismissed) {
       //avoid duplicate call
       return;
     }
+    _dismissed = true;
+    OverlaySupportEntry._entries.remove(_key);
     if (!animate) {
-      _dismissedCompleter.complete();
       _dismissEntry();
       return;
     }
 
     void animateRemove() {
       if (_stateKey.currentState != null) {
-        _stateKey.currentState.hide();
+        _stateKey.currentState.hide().whenComplete(() {
+          _dismissEntry();
+        });
       } else {
         //we need show animation before remove this entry
         //so need ensure entry has been inserted into screen
@@ -79,11 +89,8 @@ class NotificationEntry {
   }
 
   void _dismissEntry() {
-    if (_dismissed) {
-      return;
-    }
-    _dismissed = true;
-    OverlaySupportEntry._entries.remove(_key);
+    OverlaySupportEntry._entriesGlobal.remove(_stateKey);
     _entry.remove();
+    _dismissedCompleter.complete();
   }
 }

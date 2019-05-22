@@ -38,7 +38,8 @@ typedef Widget AnimatedOverlayWidgetBuilder(
 /// //step 2: popup a overlay use the same key
 /// showOverlay(context, builder2, key: key);
 /// ```
-/// if the notification1 of step1 is showing, the step2 will update previous notification1 instead of pop up a new notification.
+///
+/// if the notification1 of step1 is showing, the step2 will dismiss previous notification1.
 ///
 /// if you want notification1' exist to reject step2, please see [RejectKey]
 ///
@@ -50,6 +51,8 @@ OverlaySupportEntry showOverlay(
   Duration duration,
   Key key,
 }) {
+  assert(key is! GlobalKey);
+
   duration ??= kNotificationDuration;
 
   final OverlayState overlay =
@@ -60,28 +63,12 @@ OverlaySupportEntry showOverlay(
   final overlayKey = _OverlayKey(key);
 
   final supportEntry = OverlaySupportEntry._entries[overlayKey];
-  if (supportEntry != null) {
-    if (key is RejectKey) {
-      //do nothing for reject key
-      return supportEntry;
-    }
-    //already got a entry is showing, so we just update this notification
-    final StatefulElement element = supportEntry._stateKey.currentContext;
-    assert(element != null,
-        'we got a supportEntry ,but element is null. you call reported to : \nhttps://github.com/boyan01/overlay_support/issues');
-
-    //update the overlay widget
-    element.owner.lockState(() {
-      element.update(_AnimatedOverlay(
-        key: supportEntry._stateKey,
-        builder: builder,
-        curve: curve,
-        duration: duration,
-        animationDuration: kNotificationSlideDuration,
-      ));
-    });
+  if (supportEntry != null && key is RejectKey) {
+    //do nothing for reject key
     return supportEntry;
   }
+  //dismiss existed entry
+  supportEntry?.dismiss(animate: true);
 
   final stateKey = GlobalKey<_AnimatedOverlayState>();
   OverlaySupportEntry entry =
@@ -135,69 +122,21 @@ class _AnimatedOverlayState extends State<_AnimatedOverlay>
     with TickerProviderStateMixin {
   AnimationController _controller;
 
-  TickerFuture _forwarding;
-
-  CancelableOperation _showTask;
-
-  CancelableOperation _dismissTask;
+  CancelableOperation _autoHideOperation;
 
   void show() {
-    _dismissTask?.cancel();
-    _showTask?.cancel();
-
-    _forwarding = _controller.forward(from: _controller.value);
-    _showTask = CancelableOperation.fromFuture(
-        Future.wait([_forwarding, Future.delayed(widget.duration)]))
-      ..value.whenComplete(() {
-        _showTask = null;
-        if (widget.duration != Duration.zero) {
-          hide();
-        }
-      });
+    _autoHideOperation?.cancel();
+    _controller.forward(from: _controller.value);
   }
 
-  void hide({bool immediately = false}) async {
-    _dismissTask?.cancel();
-    _showTask?.cancel();
-
-    if (!immediately && _showTask != null) {
-      await _forwarding;
+  Future hide({bool immediately = false}) async {
+    if (!immediately &&
+        !_controller.isDismissed &&
+        _controller.status == AnimationStatus.forward) {
+      await _controller.forward(from: _controller.value);
     }
-    final reverse = _controller.reverse(from: _controller.value);
-    _dismissTask = CancelableOperation.fromFuture(reverse)
-      ..value.whenComplete(() {
-        OverlaySupportEntry.of(context, requireForDebug: widget)
-            .dismiss(animate: false);
-      });
-  }
-
-  @override
-  void didUpdateWidget(_AnimatedOverlay oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    WidgetsBinding.instance.scheduleFrameCallback((_) {
-      bool needShow = widget.duration != oldWidget.duration ||
-          widget.builder != oldWidget.builder ||
-          widget.key != oldWidget.key ||
-          widget.curve != oldWidget.curve ||
-          widget.animationDuration != oldWidget.animationDuration;
-
-      if (widget.duration != oldWidget.duration) {
-        _controller?.dispose();
-        _controller = AnimationController(
-            vsync: this,
-            duration: widget.animationDuration,
-            debugLabel: 'AnimatedOverlayShowHideAnimation');
-      }
-      if (needShow) {
-        _showTask?.cancel();
-        _dismissTask?.cancel();
-        _showTask = null;
-        _dismissTask = null;
-        setState(() {
-          show();
-        });
-      }
-    });
+    _autoHideOperation?.cancel();
+    await _controller.reverse(from: _controller.value);
   }
 
   @override
@@ -207,14 +146,26 @@ class _AnimatedOverlayState extends State<_AnimatedOverlay>
         duration: widget.animationDuration,
         debugLabel: 'AnimatedOverlayShowHideAnimation');
     super.initState();
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.dismissed) {
+        OverlaySupportEntry._entriesGlobal[widget.key].dismiss(animate: false);
+      } else if (status == AnimationStatus.completed) {
+        if (widget.duration > Duration.zero) {
+          _autoHideOperation =
+              CancelableOperation.fromFuture(Future.delayed(widget.duration))
+                ..value.whenComplete(() {
+                  hide();
+                });
+        }
+      }
+    });
     show();
   }
 
   @override
   void dispose() {
     _controller?.dispose();
-    _dismissTask?.cancel();
-    _showTask?.cancel();
+    _autoHideOperation?.cancel();
     super.dispose();
   }
 
