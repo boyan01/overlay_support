@@ -3,13 +3,17 @@
 [![Build Status](https://travis-ci.com/boyan01/overlay_support.svg?branch=master)](https://travis-ci.com/boyan01/overlay_support)
 [![codecov](https://codecov.io/gh/boyan01/overlay_support/branch/master/graph/badge.svg)](https://codecov.io/gh/boyan01/overlay_support)
 
-provider support for overlay, easy to build toast and internal notification.
+provider support for overlay, easy to build **toast** and **internal notification**.
 
-## A picture is worth a thousand words
+**this library support platform Android、iOS 、Linux、macOS and Windows**
 
-![simple notification](./_preview/notification.gif)
+## Three picture is worth three thousand words
 
-![simple toast](./_preview/toast.gif)
+| notification                                                 | custom notification                                          | toast                                                        |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| ![notification gif](https://boyan01.github.io/overlay_support/notification.gif) | ![custom notification gif](https://boyan01.github.io/overlay_support/notification_custom.gif) | ![toast gif](https://boyan01.github.io/overlay_support/toast.gif) |
+
+
 
 ## How To Use
 
@@ -32,6 +36,14 @@ showSimpleNotification(context,
     background: Colors.green);
 ```
 
+more instructions check here :  [example/readme.md](./example/)
+
 ## License 
 
 see License File
+
+## End
+
+if you have some suggestion or advice, please open an issue to let me known. 
+This will greatly help the improvement of the usability of this project.
+Thanks.

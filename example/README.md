@@ -20,21 +20,14 @@ toast(context, 'this is a message from toast');
 you can custom your notification widget to popup, for example:
 
 ```dart
- NotificationEntry entry;
- entry = showOverlayNotification(context, (_) {
-   return MessageNotification(
-     onReplay: () {
-       entry.dismiss();
-       showDialog(
-           context: context,
-           builder: (context) {
-             return SimpleDialog(
-               title: Text('message'),
-             );
-           });
-     },
-   );
- }, duration: Duration(milliseconds: 4000));
+showOverlayNotification(context, (context) {
+  return MessageNotification(
+    message: 'i love you',
+    onReplay: () {
+      OverlaySupportEntry.of(context).dismiss(); //use OverlaySupportEntry to dismiss overlay
+      toast(context, 'you checked this message');
+    },
+  );
  ```
  
 ```dart MessageNotification Class
@@ -84,7 +77,7 @@ for example, we need create a iOS Style Toast.
   });
 ```
 
-```dart IosStyleToast
+```dart
 class IosStyleToast extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
