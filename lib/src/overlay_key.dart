@@ -27,13 +27,13 @@ class _KeyedOverlay extends StatelessWidget {
 /// showSimpleNotification(context, Text('reject example 2'), key: rejectKey);
 ///
 /// ```
-class RejectKey extends ValueKey<Key> {
-  RejectKey(Key value) : super(value);
+class RejectKey<T> extends ValueKey<T> {
+  RejectKey(T value) : super(value);
 
   @override
   bool operator ==(other) {
     if (other.runtimeType != runtimeType) return false;
-    final RejectKey typedOther = other;
+    final RejectKey<T> typedOther = other;
     return value == typedOther.value;
   }
 
