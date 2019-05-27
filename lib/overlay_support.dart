@@ -1,7 +1,7 @@
 library overlay_support;
 
 export 'src/notification/overlay_notification.dart';
-export 'src/toast/overlay_toast.dart';
+export 'src/toast/toast.dart';
 
 export 'src/overlay.dart';
 
