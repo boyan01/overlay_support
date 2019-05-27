@@ -1,16 +1,14 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_web/foundation.dart';
+import 'package:flutter_web/material.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 import 'notification/custom_notification.dart';
 import 'notification/ios_toast.dart';
 
 void main() {
-  debugDefaultTargetPlatformOverride = TargetPlatform.android;
-
   kNotificationSlideDuration = const Duration(milliseconds: 500);
   kNotificationDuration = const Duration(milliseconds: 1500);
   runApp(MyApp());

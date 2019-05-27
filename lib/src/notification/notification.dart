@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_web/material.dart';
 
 /// a notification show in front of screen and shown at the top
 class TopSlideNotification extends StatelessWidget {

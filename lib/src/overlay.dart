@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_web/material.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 part 'overlay_entry.dart';

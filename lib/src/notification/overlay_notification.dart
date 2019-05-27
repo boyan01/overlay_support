@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_web/material.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:overlay_support/src/notification/notification.dart';
 import 'package:overlay_support/src/overlay.dart';
