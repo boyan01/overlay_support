@@ -5,7 +5,7 @@
 
 provider support for overlay, easy to build **toast** and **internal notification**.
 
-**this library support platform Android、iOS 、Linux、macOS、Windows and Web **
+**this library support platform Android、iOS 、Linux、macOS、Windows and Web**
 
 ## Interation
 
