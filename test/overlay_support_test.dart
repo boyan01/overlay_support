@@ -14,7 +14,8 @@ void main() {
       await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
             onPressed: () {
-              toast(context, 'message');
+              toast(context, 'message',
+                  duration: const Duration(milliseconds: 1));
             },
             child: Text('toast'));
       })));
