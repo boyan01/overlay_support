@@ -44,19 +44,20 @@ OverlaySupportEntry showSimpleNotification(BuildContext context, Widget content,
       color: background ?? Theme.of(context)?.accentColor,
       elevation: elevation,
       child: SafeArea(
+          bottom: false,
           child: ListTileTheme(
-        textColor:
-            foreground ?? Theme.of(context)?.accentTextTheme?.title?.color,
-        iconColor:
-            foreground ?? Theme.of(context)?.accentTextTheme?.title?.color,
-        child: ListTile(
-          leading: leading,
-          title: content,
-          subtitle: subtitle,
-          trailing: trailing,
-          contentPadding: contentPadding,
-        ),
-      )),
+            textColor:
+                foreground ?? Theme.of(context)?.accentTextTheme?.title?.color,
+            iconColor:
+                foreground ?? Theme.of(context)?.accentTextTheme?.title?.color,
+            child: ListTile(
+              leading: leading,
+              title: content,
+              subtitle: subtitle,
+              trailing: trailing,
+              contentPadding: contentPadding,
+            ),
+          )),
     );
   }, duration: autoDismiss ? null : Duration.zero, key: key);
   return entry;
