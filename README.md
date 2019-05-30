@@ -5,15 +5,11 @@
 
 provider support for overlay, easy to build **toast** and **internal notification**.
 
-**this library support platform Android、iOS 、Linux、macOS and Windows**
+**this library support platform Android、iOS 、Linux、macOS、Windows and Web**
 
-## Three picture is worth three thousand words
+## Interation
 
-| notification                                                 | custom notification                                          | toast                                                        |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ![notification gif](https://boyan01.github.io/overlay_support/notification.gif) | ![custom notification gif](https://boyan01.github.io/overlay_support/notification_custom.gif) | ![toast gif](https://boyan01.github.io/overlay_support/toast.gif) |
-
-
+If you want to see the ui effect of this library, then click here [https://boyan01.github.io/overlay_support/#/](https://boyan01.github.io/overlay_support/#/)
 
 ## How To Use
 

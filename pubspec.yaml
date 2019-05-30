@@ -11,7 +11,8 @@ environment:
 dependencies:
   flutter_web: any
   flutter_web_ui: any
-  async: ^2.2.0
+  async: ^2.1.0
+
 
 dev_dependencies:
   flutter_web_test: any
