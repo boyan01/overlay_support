@@ -17,7 +17,7 @@ before_script:
 script:
 - flutter pub upgrade
 - flutter pub run test -p chrome
-- flutter pub run peanut
+- flutter pub global run peanut
 after_success:
 - bash <(curl -s https://codecov.io/bash)
 - git checkout gh-pages
