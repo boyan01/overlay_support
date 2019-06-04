@@ -10,10 +10,15 @@ addons:
     - fonts-droid
 before_script:
 - git clone https://github.com/flutter/flutter.git -b stable --depth 1
-- ./flutter/bin/flutter doctor
+- export PATH=$PATH:flutter/bin/
+- flutter doctor
+- flutter pub global activate webdev
+- flutter pub global activate peanut
 script:
-- ./flutter/bin/cache/dart-sdk/bin/pub get
-- ./flutter/bin/cache/dart-sdk/bin/pub run test -p chrome --coverage --coverage-path=lcov.info
+- flutter pub upgrade
+- flutter pub run test -p chrome
+- peanut
+- git push origin --set-upstream gh-pages
 after_success:
 - bash <(curl -s https://codecov.io/bash)
 cache:
