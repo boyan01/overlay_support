@@ -18,9 +18,14 @@ script:
 - flutter pub upgrade
 - flutter pub run test -p chrome
 - peanut
-- git push origin --set-upstream gh-pages
 after_success:
 - bash <(curl -s https://codecov.io/bash)
+- git checkout gh-pages
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  keep_history: false
 cache:
   directories:
   - $HOME/.pub-cache
