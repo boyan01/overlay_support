@@ -13,12 +13,12 @@ before_script:
 - export PATH=$PATH:flutter/bin/
 - flutter doctor
 - flutter pub global activate webdev
-- flutter pub global activate peanut
+- export PATH=$PATH:$HOME/.pub-cache/bin
 script:
 - flutter pub upgrade
 - flutter pub run test -p chrome
 - cd example
-- flutter pub global run webdev build
+- webdev build
 - cd ..
 after_success:
 - bash <(curl -s https://codecov.io/bash)
