@@ -15,14 +15,12 @@ before_script:
 - DART_PATH=flutter/bin/cache/dart-sdk/bin
 - export PATH=$PATH:$FLUTTER_PATH:$PUB_CACHE_BIN:$DART_PATH
 - flutter doctor
-- dart --version
-- which dart
 - flutter pub global activate webdev
 script:
 - flutter pub upgrade
 - flutter pub run test -p chrome
 - cd example
-- webdev build
+- flutter pub global run webdev build
 - cd ..
 after_success:
 - bash <(curl -s https://codecov.io/bash)
