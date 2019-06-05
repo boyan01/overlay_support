@@ -11,6 +11,7 @@ addons:
 before_script:
 - git clone https://github.com/flutter/flutter.git -b stable --depth 1
 - export PATH=$PATH:flutter/bin/
+- export PATH=$PATH:flutter/bin/cache/dart-sdk/bin
 - flutter doctor
 - flutter pub global activate webdev
 - export PATH=$PATH:$HOME/.pub-cache/bin
