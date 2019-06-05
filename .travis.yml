@@ -10,9 +10,10 @@ addons:
     - fonts-droid
 before_script:
 - git clone https://github.com/flutter/flutter.git -b stable --depth 1
-- export PATH=$PATH:flutter/bin/
-- export PATH=$PATH:flutter/bin/cache/dart-sdk/bin/
-- export PATH=$PATH:$HOME/.pub-cache/bin/
+- FLUTTER_PATH=flutter/bin
+- PUB_CACHE_BIN=flutter/.pub-cache/bin
+- DART_PATH=flutter/bin/cache/dart-sdk/bin
+- export PATH=$PATH:$FLUTTER_PATH:$PUB_CACHE_BIN:$DART_PATH
 - flutter doctor
 - flutter pub global activate webdev
 script:
