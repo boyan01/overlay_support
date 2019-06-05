@@ -15,6 +15,8 @@ before_script:
 - DART_PATH=flutter/bin/cache/dart-sdk/bin
 - export PATH=$PATH:$FLUTTER_PATH:$PUB_CACHE_BIN:$DART_PATH
 - flutter doctor
+- dart --version
+- which dart
 - flutter pub global activate webdev
 script:
 - flutter pub upgrade
