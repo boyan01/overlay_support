@@ -17,15 +17,22 @@ before_script:
 script:
 - flutter pub upgrade
 - flutter pub run test -p chrome
-- flutter pub global run peanut
+- cd example
+- flutter pub global run webdev build
+- cd ..
 after_success:
 - bash <(curl -s https://codecov.io/bash)
-- git checkout gh-pages
+- cd example
+- rm -rf  build/packages/\$sdk/
+- rm -rf  build/packages/build_*
+- rm -rf  build/packages/analyzer
+- find build/ -name "*.md" | xargs rm -f
 deploy:
   provider: pages
   skip_cleanup: true
   github_token: $GITHUB_TOKEN
   keep_history: false
+  local_dir: /build/
 cache:
   directories:
   - $HOME/.pub-cache
