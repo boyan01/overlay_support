@@ -8,6 +8,7 @@ addons:
     packages:
     - libstdc++6
     - fonts-droid
+    - lib32stdc++6
 before_script:
 - git clone -b dev https://github.com/flutter/flutter.git
 - FLUTTER_PATH=flutter/bin
