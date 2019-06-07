@@ -36,5 +36,7 @@ deploy:
   github_token: $GITHUB_TOKEN
   keep_history: false
   local_dir: /build/
+  on:
+    branch: web*
 cache:
   directories:
