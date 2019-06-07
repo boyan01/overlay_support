@@ -35,7 +35,7 @@ deploy:
   skip_cleanup: true
   github_token: $GITHUB_TOKEN
   keep_history: false
-  local_dir: /build/
+  local_dir: example/build/
   on:
     branch: web*
 cache:
