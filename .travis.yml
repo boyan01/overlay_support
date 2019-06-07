@@ -10,10 +10,10 @@ addons:
     - fonts-droid
     - lib32stdc++6
 before_script:
-- git clone -b dev https://github.com/flutter/flutter.git
-- FLUTTER_PATH=flutter/bin
+- git clone -b dev https://github.com/flutter/flutter.git ~/flutter
+- FLUTTER_PATH=~/flutter/bin
 - PUB_CACHE_BIN=$HOME/.pub-cache/bin
-- DART_PATH=flutter/bin/cache/dart-sdk/bin
+- DART_PATH=~/flutter/bin/cache/dart-sdk/bin
 - export PATH=$PATH:$FLUTTER_PATH:$PUB_CACHE_BIN:$DART_PATH
 - flutter doctor
 - flutter pub global activate webdev
