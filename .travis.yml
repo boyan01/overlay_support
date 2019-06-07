@@ -20,7 +20,7 @@ script:
 - flutter pub upgrade
 - flutter pub run test -p chrome
 - cd example
-- webdev build
+- flutter pub global run webdev build
 - cd ..
 after_success:
 - bash <(curl -s https://codecov.io/bash)
