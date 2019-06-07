@@ -37,4 +37,3 @@ deploy:
   local_dir: /build/
 cache:
   directories:
-  - $HOME/.pub-cache
