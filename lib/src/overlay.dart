@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:overlay_support/overlay_support.dart';
 
+part 'overlay_animation.dart';
 part 'overlay_entry.dart';
-
 part 'overlay_key.dart';
 
 /// to build a widget with animated value
@@ -45,20 +47,25 @@ typedef Widget AnimatedOverlayWidgetBuilder(
 ///
 ///
 OverlaySupportEntry showOverlay(
-  BuildContext context,
   AnimatedOverlayWidgetBuilder builder, {
   Curve curve,
   Duration duration,
   Key key,
 }) {
   assert(key is! GlobalKey);
+  assert(_debugInitialized,
+      'OverlaySupport Not Initialized ! \nensure your app wrapped widget OverlaySupport');
 
   duration ??= kNotificationDuration;
 
-  final OverlayState overlay =
-      context.rootAncestorStateOfType(const TypeMatcher<OverlayState>());
-  assert(overlay != null,
-      "can not find OverlayState, ensure your app wrapped a widget named Overlay");
+  final OverlayState overlay = _overlayKey.currentState;
+  if (overlay == null) {
+    assert(() {
+      debugPrint('overlay not avaliable, dispose this call : $key');
+      return true;
+    }());
+    return OverlaySupportEntry.empty();
+  }
 
   final overlayKey = _OverlayKey(key);
 
@@ -72,7 +79,7 @@ OverlaySupportEntry showOverlay(
 
   final stateKey = GlobalKey<_AnimatedOverlayState>();
   OverlaySupportEntry entry =
-      OverlaySupportEntry(overlayKey, OverlayEntry(builder: (context) {
+      OverlaySupportEntry(OverlayEntry(builder: (context) {
     return _KeyedOverlay(
       key: overlayKey,
       child: _AnimatedOverlay(
@@ -83,99 +90,49 @@ OverlaySupportEntry showOverlay(
         duration: duration,
       ),
     );
-  }), stateKey);
+  }), overlayKey, stateKey);
 
   overlay.insert(entry._entry);
 
   return entry;
 }
 
-class _AnimatedOverlay extends StatefulWidget {
-  ///overlay display total duration
-  ///zero means overlay display forever
-  final Duration duration;
+final GlobalKey<OverlayState> _overlayKey =
+    GlobalKey(debugLabel: 'overlay_support');
 
-  ///overlay show/hide animation duration
-  final Duration animationDuration;
+bool _debugInitialized = false;
 
-  final AnimatedOverlayWidgetBuilder builder;
+class OverlaySupport extends StatelessWidget {
+  final Widget child;
 
-  final Curve curve;
-
-  _AnimatedOverlay(
-      {@required Key key,
-      @required this.animationDuration,
-      Curve curve,
-      @required this.builder,
-      @required this.duration})
-      : curve = curve ?? Curves.easeInOut,
-        assert(animationDuration != null && animationDuration >= Duration.zero),
-        assert(duration != null && duration >= Duration.zero),
-        assert(builder != null),
-        super(key: key);
+  const OverlaySupport({Key key, this.child}) : super(key: key);
 
   @override
-  _AnimatedOverlayState createState() => _AnimatedOverlayState();
-}
-
-class _AnimatedOverlayState extends State<_AnimatedOverlay>
-    with TickerProviderStateMixin {
-  AnimationController _controller;
-
-  CancelableOperation _autoHideOperation;
-
-  void show() {
-    _autoHideOperation?.cancel();
-    _controller.forward(from: _controller.value);
-  }
-
-  Future hide({bool immediately = false}) async {
-    if (!immediately &&
-        !_controller.isDismissed &&
-        _controller.status == AnimationStatus.forward) {
-      await _controller.forward(from: _controller.value);
-    }
-    _autoHideOperation?.cancel();
-    await _controller.reverse(from: _controller.value);
-  }
-
-  @override
-  void initState() {
-    _controller = AnimationController(
-        vsync: this,
-        duration: widget.animationDuration,
-        debugLabel: 'AnimatedOverlayShowHideAnimation');
-    super.initState();
-    _controller.addStatusListener((status) {
-      if (status == AnimationStatus.dismissed) {
-        OverlaySupportEntry._entriesGlobal[widget.key].dismiss(animate: false);
-      } else if (status == AnimationStatus.completed) {
-        if (widget.duration > Duration.zero) {
-          _autoHideOperation =
-              CancelableOperation.fromFuture(Future.delayed(widget.duration))
-                ..value.whenComplete(() {
-                  hide();
-                });
-        }
-      }
-    });
-    show();
-  }
-
-  @override
-  void dispose() {
-    _controller?.dispose();
-    _autoHideOperation?.cancel();
-    super.dispose();
+  StatelessElement createElement() {
+    _debugInitialized = true;
+    return super.createElement();
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-        animation: _controller,
-        builder: (context, _) {
-          return widget.builder(
-              context, widget.curve.transform(_controller.value));
-        });
+    assert(() {
+      if (context.ancestorWidgetOfExactType(OverlaySupport) != null) {
+        throw FlutterError(
+            'There is already an OverlaySupport in the Widget tree.');
+      }
+      return true;
+    }());
+    return MediaQuery(
+      data: MediaQueryData(),
+      child: Directionality(
+        textDirection: TextDirection.ltr,
+        child: Overlay(
+          key: _overlayKey,
+          initialEntries: [
+            OverlayEntry(builder: (context) => child),
+          ],
+        ),
+      ),
+    );
   }
 }

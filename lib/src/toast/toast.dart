@@ -18,14 +18,13 @@ class Toast {
 /// [duration] the duration to show a toast,
 /// for most situation, you can use [Toast.LENGTH_SHORT] and [Toast.LENGTH_LONG]
 ///
-void toast(BuildContext context, String message,
-    {Duration duration = Toast.LENGTH_SHORT}) {
+void toast(String message, {Duration duration = Toast.LENGTH_SHORT}) {
   if (duration <= Duration.zero) {
     //fast fail
     return;
   }
 
-  showOverlay(context, (context, t) {
+  showOverlay((context, t) {
     return Opacity(
         opacity: t,
         child: _Toast(
