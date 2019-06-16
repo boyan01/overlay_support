@@ -14,8 +14,7 @@ void main() {
       await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
             onPressed: () {
-              toast(context, 'message',
-                  duration: const Duration(milliseconds: 1));
+              toast('message', duration: const Duration(milliseconds: 1));
             },
             child: Text('toast'));
       })));
@@ -34,7 +33,7 @@ void main() {
       await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
             onPressed: () {
-              toast(context, 'message', duration: Duration.zero);
+              toast('message', duration: Duration.zero);
             },
             child: Text('toast'));
       })));
@@ -51,7 +50,7 @@ void main() {
       await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
             onPressed: () {
-              showSimpleNotification(context, Text('message'));
+              showSimpleNotification(Text('message'));
             },
             child: Text('notification'));
       })));
@@ -71,8 +70,8 @@ void main() {
       await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
             onPressed: () {
-              entry = showSimpleNotification(context, Text('message'),
-                  autoDismiss: false);
+              entry =
+                  showSimpleNotification(Text('message'), autoDismiss: false);
             },
             child: Text('notification'));
       })));
@@ -96,8 +95,8 @@ void main() {
       await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
             onPressed: () {
-              final entry = showSimpleNotification(context, Text('message'),
-                  autoDismiss: false);
+              final entry =
+                  showSimpleNotification(Text('message'), autoDismiss: false);
               //dismiss immediately
               entry.dismiss();
             },
@@ -126,7 +125,7 @@ void main() {
                     builder: (context) {
                       return RaisedButton(
                           onPressed: () {
-                            showSimpleNotification(context, Text('message'));
+                            showSimpleNotification(Text('message'));
                             Navigator.pop(context);
                           },
                           child: Text('popup'));
@@ -164,13 +163,13 @@ void main() {
           children: <Widget>[
             FlatButton(
                 onPressed: () {
-                  showSimpleNotification(context, Text('message'),
+                  showSimpleNotification(Text('message'),
                       autoDismiss: false, key: ValueKey('hello'));
                 },
                 child: Text('notification')),
             FlatButton(
                 onPressed: () {
-                  showSimpleNotification(context, Text('message2'),
+                  showSimpleNotification(Text('message2'),
                       autoDismiss: false, key: ValueKey('hello'));
                 },
                 child: Text('notification2')),
@@ -197,13 +196,13 @@ void main() {
           children: <Widget>[
             FlatButton(
                 onPressed: () {
-                  showSimpleNotification(context, Text('message'),
+                  showSimpleNotification(Text('message'),
                       autoDismiss: false, key: ModalKey('hello'));
                 },
                 child: Text('notification')),
             FlatButton(
                 onPressed: () {
-                  showSimpleNotification(context, Text('message2'),
+                  showSimpleNotification(Text('message2'),
                       autoDismiss: false, key: ModalKey('hello'));
                 },
                 child: Text('notification2')),
@@ -231,7 +230,7 @@ void main() {
       await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
             onPressed: () {
-              showSimpleNotification(context, Text('message'),
+              showSimpleNotification(Text('message'),
                   trailing: Builder(builder: (context) {
                 return FlatButton(
                   onPressed: () {
@@ -259,8 +258,8 @@ void main() {
       await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
             onPressed: () {
-              entry = showSimpleNotification(context, Text('message'),
-                  autoDismiss: true);
+              entry =
+                  showSimpleNotification(Text('message'), autoDismiss: true);
             },
             child: Text('notification'));
       })));
@@ -286,8 +285,10 @@ class _FakeOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: child,
+    return OverlaySupport(
+      child: MaterialApp(
+        home: child,
+      ),
     );
   }
 }
