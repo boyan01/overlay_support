@@ -1,3 +1,7 @@
+## [1.0.0] - 2019/6/16
+
+* do not need pass `context` parameter to popup overlay
+
 ## [0.3.0] - 2019/5/22
 
 * add key parameter for showOverlay

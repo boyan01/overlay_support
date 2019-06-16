@@ -20,11 +20,11 @@ class _KeyedOverlay extends StatelessWidget {
 /// final modalKey = ModalKey('simple');
 ///
 /// //popup a simple message on top of screen
-/// showSimpleNotification(context, Text('modal example'), key: modalKey);
+/// showSimpleNotification(Text('modal example'), key: modalKey);
 ///
 /// //when previous notification is showing, popup again whit this key
 /// //this notification will be rejected.
-/// showSimpleNotification(context, Text('modal example 2'), key: modalKey);
+/// showSimpleNotification(Text('modal example 2'), key: modalKey);
 ///
 /// ```
 class ModalKey<T> extends ValueKey<T> {

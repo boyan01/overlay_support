@@ -10,16 +10,14 @@ import 'package:overlay_support/src/overlay.dart';
 ///if zero , will not auto dismiss in the future
 ///
 OverlaySupportEntry showOverlayNotification(
-  BuildContext context,
   WidgetBuilder builder, {
-  @Deprecated('use duration insted') bool autoDismiss = true,
   Duration duration,
   Key key,
 }) {
   if (duration == null) {
-    duration = autoDismiss ? kNotificationDuration : Duration.zero;
+    duration = kNotificationDuration;
   }
-  return showOverlay(context, (context, t) {
+  return showOverlay((context, t) {
     return Column(
       children: <Widget>[
         TopSlideNotification(builder: builder, progress: t),
@@ -29,7 +27,7 @@ OverlaySupportEntry showOverlayNotification(
 }
 
 ///show a simple notification above the top of window
-OverlaySupportEntry showSimpleNotification(BuildContext context, Widget content,
+OverlaySupportEntry showSimpleNotification(Widget content,
     {Widget leading,
     Widget subtitle,
     Widget trailing,
@@ -39,7 +37,7 @@ OverlaySupportEntry showSimpleNotification(BuildContext context, Widget content,
     double elevation = 16,
     Key key,
     bool autoDismiss = true}) {
-  final entry = showOverlayNotification(context, (context) {
+  final entry = showOverlayNotification((context) {
     return Material(
       color: background ?? Theme.of(context)?.accentColor,
       elevation: elevation,

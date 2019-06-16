@@ -5,9 +5,13 @@ part of 'overlay.dart';
 ///
 /// provide function [dismiss] to dismiss a Notification/Overlay
 ///
-class OverlaySupportEntry extends NotificationEntry {
+class OverlaySupportEntry {
   static final _entries = <_OverlayKey, OverlaySupportEntry>{};
   static final _entriesGlobal = <GlobalKey, OverlaySupportEntry>{};
+
+  final OverlayEntry _entry;
+  final _OverlayKey _key;
+  final GlobalKey<_AnimatedOverlayState> _stateKey;
 
   static OverlaySupportEntry of(BuildContext context,
       {Widget requireForDebug}) {
@@ -27,28 +31,21 @@ class OverlaySupportEntry extends NotificationEntry {
     return OverlaySupportEntry._entriesGlobal[key];
   }
 
-  OverlaySupportEntry(_OverlayKey key, OverlayEntry entry,
-      GlobalKey<_AnimatedOverlayState> stateKey)
-      : super(entry, key, stateKey) {
+  OverlaySupportEntry(this._entry, this._key, this._stateKey) {
     assert(() {
-      if (_entries[key] != null) {
+      if (_entries[_key] != null) {
         throw FlutterError(
-            'there still a OverlaySupportEntry associactd with $key');
+            'there still a OverlaySupportEntry associactd with $_key');
       }
       return true;
     }());
-    _entries[key] = this;
-    _entriesGlobal[stateKey] = this;
+    _entries[_key] = this;
+    _entriesGlobal[_stateKey] = this;
   }
-}
 
-@Deprecated('use OverlaySupportEntry instead , will be remove in 1.0')
-class NotificationEntry {
-  final OverlayEntry _entry;
-  final _OverlayKey _key;
-  final GlobalKey<_AnimatedOverlayState> _stateKey;
-
-  NotificationEntry(this._entry, this._key, this._stateKey);
+  factory OverlaySupportEntry.empty() {
+    return _OverlaySupportEntryEmpty();
+  }
 
   ///this overlay has been dismissed
   bool _dismissed = false;
@@ -93,4 +90,30 @@ class NotificationEntry {
     _entry.remove();
     _dismissedCompleter.complete();
   }
+}
+
+class _OverlaySupportEntryEmpty implements OverlaySupportEntry {
+  @override
+  bool _dismissed = true;
+
+  @override
+  void _dismissEntry() {}
+
+  @override
+  Completer get _dismissedCompleter => null;
+
+  @override
+  OverlayEntry get _entry => null;
+
+  @override
+  _OverlayKey get _key => null;
+
+  @override
+  GlobalKey<_AnimatedOverlayState> get _stateKey => null;
+
+  @override
+  void dismiss({bool animate = true}) {}
+
+  @override
+  Future get dismissed => Future.value(null);
 }

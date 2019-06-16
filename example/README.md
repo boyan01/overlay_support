@@ -7,11 +7,10 @@ example for overlay_support
 popup a notification or toast:
 
 ```dart
-showSimpleNotification(context,
-                      Text("this is a message from simple notification"),
+showSimpleNotification(Text("this is a message from simple notification"),
                       background: Colors.green);
 
-toast(context, 'this is a message from toast');
+toast('this is a message from toast');
 
 ```
 
@@ -20,7 +19,7 @@ toast(context, 'this is a message from toast');
 you can custom your notification widget to popup, for example:
 
 ```dart
-showOverlayNotification(context, (context) {
+showOverlayNotification((context) {
   return MessageNotification(
     message: 'i love you',
     onReplay: () {
@@ -28,8 +27,8 @@ showOverlayNotification(context, (context) {
       toast(context, 'you checked this message');
     },
   );
- ```
- 
+```
+
 ```dart MessageNotification Class
 class MessageNotification extends StatelessWidget {
   final VoidCallback onReplay;
@@ -66,13 +65,10 @@ class MessageNotification extends StatelessWidget {
 for example, we need create a iOS Style Toast.
 
 ```dart
-  showOverlay(context, (_, t) {
-    return Theme(
-      data: Theme.of(context),
-      child: Opacity(
-        opacity: t,
-        child: IosStyleToast(),
-      ),
+  showOverlay((context, t) {
+    return Opacity(
+      opacity: t,
+      child: IosStyleToast(),
     );
   });
 ```
