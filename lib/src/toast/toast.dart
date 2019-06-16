@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:overlay_support/src/overlay.dart';
+import 'package:overlay_support/src/theme.dart';
 
 class Toast {
   Toast._private();
@@ -43,19 +44,18 @@ class _Toast extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final toastTheme = ToastTheme.of(context);
-
+    final toastTheme = OverlaySupportTheme.toast(context);
     return SafeArea(
       child: DefaultTextStyle(
-        style: TextStyle(color: toastTheme?.textColor ?? _default_label_color),
+        style: TextStyle(color: toastTheme.textColor),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Align(
-            alignment: toastTheme?.alignment ?? _default_alignment,
+            alignment: toastTheme.alignment,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Container(
-                color: toastTheme?.background ?? _default_background_color,
+                color: toastTheme?.background,
                 padding:
                     const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 child: content,
@@ -65,41 +65,5 @@ class _Toast extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-const _default_background_color = const Color(0x8ecccccc);
-
-const _default_label_color = Colors.black87;
-
-const _default_alignment = Alignment(0, 0.618);
-
-///to custom toast style
-class ToastTheme extends InheritedWidget {
-  final Color textColor;
-
-  final Color background;
-
-  final Alignment alignment;
-
-  const ToastTheme({
-    this.textColor = _default_background_color,
-    this.background = _default_label_color,
-    this.alignment = _default_alignment,
-    Key key,
-    @required Widget child,
-  })  : assert(child != null),
-        assert(textColor != null),
-        assert(background != null),
-        assert(alignment != null),
-        super(key: key, child: child);
-
-  static ToastTheme of(BuildContext context) {
-    return context.inheritFromWidgetOfExactType(ToastTheme) as ToastTheme;
-  }
-
-  @override
-  bool updateShouldNotify(ToastTheme old) {
-    return textColor != old.textColor || background != old.background;
   }
 }

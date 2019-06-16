@@ -5,11 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:overlay_support/src/theme.dart';
 
 part 'overlay_animation.dart';
-
 part 'overlay_entry.dart';
-
 part 'overlay_key.dart';
 
 /// to build a widget with animated value
@@ -140,7 +139,10 @@ bool _debugInitialized = false;
 class OverlaySupport extends StatelessWidget {
   final Widget child;
 
-  const OverlaySupport({Key key, this.child}) : super(key: key);
+  final ToastThemeData toastTheme;
+
+  const OverlaySupport({Key key, @required this.child, this.toastTheme})
+      : super(key: key);
 
   @override
   StatelessElement createElement() {
@@ -157,10 +159,13 @@ class OverlaySupport extends StatelessWidget {
       }
       return true;
     }());
-    return _OverlayFinder(key: _keyFinder, child: child);
+    return OverlaySupportTheme(
+        toastTheme: toastTheme ?? ToastThemeData(),
+        child: _OverlayFinder(key: _keyFinder, child: child));
   }
 }
 
+//stateful widget use to find the [Overlay] in decedents tree
 class _OverlayFinder extends StatefulWidget {
   final Widget child;
 
