@@ -7,7 +7,9 @@ import 'package:flutter/widgets.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 part 'overlay_animation.dart';
+
 part 'overlay_entry.dart';
+
 part 'overlay_key.dart';
 
 /// to build a widget with animated value
@@ -35,10 +37,10 @@ typedef Widget AnimatedOverlayWidgetBuilder(
 /// final key = ValueKey('my overlay');
 ///
 /// //step 1: popup a overlay
-/// showOverlay(context, builder, key: key);
+/// showOverlay(builder, key: key);
 ///
 /// //step 2: popup a overlay use the same key
-/// showOverlay(context, builder2, key: key);
+/// showOverlay(builder2, key: key);
 /// ```
 ///
 /// if the notification1 of step1 is showing, the step2 will dismiss previous notification1.
@@ -58,7 +60,7 @@ OverlaySupportEntry showOverlay(
 
   duration ??= kNotificationDuration;
 
-  final OverlayState overlay = _overlayKey.currentState;
+  final OverlayState overlay = _overlayState;
   if (overlay == null) {
     assert(() {
       debugPrint('overlay not avaliable, dispose this call : $key');
@@ -97,8 +99,41 @@ OverlaySupportEntry showOverlay(
   return entry;
 }
 
-final GlobalKey<OverlayState> _overlayKey =
+final GlobalKey<_OverlayFinderState> _keyFinder =
     GlobalKey(debugLabel: 'overlay_support');
+
+OverlayState get _overlayState {
+  final context = _keyFinder.currentContext;
+  if (context == null) return null;
+
+  NavigatorState navigator;
+  void visitor(Element element) {
+    if (navigator != null) return;
+
+    if (element.widget is Navigator) {
+      navigator = (element as StatefulElement).state;
+    } else {
+      element.visitChildElements(visitor);
+    }
+  }
+
+  context.visitChildElements(visitor);
+
+  assert(navigator != null,
+      '''It looks like you are not using Navigator in your app.
+         
+         do you wrapped you app widget like this?
+         
+         OverlaySupport(
+           child: MaterialApp(
+             title: 'Overlay Support Example',
+             home: HomePage(),
+           ),
+         )
+      
+      ''');
+  return navigator.overlay;
+}
 
 bool _debugInitialized = false;
 
@@ -122,17 +157,22 @@ class OverlaySupport extends StatelessWidget {
       }
       return true;
     }());
-    return MediaQuery(
-      data: MediaQueryData(),
-      child: Directionality(
-        textDirection: TextDirection.ltr,
-        child: Overlay(
-          key: _overlayKey,
-          initialEntries: [
-            OverlayEntry(builder: (context) => child),
-          ],
-        ),
-      ),
-    );
+    return _OverlayFinder(key: _keyFinder, child: child);
+  }
+}
+
+class _OverlayFinder extends StatefulWidget {
+  final Widget child;
+
+  const _OverlayFinder({Key key, this.child}) : super(key: key);
+
+  @override
+  _OverlayFinderState createState() => _OverlayFinderState();
+}
+
+class _OverlayFinderState extends State<_OverlayFinder> {
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
   }
 }

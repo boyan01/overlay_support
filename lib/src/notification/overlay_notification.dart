@@ -11,12 +11,11 @@ import 'package:overlay_support/src/overlay.dart';
 ///
 OverlaySupportEntry showOverlayNotification(
   WidgetBuilder builder, {
-  @Deprecated('use duration insted') bool autoDismiss = true,
   Duration duration,
   Key key,
 }) {
   if (duration == null) {
-    duration = autoDismiss ? kNotificationDuration : Duration.zero;
+    duration = kNotificationDuration;
   }
   return showOverlay((context, t) {
     return Column(
