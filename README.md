@@ -27,7 +27,7 @@ import 'package:overlay_support/overlay_support.dart';
 3. use `showSimpleNotification` method to show a notification at top of screen
 
 ```dart
-showSimpleNotification(context,
+showSimpleNotification(
     Text("this is a message from simple notification"),
     background: Colors.green);
 ```
