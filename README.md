@@ -9,7 +9,7 @@ provider support for overlay, easy to build **toast** and **internal notificatio
 
 ## Interation
 
-If you want to see the ui effect of this library, then click here [https://boyan01.github.io/overlay_support/#/](https://boyan01.github.io/overlay_support/#/)
+If you want to see the ui effect of this library, just click here [https://boyan01.github.io/overlay_support/#/](https://boyan01.github.io/overlay_support/#/)
 
 ## How To Use
 
@@ -18,15 +18,18 @@ If you want to see the ui effect of this library, then click here [https://boyan
 dependencies:
   overlay_support: latest_version
 ```
-2. import package into your dart file
-
-```dart
-import 'package:overlay_support/overlay_support.dart';
+2. wrap your AppWidget with `OverlaySupport`
+```dart #build()
+  return OverlaySupport(child: MaterialApp());
 ```
 
-3. use `showSimpleNotification` method to show a notification at top of screen
+3. show toast or simple notifications
 
 ```dart
+//popup a tost
+toast('Hello world!');
+
+//show a notification at top of screen
 showSimpleNotification(
     Text("this is a message from simple notification"),
     background: Colors.green);
