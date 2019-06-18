@@ -13,18 +13,16 @@
 // limitations under the License.
 
 import Cocoa
+import FlutterMacOS
 
 class ExampleWindow: NSWindow {
   @IBOutlet weak var flutterViewController: FLEViewController!
 
   override func awakeFromNib() {
-    PluginRegistrant.register(with: flutterViewController)
+    RegisterGeneratedPlugins(registry: flutterViewController)
 
     let assets = NSURL.fileURL(withPath: "flutter_assets", relativeTo: Bundle.main.resourceURL)
     var arguments: [String] = [];
-#if !DEBUG
-    arguments.append("--disable-dart-asserts");
-#endif
     flutterViewController.launchEngine(
       withAssetsPath: assets,
       commandLineArguments: arguments)
