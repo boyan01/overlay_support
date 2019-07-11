@@ -122,9 +122,34 @@ class HomePage extends StatelessWidget {
                       child: IosStyleToast(),
                     ),
                   );
-                }, key: ValueKey('nihao'));
+                }, key: ValueKey('hello'));
               },
               child: Text('show iOS Style Dialog'),
+            ),
+            RaisedButton(
+              onPressed: () {
+                showOverlay((context, t) {
+                  return Container(
+                    color: Color.lerp(Colors.transparent, Colors.black54, t),
+                    child: FractionalTranslation(
+                      translation: Offset.lerp(
+                          const Offset(0, -1), const Offset(0, 0), t),
+                      child: Column(
+                        children: <Widget>[
+                          MessageNotification(
+                            message: "Hello",
+                            onReplay: () {
+                              OverlaySupportEntry.of(context).dismiss();
+                            },
+                            key: ModalKey(const Object()),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }, duration: Duration.zero);
+              },
+              child: Text('show notification with barrier'),
             )
           ])
         ],
