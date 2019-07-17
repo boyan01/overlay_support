@@ -39,6 +39,9 @@ class _AnimatedOverlayState extends State<_AnimatedOverlay>
     _controller.forward(from: _controller.value);
   }
 
+  ///
+  /// [immediately] True to dismiss notification immediately.
+  ///
   Future hide({bool immediately = false}) async {
     if (!immediately &&
         !_controller.isDismissed &&

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:async/async.dart';
 import 'package:flutter/cupertino.dart';
@@ -72,10 +73,12 @@ OverlaySupportEntry showOverlay(
 
   final supportEntry = OverlaySupportEntry._entries[overlayKey];
   if (supportEntry != null && key is ModalKey) {
-    //do nothing for reject key
+    // Do nothing for modal key if there be a OverlayEntry hold the same model key
+    // and it is showing.
     return supportEntry;
   }
-  //dismiss existed entry
+
+  // If we got a showing overlay with [key], we should dismiss it before showing a new.
   supportEntry?.dismiss(animate: true);
 
   final stateKey = GlobalKey<_AnimatedOverlayState>();
@@ -165,7 +168,7 @@ class OverlaySupport extends StatelessWidget {
   }
 }
 
-//stateful widget use to find the [Overlay] in decedents tree
+/// Used to find the [Overlay] in decedents tree.
 class _OverlayFinder extends StatefulWidget {
   final Widget child;
 

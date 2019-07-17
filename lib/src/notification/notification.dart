@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 /// a notification show in front of screen and shown at the top
 class TopSlideNotification extends StatelessWidget {
@@ -12,10 +13,17 @@ class TopSlideNotification extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FractionalTranslation(
-      translation:
-          Offset.lerp(const Offset(0, -1), const Offset(0, 0), progress),
-      child: builder(context),
+    return Dismissible(
+      key: ValueKey(key),
+      onDismissed: (direction) {
+        OverlaySupportEntry.of(context, requireForDebug: this)
+            .dismiss(animate: false);
+      },
+      child: FractionalTranslation(
+        translation:
+            Offset.lerp(const Offset(0, -1), const Offset(0, 0), progress),
+        child: builder(context),
+      ),
     );
   }
 }

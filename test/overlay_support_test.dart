@@ -177,7 +177,14 @@ void main() {
         );
       })));
       await tester.tap(find.text('notification'));
-      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 10));
+      await tester.pump(const Duration(milliseconds: 10));
+      await tester.pump(const Duration(milliseconds: 10));
+      await tester.pump(const Duration(milliseconds: 10));
+      await tester.pump(const Duration(milliseconds: 10));
+      await tester.pump(const Duration(milliseconds: 10));
+      await tester.pump(const Duration(milliseconds: 10));
+      await tester.pump(const Duration(milliseconds: 10));
       expect(find.text('message'), findsOneWidget);
 
       await tester.tap(find.text('notification2'));

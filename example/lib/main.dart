@@ -86,7 +86,7 @@ class HomePage extends StatelessWidget {
                 final random = Random();
                 for (var i = 0; i < messages.length; i++) {
                   await Future.delayed(
-                      Duration(milliseconds: 200 + random.nextInt(1000)));
+                      Duration(milliseconds: 200 + random.nextInt(200)));
                   showOverlayNotification((context) {
                     return MessageNotification(
                       message: messages[i],
