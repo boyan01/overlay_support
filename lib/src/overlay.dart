@@ -78,8 +78,9 @@ OverlaySupportEntry showOverlay(
     return supportEntry;
   }
 
+  final dismissImmediately = key is TransientKey;
   // If we got a showing overlay with [key], we should dismiss it before showing a new.
-  supportEntry?.dismiss(animate: true);
+  supportEntry?.dismiss(animate: !dismissImmediately);
 
   final stateKey = GlobalKey<_AnimatedOverlayState>();
   OverlaySupportEntry entry = OverlaySupportEntry(OverlayEntry(builder: (context) {
