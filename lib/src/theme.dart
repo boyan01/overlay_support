@@ -21,7 +21,7 @@ class ToastThemeData {
   }) {
     return ToastThemeData.raw(
         textColor: textColor ?? Colors.black87,
-        background: background ?? const Color(0x8ecccccc),
+        background: background ?? const Color(0xfceeeeee),
         alignment: alignment ?? Alignment(0, 0.618));
   }
 
