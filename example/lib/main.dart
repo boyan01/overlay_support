@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:overlay_support_example/notification/custom_animation.dart';
 
 import 'notification/custom_notification.dart';
 import 'notification/ios_toast.dart';
@@ -41,9 +42,14 @@ class HomePage extends StatelessWidget {
           _Section(title: 'Notification', children: <Widget>[
             RaisedButton(
               onPressed: () {
-                showSimpleNotification(Text("this is a message from simple notification"), background: Colors.green);
+                showSimpleNotification(
+                  Text("this is a message from simple notification"),
+                  background: Colors.green,
+                );
               },
-              child: Text("Auto Dimiss Notification"),
+              child: Text(
+                "Auto Dimiss Notification",
+              ),
             ),
             RaisedButton(
               onPressed: () {
@@ -121,6 +127,14 @@ class HomePage extends StatelessWidget {
                 }, key: ValueKey('hello'));
               },
               child: Text('show iOS Style Dialog'),
+            ),
+            RaisedButton(
+              onPressed: () {
+                showOverlay((context, t) {
+                  return CustomAnimationToast(value: t);
+                }, key: ValueKey('hello'), curve: Curves.decelerate);
+              },
+              child: Text('show custom animation overlay'),
             ),
             RaisedButton(
               onPressed: () {
