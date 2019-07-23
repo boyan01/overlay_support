@@ -26,15 +26,8 @@ void toast(String message, {Duration duration = Toast.LENGTH_SHORT}) {
   }
 
   showOverlay((context, t) {
-    return Opacity(
-        opacity: t,
-        child: _Toast(
-          content: Text(message),
-        ));
-  },
-      curve: Curves.ease,
-      key: const ValueKey('overlay_toast'),
-      duration: duration);
+    return Opacity(opacity: t, child: _Toast(content: Text(message)));
+  }, curve: Curves.ease, key: const ValueKey('overlay_toast'), duration: duration);
 }
 
 class _Toast extends StatelessWidget {
@@ -56,8 +49,7 @@ class _Toast extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               child: Container(
                 color: toastTheme?.background,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 child: content,
               ),
             ),

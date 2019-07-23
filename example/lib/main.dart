@@ -41,9 +41,7 @@ class HomePage extends StatelessWidget {
           _Section(title: 'Notification', children: <Widget>[
             RaisedButton(
               onPressed: () {
-                showSimpleNotification(
-                    Text("this is a message from simple notification"),
-                    background: Colors.green);
+                showSimpleNotification(Text("this is a message from simple notification"), background: Colors.green);
               },
               child: Text("Auto Dimiss Notification"),
             ),
@@ -61,6 +59,7 @@ class HomePage extends StatelessWidget {
                   }),
                   background: Colors.green,
                   autoDismiss: false,
+                  slideDismiss: true,
                 );
               },
               child: Text("Fixed Notification"),
@@ -85,8 +84,7 @@ class HomePage extends StatelessWidget {
               onPressed: () async {
                 final random = Random();
                 for (var i = 0; i < messages.length; i++) {
-                  await Future.delayed(
-                      Duration(milliseconds: 200 + random.nextInt(200)));
+                  await Future.delayed(Duration(milliseconds: 200 + random.nextInt(200)));
                   showOverlayNotification((context) {
                     return MessageNotification(
                       message: messages[i],
@@ -95,9 +93,7 @@ class HomePage extends StatelessWidget {
                         toast('you checked this message');
                       },
                     );
-                  },
-                      duration: Duration(milliseconds: 4000),
-                      key: const ValueKey('message'));
+                  }, duration: Duration(milliseconds: 4000), key: const ValueKey('message'));
                 }
               },
               child: Text('message sequence'),
@@ -132,8 +128,7 @@ class HomePage extends StatelessWidget {
                   return Container(
                     color: Color.lerp(Colors.transparent, Colors.black54, t),
                     child: FractionalTranslation(
-                      translation: Offset.lerp(
-                          const Offset(0, -1), const Offset(0, 0), t),
+                      translation: Offset.lerp(const Offset(0, -1), const Offset(0, 0), t),
                       child: Column(
                         children: <Widget>[
                           MessageNotification(
@@ -163,8 +158,7 @@ class _Section extends StatelessWidget {
 
   final List<Widget> children;
 
-  const _Section({Key key, @required this.title, @required this.children})
-      : super(key: key);
+  const _Section({Key key, @required this.title, @required this.children}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

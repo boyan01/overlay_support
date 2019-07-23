@@ -13,8 +13,7 @@ class OverlaySupportEntry {
   final _OverlayKey _key;
   final GlobalKey<_AnimatedOverlayState> _stateKey;
 
-  static OverlaySupportEntry of(BuildContext context,
-      {Widget requireForDebug}) {
+  static OverlaySupportEntry of(BuildContext context, {Widget requireForDebug}) {
     final animatedOverlay = context.ancestorWidgetOfExactType(_AnimatedOverlay);
     assert(() {
       if (animatedOverlay == null && requireForDebug != null) {
@@ -34,8 +33,7 @@ class OverlaySupportEntry {
   OverlaySupportEntry(this._entry, this._key, this._stateKey) {
     assert(() {
       if (_entries[_key] != null) {
-        throw FlutterError(
-            'there still a OverlaySupportEntry associactd with $_key');
+        throw FlutterError('there still a OverlaySupportEntry associactd with $_key');
       }
       return true;
     }());

@@ -26,9 +26,8 @@ class MessageNotification extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 4),
       child: SafeArea(
         child: ListTile(
-          leading: SizedBox.fromSize(
-              size: const Size(40, 40),
-              child: ClipOval(child: Image.asset('assets/avatar.png'))),
+          leading:
+              SizedBox.fromSize(size: const Size(40, 40), child: ClipOval(child: Image.asset('assets/avatar.png'))),
           title: Text('Boyan'),
           subtitle: Text(message),
           trailing: IconButton(

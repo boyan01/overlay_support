@@ -9,7 +9,9 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:overlay_support/src/theme.dart';
 
 part 'overlay_animation.dart';
+
 part 'overlay_entry.dart';
+
 part 'overlay_key.dart';
 
 /// to build a widget with animated value
@@ -17,8 +19,7 @@ part 'overlay_key.dart';
 ///
 /// a simple use case is [TopSlideNotification] in [showOverlayNotification]
 ///
-typedef Widget AnimatedOverlayWidgetBuilder(
-    BuildContext context, double progress);
+typedef Widget AnimatedOverlayWidgetBuilder(BuildContext context, double progress);
 
 ///basic api to show overlay widget
 ///
@@ -55,8 +56,7 @@ OverlaySupportEntry showOverlay(
   Key key,
 }) {
   assert(key is! GlobalKey);
-  assert(_debugInitialized,
-      'OverlaySupport Not Initialized ! \nensure your app wrapped widget OverlaySupport');
+  assert(_debugInitialized, 'OverlaySupport Not Initialized ! \nensure your app wrapped widget OverlaySupport');
 
   duration ??= kNotificationDuration;
 
@@ -82,8 +82,7 @@ OverlaySupportEntry showOverlay(
   supportEntry?.dismiss(animate: true);
 
   final stateKey = GlobalKey<_AnimatedOverlayState>();
-  OverlaySupportEntry entry =
-      OverlaySupportEntry(OverlayEntry(builder: (context) {
+  OverlaySupportEntry entry = OverlaySupportEntry(OverlayEntry(builder: (context) {
     return _KeyedOverlay(
       key: overlayKey,
       child: _AnimatedOverlay(
@@ -101,8 +100,7 @@ OverlaySupportEntry showOverlay(
   return entry;
 }
 
-final GlobalKey<_OverlayFinderState> _keyFinder =
-    GlobalKey(debugLabel: 'overlay_support');
+final GlobalKey<_OverlayFinderState> _keyFinder = GlobalKey(debugLabel: 'overlay_support');
 
 OverlayState get _overlayState {
   final context = _keyFinder.currentContext;
@@ -121,8 +119,7 @@ OverlayState get _overlayState {
 
   context.visitChildElements(visitor);
 
-  assert(navigator != null,
-      '''It looks like you are not using Navigator in your app.
+  assert(navigator != null, '''It looks like you are not using Navigator in your app.
          
          do you wrapped you app widget like this?
          
@@ -144,8 +141,7 @@ class OverlaySupport extends StatelessWidget {
 
   final ToastThemeData toastTheme;
 
-  const OverlaySupport({Key key, @required this.child, this.toastTheme})
-      : super(key: key);
+  const OverlaySupport({Key key, @required this.child, this.toastTheme}) : super(key: key);
 
   @override
   StatelessElement createElement() {
@@ -157,14 +153,14 @@ class OverlaySupport extends StatelessWidget {
   Widget build(BuildContext context) {
     assert(() {
       if (context.ancestorWidgetOfExactType(OverlaySupport) != null) {
-        throw FlutterError(
-            'There is already an OverlaySupport in the Widget tree.');
+        throw FlutterError('There is already an OverlaySupport in the Widget tree.');
       }
       return true;
     }());
     return OverlaySupportTheme(
-        toastTheme: toastTheme ?? ToastThemeData(),
-        child: _OverlayFinder(key: _keyFinder, child: child));
+      toastTheme: toastTheme ?? ToastThemeData(),
+      child: _OverlayFinder(key: _keyFinder, child: child),
+    );
   }
 }
 

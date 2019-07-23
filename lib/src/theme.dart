@@ -35,8 +35,7 @@ class ToastThemeData {
           alignment == other.alignment;
 
   @override
-  int get hashCode =>
-      textColor.hashCode ^ background.hashCode ^ alignment.hashCode;
+  int get hashCode => textColor.hashCode ^ background.hashCode ^ alignment.hashCode;
 }
 
 class OverlaySupportTheme extends InheritedWidget {
@@ -51,8 +50,7 @@ class OverlaySupportTheme extends InheritedWidget {
         super(key: key, child: child);
 
   static OverlaySupportTheme of(BuildContext context) {
-    return context.inheritFromWidgetOfExactType(OverlaySupportTheme)
-        as OverlaySupportTheme;
+    return context.inheritFromWidgetOfExactType(OverlaySupportTheme) as OverlaySupportTheme;
   }
 
   static ToastThemeData toast(BuildContext context) {
