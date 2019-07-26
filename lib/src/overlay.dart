@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:async/async.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,7 +9,9 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:overlay_support/src/theme.dart';
 
 part 'overlay_animation.dart';
+
 part 'overlay_entry.dart';
+
 part 'overlay_key.dart';
 
 /// to build a widget with animated value
@@ -16,8 +19,7 @@ part 'overlay_key.dart';
 ///
 /// a simple use case is [TopSlideNotification] in [showOverlayNotification]
 ///
-typedef Widget AnimatedOverlayWidgetBuilder(
-    BuildContext context, double progress);
+typedef Widget AnimatedOverlayWidgetBuilder(BuildContext context, double progress);
 
 ///basic api to show overlay widget
 ///
@@ -54,8 +56,7 @@ OverlaySupportEntry showOverlay(
   Key key,
 }) {
   assert(key is! GlobalKey);
-  assert(_debugInitialized,
-      'OverlaySupport Not Initialized ! \nensure your app wrapped widget OverlaySupport');
+  assert(_debugInitialized, 'OverlaySupport Not Initialized ! \nensure your app wrapped widget OverlaySupport');
 
   duration ??= kNotificationDuration;
 
@@ -72,15 +73,17 @@ OverlaySupportEntry showOverlay(
 
   final supportEntry = OverlaySupportEntry._entries[overlayKey];
   if (supportEntry != null && key is ModalKey) {
-    //do nothing for reject key
+    // Do nothing for modal key if there be a OverlayEntry hold the same model key
+    // and it is showing.
     return supportEntry;
   }
-  //dismiss existed entry
-  supportEntry?.dismiss(animate: true);
+
+  final dismissImmediately = key is TransientKey;
+  // If we got a showing overlay with [key], we should dismiss it before showing a new.
+  supportEntry?.dismiss(animate: !dismissImmediately);
 
   final stateKey = GlobalKey<_AnimatedOverlayState>();
-  OverlaySupportEntry entry =
-      OverlaySupportEntry(OverlayEntry(builder: (context) {
+  OverlaySupportEntry entry = OverlaySupportEntry(OverlayEntry(builder: (context) {
     return _KeyedOverlay(
       key: overlayKey,
       child: _AnimatedOverlay(
@@ -98,8 +101,7 @@ OverlaySupportEntry showOverlay(
   return entry;
 }
 
-final GlobalKey<_OverlayFinderState> _keyFinder =
-    GlobalKey(debugLabel: 'overlay_support');
+final GlobalKey<_OverlayFinderState> _keyFinder = GlobalKey(debugLabel: 'overlay_support');
 
 OverlayState get _overlayState {
   final context = _keyFinder.currentContext;
@@ -118,8 +120,7 @@ OverlayState get _overlayState {
 
   context.visitChildElements(visitor);
 
-  assert(navigator != null,
-      '''It looks like you are not using Navigator in your app.
+  assert(navigator != null, '''It looks like you are not using Navigator in your app.
          
          do you wrapped you app widget like this?
          
@@ -141,8 +142,7 @@ class OverlaySupport extends StatelessWidget {
 
   final ToastThemeData toastTheme;
 
-  const OverlaySupport({Key key, @required this.child, this.toastTheme})
-      : super(key: key);
+  const OverlaySupport({Key key, @required this.child, this.toastTheme}) : super(key: key);
 
   @override
   StatelessElement createElement() {
@@ -154,18 +154,18 @@ class OverlaySupport extends StatelessWidget {
   Widget build(BuildContext context) {
     assert(() {
       if (context.ancestorWidgetOfExactType(OverlaySupport) != null) {
-        throw FlutterError(
-            'There is already an OverlaySupport in the Widget tree.');
+        throw FlutterError('There is already an OverlaySupport in the Widget tree.');
       }
       return true;
     }());
     return OverlaySupportTheme(
-        toastTheme: toastTheme ?? ToastThemeData(),
-        child: _OverlayFinder(key: _keyFinder, child: child));
+      toastTheme: toastTheme ?? ToastThemeData(),
+      child: _OverlayFinder(key: _keyFinder, child: child),
+    );
   }
 }
 
-//stateful widget use to find the [Overlay] in decedents tree
+/// Used to find the [Overlay] in decedents tree.
 class _OverlayFinder extends StatefulWidget {
   final Widget child;
 

@@ -1,6 +1,7 @@
 library overlay_support;
 
 export 'src/notification/overlay_notification.dart';
+export 'src/notification/notification.dart';
 export 'src/overlay.dart';
 export 'src/toast/toast.dart';
 
@@ -9,4 +10,3 @@ Duration kNotificationDuration = const Duration(milliseconds: 2000);
 
 ///Notification display or hidden animation duration
 Duration kNotificationSlideDuration = const Duration(milliseconds: 300);
-
