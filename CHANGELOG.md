@@ -1,3 +1,8 @@
+## [1.0.1] - 2019/7/26
+
+* swipe to dismiss #16
+* adjust default toast background #18
+
 ## [1.0.0] - 2019/6/16
 
 * do not need pass `context` parameter to popup overlay
