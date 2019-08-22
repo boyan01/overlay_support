@@ -26,7 +26,7 @@ dependencies:
 3. show toast or simple notifications
 
 ```dart
-//popup a tost
+//popup a toast
 toast('Hello world!');
 
 //show a notification at top of screen
