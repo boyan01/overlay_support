@@ -30,6 +30,9 @@ jobs:
           file: lcov.info
           flags: unittests
 
+      - name: Build Web Project
+        run: cd example && flutter build web && cd ..
+
       - name: Deploy web To GH-Page
         uses: JamesIves/github-pages-deploy-action@master
         env:
@@ -37,4 +40,3 @@ jobs:
           BASE_BRANCH: master
           BRANCH: gh-pages
           FOLDER: example/build/web/
-          BUILD_SCRIPT: cd example && flutter build web && cd ..
