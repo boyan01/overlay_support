@@ -37,4 +37,4 @@ jobs:
           BASE_BRANCH: master
           BRANCH: gh-pages
           FOLDER: example/build/web/
-          BUILD_SCRIPT: cd example && flutter build web
+          BUILD_SCRIPT: cd example && flutter build web && cd ..
