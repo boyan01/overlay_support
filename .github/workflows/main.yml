@@ -27,16 +27,14 @@ jobs:
         uses: codecov/codecov-action@v1.0.2
         with:
           token: ${{secrets.CODECOV_TOKEN}}
-          file: lcov.info
           flags: unittests
 
       - name: Build Web Project
         run: cd example && flutter build web && cd ..
 
       - name: Deploy web To GH-Page
-        uses: JamesIves/github-pages-deploy-action@master
+        uses: peaceiris/actions-gh-pages@v2.5.0
         env:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          BASE_BRANCH: master
-          BRANCH: gh-pages
-          FOLDER: example/build/web/
+          ACTIONS_DEPLOY_KEY: ${{ secrets.ACCESS_TOKEN }}
+          PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: ./example/build/web/
