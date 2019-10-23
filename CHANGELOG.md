@@ -1,3 +1,7 @@
+## [1.0.2] - 2019/10/23
+
+* fix Toast hidden behind ime #20
+
 ## [1.0.1] - 2019/7/26
 
 * swipe to dismiss #16
