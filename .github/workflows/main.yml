@@ -28,13 +28,3 @@ jobs:
         with:
           token: ${{secrets.CODECOV_TOKEN}}
           flags: unittests
-
-      - name: Build Web Project
-        run: cd example && flutter build web && cd ..
-
-      - name: Deploy web To GH-Page
-        uses: peaceiris/actions-gh-pages@v2.5.0
-        env:
-          PERSONAL_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          PUBLISH_BRANCH: gh-pages
-          PUBLISH_DIR: ./example/build/web/
