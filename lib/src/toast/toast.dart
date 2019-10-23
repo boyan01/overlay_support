@@ -39,18 +39,22 @@ class _Toast extends StatelessWidget {
   Widget build(BuildContext context) {
     final toastTheme = OverlaySupportTheme.toast(context);
     return SafeArea(
-      child: DefaultTextStyle(
-        style: TextStyle(color: toastTheme.textColor),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Align(
-            alignment: toastTheme.alignment,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Container(
-                color: toastTheme?.background,
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                child: content,
+      maintainBottomViewPadding: true,
+      child: Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: DefaultTextStyle(
+          style: TextStyle(color: toastTheme.textColor),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Align(
+              alignment: toastTheme.alignment,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Container(
+                  color: toastTheme?.background,
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: content,
+                ),
               ),
             ),
           ),

@@ -10,13 +10,13 @@ const messages = [
 ];
 
 class MessageNotification extends StatelessWidget {
-  final VoidCallback onReplay;
+  final VoidCallback onReply;
 
   final String message;
 
   const MessageNotification({
     Key key,
-    @required this.onReplay,
+    @required this.onReply,
     @required this.message,
   }) : super(key: key);
 
@@ -33,9 +33,7 @@ class MessageNotification extends StatelessWidget {
           trailing: IconButton(
               icon: Icon(Icons.reply),
               onPressed: () {
-                ///TODO i'm not sure it should be use this widget' BuildContext to create a Dialog
-                ///maybe i will give the answer in the future
-                if (onReplay != null) onReplay();
+                if (onReply != null) onReply();
               }),
         ),
       ),
