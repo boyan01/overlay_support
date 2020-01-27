@@ -17,10 +17,10 @@ OverlaySupportEntry showOverlayNotification(
   if (duration == null) {
     duration = kNotificationDuration;
   }
-  return showOverlay((context, t) {
+  return showOverlay((context, animation) {
     return Column(
       children: <Widget>[
-        TopSlideNotification(builder: builder, progress: t),
+        TopSlideNotification(builder: builder, animation: animation),
       ],
     );
   }, duration: duration, key: key);

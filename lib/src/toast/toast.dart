@@ -14,20 +14,22 @@ class Toast {
   static const LENGTH_LONG = const Duration(milliseconds: 3500);
 }
 
-///popup a message in front of screen
+/// Popup a message in front of screen.
 ///
 /// [duration] the duration to show a toast,
-/// for most situation, you can use [Toast.LENGTH_SHORT] and [Toast.LENGTH_LONG]
+/// For most situation, you can use [Toast.LENGTH_SHORT] and [Toast.LENGTH_LONG].
 ///
 void toast(String message, {Duration duration = Toast.LENGTH_SHORT}) {
   if (duration <= Duration.zero) {
     //fast fail
     return;
   }
-
-  showOverlay((context, t) {
-    return Opacity(opacity: t, child: _Toast(content: Text(message)));
-  }, curve: Curves.ease, key: const ValueKey('overlay_toast'), duration: duration);
+  showOverlay((context, animation) {
+    return FadeTransition(
+      opacity: CurveTween(curve: Curves.ease).animate(animation),
+      child: _Toast(content: Text(message)),
+    );
+  }, key: const ValueKey('overlay_toast'), duration: duration);
 }
 
 class _Toast extends StatelessWidget {

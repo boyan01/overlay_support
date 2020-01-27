@@ -89,13 +89,10 @@ class HomePage extends StatelessWidget {
         _Section(title: 'custom', children: [
           RaisedButton(
             onPressed: () {
-              showOverlay((_, t) {
-                return Theme(
-                  data: Theme.of(context),
-                  child: Opacity(
-                    opacity: t,
-                    child: IosStyleToast(),
-                  ),
+              showOverlay((context, animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: IosStyleToast(),
                 );
               }, key: ValueKey('hello'));
             },
@@ -103,31 +100,36 @@ class HomePage extends StatelessWidget {
           ),
           RaisedButton(
             onPressed: () {
-              showOverlay((context, t) {
-                return CustomAnimationToast(value: t);
-              }, key: ValueKey('hello'), curve: Curves.decelerate);
+              showOverlay((context, animation) {
+                return CustomAnimationToast(animation: animation);
+              }, key: ValueKey('hello'));
             },
             child: Text('show custom animation overlay'),
           ),
           RaisedButton(
             onPressed: () {
-              showOverlay((context, t) {
-                return Container(
-                  color: Color.lerp(Colors.transparent, Colors.black54, t),
-                  child: FractionalTranslation(
-                    translation: Offset.lerp(const Offset(0, -1), const Offset(0, 0), t),
-                    child: Column(
-                      children: <Widget>[
-                        MessageNotification(
-                          message: "Hello",
-                          onReply: () {
-                            OverlaySupportEntry.of(context).dismiss();
-                          },
-                          key: ModalKey(const Object()),
-                        ),
-                      ],
+              showOverlay((context, animation) {
+                return Stack(
+                  children: <Widget>[
+                    AnimatedModalBarrier(
+                      color: ColorTween(begin: Colors.transparent, end: Colors.black54).animate(animation),
+                      dismissible: false,
                     ),
-                  ),
+                    SlideTransition(
+                      position: Tween<Offset>(begin: const Offset(0, -1), end: Offset.zero).animate(animation),
+                      child: Column(
+                        children: <Widget>[
+                          MessageNotification(
+                            message: "Hello",
+                            onReply: () {
+                              OverlaySupportEntry.of(context).dismiss();
+                            },
+                            key: ModalKey(const Object()),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 );
               }, duration: Duration.zero);
             },

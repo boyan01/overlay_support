@@ -10,18 +10,18 @@ class _AnimatedOverlay extends StatefulWidget {
 
   final AnimatedOverlayWidgetBuilder builder;
 
-  final Curve curve;
+  final AnimatedOverlayRemovedWidgetBuilder removedBuilder;
 
   _AnimatedOverlay(
       {@required Key key,
       @required this.animationDuration,
-      Curve curve,
       @required this.builder,
-      @required this.duration})
-      : curve = curve ?? Curves.easeInOut,
-        assert(animationDuration != null && animationDuration >= Duration.zero),
+      @required this.duration,
+      AnimatedOverlayRemovedWidgetBuilder removedBuilder})
+      : assert(animationDuration != null && animationDuration >= Duration.zero),
         assert(duration != null && duration >= Duration.zero),
         assert(builder != null),
+        this.removedBuilder = removedBuilder ?? builder,
         super(key: key);
 
   @override
@@ -78,10 +78,15 @@ class _AnimatedOverlayState extends State<_AnimatedOverlay> with TickerProviderS
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-        animation: _controller,
-        builder: (context, _) {
-          return widget.builder(context, widget.curve.transform(_controller.value));
-        });
+    switch (_controller.status) {
+      case AnimationStatus.forward:
+      case AnimationStatus.completed:
+        return Builder(builder: (context) => widget.builder(context, _controller));
+      case AnimationStatus.reverse:
+      case AnimationStatus.dismissed:
+        return Builder(builder: (context) => widget.removedBuilder(context, _controller));
+    }
+    // Unreachable logic
+    return const SizedBox();
   }
 }
