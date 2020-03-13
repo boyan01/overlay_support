@@ -1,3 +1,6 @@
+## [1.0.3] - 20202/3/13
+* expose toastTheme. by [juvs](https://github.com/juvs)
+
 ## [1.0.2] - 2019/10/23
 
 * fix Toast hidden behind ime #20
