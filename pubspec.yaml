@@ -1,6 +1,6 @@
 name: overlay_support
 description: proivder support for overlay, easy to build toast and internal notification
-version: 1.0.2
+version: 1.0.3
 author: YangBin <yangbinyhbn@gmail.com>
 homepage: https://github.com/boyan01/overlay_support
 
