@@ -13,14 +13,20 @@ OverlaySupportEntry showOverlayNotification(
   WidgetBuilder builder, {
   Duration duration,
   Key key,
+  bool showAtBottom = false,
 }) {
   if (duration == null) {
     duration = kNotificationDuration;
   }
   return showOverlay((context, t) {
+    MainAxisAlignment alignment = MainAxisAlignment.start;
+    if (showAtBottom) alignment = MainAxisAlignment.end;
     return Column(
+      mainAxisAlignment: alignment,
       children: <Widget>[
-        TopSlideNotification(builder: builder, progress: t),
+        !showAtBottom
+            ? TopSlideNotification(builder: builder, progress: t)
+            : BottomSlideNotification(builder: builder, progress: t)
       ],
     );
   }, duration: duration, key: key);
@@ -53,7 +59,8 @@ OverlaySupportEntry showSimpleNotification(Widget content,
     double elevation = 16,
     Key key,
     bool autoDismiss = true,
-    bool slideDismiss = false}) {
+    bool slideDismiss = false,
+    bool isSnackBar = false}) {
   final entry = showOverlayNotification((context) {
     return SlideDismissible(
       enable: slideDismiss,
@@ -76,6 +83,6 @@ OverlaySupportEntry showSimpleNotification(Widget content,
             )),
       ),
     );
-  }, duration: autoDismiss ? null : Duration.zero, key: key);
+  }, duration: autoDismiss ? null : Duration.zero, key: key, showAtBottom: isSnackBar);
   return entry;
 }
