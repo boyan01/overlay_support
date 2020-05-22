@@ -20,6 +20,7 @@ class TopSlideNotification extends StatelessWidget {
   }
 }
 
+/// a notification show in front of screen and shown at the bottom
 class BottomSlideNotification extends StatelessWidget {
   ///build notification content
   final WidgetBuilder builder;

@@ -48,6 +48,7 @@ OverlaySupportEntry showOverlayNotification(
 /// [elevation] the elevation of notification, see more [Material.elevation]
 /// [autoDismiss] true to auto hide after duration [kNotificationDuration]
 /// [slideDismiss] support left/right to dismiss notification
+/// [isSnackBar] support for SnackBar style notification, which displays at bottom of screen
 ///
 OverlaySupportEntry showSimpleNotification(Widget content,
     {Widget leading,
