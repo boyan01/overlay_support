@@ -9,18 +9,26 @@ import 'package:overlay_support/src/overlay.dart';
 ///if null , will be set to [kNotificationDuration]
 ///if zero , will not auto dismiss in the future
 ///
+/// [showAtBottom] show notification at the bottom of screen like a SnackBar
+///
 OverlaySupportEntry showOverlayNotification(
   WidgetBuilder builder, {
   Duration duration,
   Key key,
+  bool showAtBottom = false,
 }) {
   if (duration == null) {
     duration = kNotificationDuration;
   }
   return showOverlay((context, animation) {
+    MainAxisAlignment alignment = MainAxisAlignment.start;
+    if (showAtBottom) alignment = MainAxisAlignment.end;
     return Column(
+      mainAxisAlignment: alignment,
       children: <Widget>[
-        TopSlideNotification(builder: builder, animation: animation),
+        !showAtBottom
+            ? TopSlideNotification(builder: builder, animation: animation)
+            : BottomSlideNotification(builder: builder, animation: animation)
       ],
     );
   }, duration: duration, key: key);
@@ -42,6 +50,7 @@ OverlaySupportEntry showOverlayNotification(
 /// [elevation] the elevation of notification, see more [Material.elevation]
 /// [autoDismiss] true to auto hide after duration [kNotificationDuration]
 /// [slideDismiss] support left/right to dismiss notification
+/// [isSnackBar] support for SnackBar style notification, which displays at bottom of screen
 ///
 OverlaySupportEntry showSimpleNotification(Widget content,
     {Widget leading,
@@ -53,7 +62,8 @@ OverlaySupportEntry showSimpleNotification(Widget content,
     double elevation = 16,
     Key key,
     bool autoDismiss = true,
-    bool slideDismiss = false}) {
+    bool slideDismiss = false,
+    bool isSnackBar = false}) {
   final entry = showOverlayNotification((context) {
     return SlideDismissible(
       enable: slideDismiss,
@@ -76,6 +86,6 @@ OverlaySupportEntry showSimpleNotification(Widget content,
             )),
       ),
     );
-  }, duration: autoDismiss ? null : Duration.zero, key: key);
+  }, duration: autoDismiss ? null : Duration.zero, key: key, showAtBottom: isSnackBar);
   return entry;
 }
