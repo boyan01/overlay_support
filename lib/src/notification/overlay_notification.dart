@@ -9,6 +9,8 @@ import 'package:overlay_support/src/overlay.dart';
 ///if null , will be set to [kNotificationDuration]
 ///if zero , will not auto dismiss in the future
 ///
+/// [showAtBottom] show notification at the bottom of screen like a SnackBar
+///
 OverlaySupportEntry showOverlayNotification(
   WidgetBuilder builder, {
   Duration duration,
