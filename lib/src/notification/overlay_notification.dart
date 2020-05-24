@@ -74,7 +74,8 @@ OverlaySupportEntry showSimpleNotification(Widget content,
         color: background ?? Theme.of(context)?.accentColor,
         elevation: elevation,
         child: SafeArea(
-            bottom: false,
+            bottom: position == NotificationPosition.bottom,
+            top: position == NotificationPosition.top,
             child: ListTileTheme(
               textColor: foreground ?? Theme.of(context)?.accentTextTheme?.title?.color,
               iconColor: foreground ?? Theme.of(context)?.accentTextTheme?.title?.color,
