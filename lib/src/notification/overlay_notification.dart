@@ -9,24 +9,24 @@ import 'package:overlay_support/src/overlay.dart';
 ///if null , will be set to [kNotificationDuration]
 ///if zero , will not auto dismiss in the future
 ///
-/// [showAtBottom] show notification at the bottom of screen like a SnackBar
+/// [position] the position of notification on the screen, default is [NotificationPosition.top]
 ///
 OverlaySupportEntry showOverlayNotification(
   WidgetBuilder builder, {
   Duration duration,
   Key key,
-  bool showAtBottom = false,
+  NotificationPosition position = NotificationPosition.top,
 }) {
   if (duration == null) {
     duration = kNotificationDuration;
   }
   return showOverlay((context, t) {
     MainAxisAlignment alignment = MainAxisAlignment.start;
-    if (showAtBottom) alignment = MainAxisAlignment.end;
+    if (position == NotificationPosition.bottom) alignment = MainAxisAlignment.end;
     return Column(
       mainAxisAlignment: alignment,
       children: <Widget>[
-        !showAtBottom
+        position == NotificationPosition.top
             ? TopSlideNotification(builder: builder, progress: t)
             : BottomSlideNotification(builder: builder, progress: t)
       ],
@@ -50,7 +50,7 @@ OverlaySupportEntry showOverlayNotification(
 /// [elevation] the elevation of notification, see more [Material.elevation]
 /// [autoDismiss] true to auto hide after duration [kNotificationDuration]
 /// [slideDismiss] support left/right to dismiss notification
-/// [isSnackBar] support for SnackBar style notification, which displays at bottom of screen
+/// [position] the position of notification, can be [NotificationPosition.top] or [NotificationPosition.bottom], default is [NotificationPosition.top]
 ///
 OverlaySupportEntry showSimpleNotification(Widget content,
     {Widget leading,
@@ -63,7 +63,7 @@ OverlaySupportEntry showSimpleNotification(Widget content,
     Key key,
     bool autoDismiss = true,
     bool slideDismiss = false,
-    bool isSnackBar = false}) {
+    NotificationPosition position = NotificationPosition.top}) {
   final entry = showOverlayNotification((context) {
     return SlideDismissible(
       enable: slideDismiss,
@@ -74,8 +74,10 @@ OverlaySupportEntry showSimpleNotification(Widget content,
         child: SafeArea(
             bottom: false,
             child: ListTileTheme(
-              textColor: foreground ?? Theme.of(context)?.accentTextTheme?.title?.color,
-              iconColor: foreground ?? Theme.of(context)?.accentTextTheme?.title?.color,
+              textColor: foreground ??
+                  Theme.of(context)?.accentTextTheme?.title?.color,
+              iconColor: foreground ??
+                  Theme.of(context)?.accentTextTheme?.title?.color,
               child: ListTile(
                 leading: leading,
                 title: content,
@@ -86,6 +88,9 @@ OverlaySupportEntry showSimpleNotification(Widget content,
             )),
       ),
     );
-  }, duration: autoDismiss ? null : Duration.zero, key: key, showAtBottom: isSnackBar);
+  },
+      duration: autoDismiss ? null : Duration.zero,
+      key: key,
+      position: position);
   return entry;
 }

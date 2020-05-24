@@ -62,3 +62,6 @@ class SlideDismissible extends StatelessWidget {
     );
   }
 }
+
+/// Indicates if notification is going to show at the [top] or at the [bottom].
+enum NotificationPosition { top, bottom }
