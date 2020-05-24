@@ -9,7 +9,8 @@ import 'package:overlay_support/src/overlay.dart';
 ///if null , will be set to [kNotificationDuration]
 ///if zero , will not auto dismiss in the future
 ///
-/// [position] the position of notification on the screen, default is [NotificationPosition.top]
+/// [position] the position of notification, default is [NotificationPosition.top],
+/// can be [NotificationPosition.top] or [NotificationPosition.bottom]
 ///
 OverlaySupportEntry showOverlayNotification(
   WidgetBuilder builder, {
@@ -50,7 +51,8 @@ OverlaySupportEntry showOverlayNotification(
 /// [elevation] the elevation of notification, see more [Material.elevation]
 /// [autoDismiss] true to auto hide after duration [kNotificationDuration]
 /// [slideDismiss] support left/right to dismiss notification
-/// [position] the position of notification, can be [NotificationPosition.top] or [NotificationPosition.bottom], default is [NotificationPosition.top]
+/// [position] the position of notification, default is [NotificationPosition.top],
+/// can be [NotificationPosition.top] or [NotificationPosition.bottom]
 ///
 OverlaySupportEntry showSimpleNotification(Widget content,
     {Widget leading,
