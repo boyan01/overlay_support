@@ -76,10 +76,8 @@ OverlaySupportEntry showSimpleNotification(Widget content,
         child: SafeArea(
             bottom: false,
             child: ListTileTheme(
-              textColor: foreground ??
-                  Theme.of(context)?.accentTextTheme?.title?.color,
-              iconColor: foreground ??
-                  Theme.of(context)?.accentTextTheme?.title?.color,
+              textColor: foreground ?? Theme.of(context)?.accentTextTheme?.title?.color,
+              iconColor: foreground ?? Theme.of(context)?.accentTextTheme?.title?.color,
               child: ListTile(
                 leading: leading,
                 title: content,
@@ -90,9 +88,6 @@ OverlaySupportEntry showSimpleNotification(Widget content,
             )),
       ),
     );
-  },
-      duration: autoDismiss ? null : Duration.zero,
-      key: key,
-      position: position);
+  }, duration: autoDismiss ? null : Duration.zero, key: key, position: position);
   return entry;
 }
