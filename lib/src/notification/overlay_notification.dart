@@ -9,18 +9,27 @@ import 'package:overlay_support/src/overlay.dart';
 ///if null , will be set to [kNotificationDuration]
 ///if zero , will not auto dismiss in the future
 ///
+/// [position] the position of notification, default is [NotificationPosition.top],
+/// can be [NotificationPosition.top] or [NotificationPosition.bottom]
+///
 OverlaySupportEntry showOverlayNotification(
   WidgetBuilder builder, {
   Duration duration,
   Key key,
+  NotificationPosition position = NotificationPosition.top,
 }) {
   if (duration == null) {
     duration = kNotificationDuration;
   }
   return showOverlay((context, t) {
+    MainAxisAlignment alignment = MainAxisAlignment.start;
+    if (position == NotificationPosition.bottom) alignment = MainAxisAlignment.end;
     return Column(
+      mainAxisAlignment: alignment,
       children: <Widget>[
-        TopSlideNotification(builder: builder, progress: t),
+        position == NotificationPosition.top
+            ? TopSlideNotification(builder: builder, progress: t)
+            : BottomSlideNotification(builder: builder, progress: t)
       ],
     );
   }, duration: duration, key: key);
@@ -42,6 +51,8 @@ OverlaySupportEntry showOverlayNotification(
 /// [elevation] the elevation of notification, see more [Material.elevation]
 /// [autoDismiss] true to auto hide after duration [kNotificationDuration]
 /// [slideDismiss] support left/right to dismiss notification
+/// [position] the position of notification, default is [NotificationPosition.top],
+/// can be [NotificationPosition.top] or [NotificationPosition.bottom]
 ///
 OverlaySupportEntry showSimpleNotification(Widget content,
     {Widget leading,
@@ -53,7 +64,8 @@ OverlaySupportEntry showSimpleNotification(Widget content,
     double elevation = 16,
     Key key,
     bool autoDismiss = true,
-    bool slideDismiss = false}) {
+    bool slideDismiss = false,
+    NotificationPosition position = NotificationPosition.top}) {
   final entry = showOverlayNotification((context) {
     return SlideDismissible(
       enable: slideDismiss,
@@ -62,7 +74,8 @@ OverlaySupportEntry showSimpleNotification(Widget content,
         color: background ?? Theme.of(context)?.accentColor,
         elevation: elevation,
         child: SafeArea(
-            bottom: false,
+            bottom: position == NotificationPosition.bottom,
+            top: position == NotificationPosition.top,
             child: ListTileTheme(
               textColor: foreground ?? Theme.of(context)?.accentTextTheme?.title?.color,
               iconColor: foreground ?? Theme.of(context)?.accentTextTheme?.title?.color,
@@ -76,6 +89,6 @@ OverlaySupportEntry showSimpleNotification(Widget content,
             )),
       ),
     );
-  }, duration: autoDismiss ? null : Duration.zero, key: key);
+  }, duration: autoDismiss ? null : Duration.zero, key: key, position: position);
   return entry;
 }

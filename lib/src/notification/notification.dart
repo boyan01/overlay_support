@@ -20,6 +20,24 @@ class TopSlideNotification extends StatelessWidget {
   }
 }
 
+/// a notification show in front of screen and shown at the bottom
+class BottomSlideNotification extends StatelessWidget {
+  ///build notification content
+  final WidgetBuilder builder;
+
+  final double progress;
+
+  const BottomSlideNotification({Key key, @required this.builder, this.progress}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FractionalTranslation(
+      translation: Offset.lerp(const Offset(0, 1), const Offset(0, 0), progress),
+      child: builder(context),
+    );
+  }
+}
+
 ///can be dismiss by left or right slide
 class SlideDismissible extends StatelessWidget {
   final Widget child;
@@ -44,3 +62,6 @@ class SlideDismissible extends StatelessWidget {
     );
   }
 }
+
+/// Indicates if notification is going to show at the [top] or at the [bottom].
+enum NotificationPosition { top, bottom }
