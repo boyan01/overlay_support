@@ -1,4 +1,7 @@
-## [1.0.3] - 20202/3/13
+## [1.0.4] - 2020/5/26
+* Support for `BottomSlideNotification`. [#40](https://github.com/boyan01/overlay_support/pull/40) by [Giles Correia Morton](https://github.com/gilescm)
+
+## [1.0.3] - 2020/3/13
 * expose toastTheme. by [juvs](https://github.com/juvs)
 
 ## [1.0.2] - 2019/10/23
