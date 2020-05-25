@@ -1,5 +1,6 @@
 ## [1.0.4] - 2020/5/26
 * Support for `BottomSlideNotification`. [#40](https://github.com/boyan01/overlay_support/pull/40) by [Giles Correia Morton](https://github.com/gilescm)
+* Upgrade min dart sdk version to 2.1.0. [Policy](https://dart.dev/tools/pub/publishing#publishing-prereleases)
 
 ## [1.0.3] - 2020/3/13
 * expose toastTheme. by [juvs](https://github.com/juvs)
