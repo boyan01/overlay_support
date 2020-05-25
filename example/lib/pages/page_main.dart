@@ -42,6 +42,12 @@ class HomePage extends StatelessWidget {
               );
             },
             child: Text("Fixed Notification"),
+          ),
+          RaisedButton(
+            child: Text("Bottom Notification"),
+            onPressed: () {
+              showSimpleNotification(Text("Hello"), position: NotificationPosition.bottom);
+            },
           )
         ]),
         _Section(title: 'Custom notification', children: <Widget>[
