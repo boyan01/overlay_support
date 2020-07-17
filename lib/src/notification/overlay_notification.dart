@@ -62,6 +62,7 @@ OverlaySupportEntry showSimpleNotification(Widget content,
     Color background,
     Color foreground,
     double elevation = 16,
+    Duration duration,
     Key key,
     bool autoDismiss = true,
     bool slideDismiss = false,
@@ -89,6 +90,9 @@ OverlaySupportEntry showSimpleNotification(Widget content,
             )),
       ),
     );
-  }, duration: autoDismiss ? null : Duration.zero, key: key, position: position);
+  },
+      duration: autoDismiss ? duration : Duration.zero,
+      key: key,
+      position: position);
   return entry;
 }
