@@ -3,14 +3,14 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:overlay_support/src/notification/notification.dart';
 import 'package:overlay_support/src/overlay.dart';
 
-/// popup a notification at the top of screen
+/// Popup a notification at the top of screen.
 ///
-///[duration] the notification display duration , overlay will auto dismiss after [duration]
-///if null , will be set to [kNotificationDuration]
-///if zero , will not auto dismiss in the future
+/// [duration] the notification display duration , overlay will auto dismiss after [duration].
+/// if null , will be set to [kNotificationDuration].
+/// if zero , will not auto dismiss in the future.
 ///
 /// [position] the position of notification, default is [NotificationPosition.top],
-/// can be [NotificationPosition.top] or [NotificationPosition.bottom]
+/// can be [NotificationPosition.top] or [NotificationPosition.bottom].
 ///
 OverlaySupportEntry showOverlayNotification(
   WidgetBuilder builder, {
@@ -23,8 +23,7 @@ OverlaySupportEntry showOverlayNotification(
   }
   return showOverlay((context, t) {
     MainAxisAlignment alignment = MainAxisAlignment.start;
-    if (position == NotificationPosition.bottom)
-      alignment = MainAxisAlignment.end;
+    if (position == NotificationPosition.bottom) alignment = MainAxisAlignment.end;
     return Column(
       mainAxisAlignment: alignment,
       children: <Widget>[
@@ -37,23 +36,23 @@ OverlaySupportEntry showOverlayNotification(
 }
 
 ///
-///show a simple notification above the top of window
+/// Show a simple notification above the top of window.
 ///
 ///
-/// [content] see more [ListTile.title]
-/// [leading] see more [ListTile.leading]
-/// [subtitle] see more [ListTile.subtitle]
-/// [trailing] see more [ListTile.trailing]
-/// [contentPadding] see more [ListTile.contentPadding]
+/// [content] see more [ListTile.title].
+/// [leading] see more [ListTile.leading].
+/// [subtitle] see more [ListTile.subtitle].
+/// [trailing] see more [ListTile.trailing].
+/// [contentPadding] see more [ListTile.contentPadding].
 ///
-/// [background] the background color for notification , default is [ThemeData.accentColor]
-/// [foreground] see more [ListTileTheme.textColor],[ListTileTheme.iconColor]
+/// [background] the background color for notification , default is [ThemeData.accentColor].
+/// [foreground] see more [ListTileTheme.textColor],[ListTileTheme.iconColor].
 ///
-/// [elevation] the elevation of notification, see more [Material.elevation]
-/// [autoDismiss] true to auto hide after duration [kNotificationDuration]
-/// [slideDismiss] support left/right to dismiss notification
+/// [elevation] the elevation of notification, see more [Material.elevation].
+/// [autoDismiss] true to auto hide after duration [kNotificationDuration].
+/// [slideDismiss] support left/right to dismiss notification.
 /// [position] the position of notification, default is [NotificationPosition.top],
-/// can be [NotificationPosition.top] or [NotificationPosition.bottom]
+/// can be [NotificationPosition.top] or [NotificationPosition.bottom].
 ///
 OverlaySupportEntry showSimpleNotification(Widget content,
     {Widget leading,
@@ -80,10 +79,8 @@ OverlaySupportEntry showSimpleNotification(Widget content,
               bottom: position == NotificationPosition.bottom,
               top: position == NotificationPosition.top,
               child: ListTileTheme(
-                textColor: foreground ??
-                    Theme.of(context)?.accentTextTheme?.title?.color,
-                iconColor: foreground ??
-                    Theme.of(context)?.accentTextTheme?.title?.color,
+                textColor: foreground ?? Theme.of(context)?.accentTextTheme?.title?.color,
+                iconColor: foreground ?? Theme.of(context)?.accentTextTheme?.title?.color,
                 child: ListTile(
                   leading: leading,
                   title: content,

@@ -83,8 +83,7 @@ class _NavigationTiles extends StatelessWidget {
             ListTile(
               title: Text("Star On GitHub"),
               onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => PageWithIme()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => PageWithIme()));
               },
             )
           ],
