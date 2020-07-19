@@ -23,7 +23,8 @@ OverlaySupportEntry showOverlayNotification(
   }
   return showOverlay((context, t) {
     MainAxisAlignment alignment = MainAxisAlignment.start;
-    if (position == NotificationPosition.bottom) alignment = MainAxisAlignment.end;
+    if (position == NotificationPosition.bottom)
+      alignment = MainAxisAlignment.end;
     return Column(
       mainAxisAlignment: alignment,
       children: <Widget>[
@@ -67,32 +68,36 @@ OverlaySupportEntry showSimpleNotification(Widget content,
     bool autoDismiss = true,
     bool slideDismiss = false,
     NotificationPosition position = NotificationPosition.top}) {
-  final entry = showOverlayNotification((context) {
-    return SlideDismissible(
-      enable: slideDismiss,
-      key: ValueKey(key),
-      child: Material(
-        color: background ?? Theme.of(context)?.accentColor,
-        elevation: elevation,
-        child: SafeArea(
-            bottom: position == NotificationPosition.bottom,
-            top: position == NotificationPosition.top,
-            child: ListTileTheme(
-              textColor: foreground ?? Theme.of(context)?.accentTextTheme?.title?.color,
-              iconColor: foreground ?? Theme.of(context)?.accentTextTheme?.title?.color,
-              child: ListTile(
-                leading: leading,
-                title: content,
-                subtitle: subtitle,
-                trailing: trailing,
-                contentPadding: contentPadding,
-              ),
-            )),
-      ),
-    );
-  },
-      duration: autoDismiss ? duration : Duration.zero,
-      key: key,
-      position: position);
+  final entry = showOverlayNotification(
+    (context) {
+      return SlideDismissible(
+        enable: slideDismiss,
+        key: ValueKey(key),
+        child: Material(
+          color: background ?? Theme.of(context)?.accentColor,
+          elevation: elevation,
+          child: SafeArea(
+              bottom: position == NotificationPosition.bottom,
+              top: position == NotificationPosition.top,
+              child: ListTileTheme(
+                textColor: foreground ??
+                    Theme.of(context)?.accentTextTheme?.title?.color,
+                iconColor: foreground ??
+                    Theme.of(context)?.accentTextTheme?.title?.color,
+                child: ListTile(
+                  leading: leading,
+                  title: content,
+                  subtitle: subtitle,
+                  trailing: trailing,
+                  contentPadding: contentPadding,
+                ),
+              )),
+        ),
+      );
+    },
+    duration: autoDismiss ? duration : Duration.zero,
+    key: key,
+    position: position,
+  );
   return entry;
 }
