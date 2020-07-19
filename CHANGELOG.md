@@ -1,3 +1,6 @@
+## [1.0.5] - 2020/7/20
+* Expose duration to `showSimpleNotification` [#46](https://github.com/boyan01/overlay_support/pull/46) by [Elvis Sun](https://github.com/elvisun)
+
 ## [1.0.4] - 2020/5/26
 * Support for `BottomSlideNotification`. [#40](https://github.com/boyan01/overlay_support/pull/40) by [Giles Correia Morton](https://github.com/gilescm)
 * Upgrade min dart sdk version to 2.1.0. [Policy](https://dart.dev/tools/pub/publishing#publishing-prereleases)
