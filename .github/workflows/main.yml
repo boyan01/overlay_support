@@ -1,6 +1,6 @@
 name: CI
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -19,6 +19,9 @@ jobs:
           channel: 'dev'
       - run: flutter config --enable-web
       - run: flutter pub get
+
+      - name: Project format check
+        run: flutter format -l 120 -n .
 
       - name: Flutter unit test
         run: flutter test --coverage --coverage-path=lcov.info
