@@ -14,7 +14,7 @@ class OverlaySupportEntry {
   final GlobalKey<_AnimatedOverlayState> _stateKey;
 
   static OverlaySupportEntry of(BuildContext context, {Widget requireForDebug}) {
-    final animatedOverlay = context.ancestorWidgetOfExactType(_AnimatedOverlay);
+    final animatedOverlay = context.findAncestorWidgetOfExactType<_AnimatedOverlay>();
     assert(() {
       if (animatedOverlay == null && requireForDebug != null) {
         throw FlutterError('No _AnimatedOverlay widget found.\n'
