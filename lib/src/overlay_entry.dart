@@ -13,12 +13,17 @@ class OverlaySupportEntry {
   final _OverlayKey _key;
   final GlobalKey<_AnimatedOverlayState> _stateKey;
 
-  static OverlaySupportEntry of(BuildContext context, {Widget requireForDebug}) {
+  /// Find OverlaySupportEntry by [context].
+  ///
+  /// The [context] should be the BuildContext which build a element in Notification.
+  ///
+  /// deprecated parameter `requireForDebug` because it is useless.
+  static OverlaySupportEntry of(BuildContext context, {@deprecated Widget requireForDebug}) {
     final animatedOverlay = context.findAncestorWidgetOfExactType<_AnimatedOverlay>();
     assert(() {
-      if (animatedOverlay == null && requireForDebug != null) {
+      if (animatedOverlay == null) {
         throw FlutterError('No _AnimatedOverlay widget found.\n'
-            '${requireForDebug.runtimeType} require an OverlaySupportEntry for corrent operation\n'
+            'The [context] should be the BuildContext which build a element in Notification.\n'
             'is that you called this method from the right scope? ');
       }
       return true;
