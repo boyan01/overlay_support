@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-///theme data for toast
+/// Theme data for toast.
 class ToastThemeData {
   final Color textColor;
 

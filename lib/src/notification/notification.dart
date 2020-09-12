@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-/// a notification show in front of screen and shown at the top
+/// A notification show in front of screen and shown at the top.
 class TopSlideNotification extends StatelessWidget {
-  ///build notification content
+  /// Which used to build notification content.
   final WidgetBuilder builder;
 
   final double progress;
@@ -38,7 +38,7 @@ class BottomSlideNotification extends StatelessWidget {
   }
 }
 
-///can be dismiss by left or right slide
+/// Can be dismiss by left or right slide.
 class SlideDismissible extends StatelessWidget {
   final Widget child;
 
