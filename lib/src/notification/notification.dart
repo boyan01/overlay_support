@@ -57,7 +57,7 @@ class SlideDismissible extends StatelessWidget {
       child: child,
       key: key,
       onDismissed: (direction) {
-        OverlaySupportEntry.of(context, requireForDebug: this).dismiss(animate: false);
+        OverlaySupportEntry.of(context).dismiss(animate: false);
       },
     );
   }
