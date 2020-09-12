@@ -1,9 +1,9 @@
 part of 'overlay.dart';
 
 ///
-/// [OverlaySupportEntry] represent a overlay popup by [showOverlay]
+/// [OverlaySupportEntry] represent a overlay popup by [showOverlay].
 ///
-/// provide function [dismiss] to dismiss a Notification/Overlay
+/// Provide function [dismiss] to dismiss a Notification/Overlay.
 ///
 class OverlaySupportEntry {
   static final _entries = HashMap<_OverlayKey, OverlaySupportEntry>();
@@ -13,12 +13,17 @@ class OverlaySupportEntry {
   final _OverlayKey _key;
   final GlobalKey<_AnimatedOverlayState> _stateKey;
 
-  static OverlaySupportEntry of(BuildContext context, {Widget requireForDebug}) {
-    final animatedOverlay = context.ancestorWidgetOfExactType(_AnimatedOverlay);
+  /// Find OverlaySupportEntry by [context].
+  ///
+  /// The [context] should be the BuildContext which build a element in Notification.
+  ///
+  /// deprecated parameter `requireForDebug` because it is useless.
+  static OverlaySupportEntry of(BuildContext context, {@deprecated Widget requireForDebug}) {
+    final animatedOverlay = context.findAncestorWidgetOfExactType<_AnimatedOverlay>();
     assert(() {
-      if (animatedOverlay == null && requireForDebug != null) {
+      if (animatedOverlay == null) {
         throw FlutterError('No _AnimatedOverlay widget found.\n'
-            '${requireForDebug.runtimeType} require an OverlaySupportEntry for corrent operation\n'
+            'The [context] should be the BuildContext which build a element in Notification.\n'
             'is that you called this method from the right scope? ');
       }
       return true;
@@ -45,7 +50,7 @@ class OverlaySupportEntry {
     return _OverlaySupportEntryEmpty();
   }
 
-  ///to known when notification has been dismissed
+  // To known when notification has been dismissed.
   final Completer _dismissedCompleter = Completer();
 
   Future get dismissed => _dismissedCompleter.future;
@@ -57,9 +62,9 @@ class OverlaySupportEntry {
   // OverlayEntry has been removed from Overlay
   bool _dismissed = false;
 
-  ///dismiss notification
-  ///animate = false , remove entry immediately
-  ///animate = true, remove entry after [_AnimatedOverlayState.hide]
+  /// Dismiss the Overlay which associated with this entry.
+  /// If [animate] is false , remove entry immediately.
+  /// If [animate] is true, remove entry after [_AnimatedOverlayState.hide]
   void dismiss({bool animate = true}) {
     if (_dismissed || (_dismissScheduled && animate)) {
       return;
@@ -91,10 +96,10 @@ class OverlaySupportEntry {
     animateRemove();
   }
 
-  //dismiss entry immediately and remove it from screen
+  // dismiss entry immediately and remove it from screen
   void _dismissEntry() {
     if (_dismissed) {
-      //already removed from screen
+      // already removed from screen
       return;
     }
     _dismissed = true;

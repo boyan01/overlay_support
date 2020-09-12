@@ -1,11 +1,11 @@
 part of 'overlay.dart';
 
 class _AnimatedOverlay extends StatefulWidget {
-  ///overlay display total duration
-  ///zero means overlay display forever
+  /// The total duration of overlay display.
+  /// [Duration.zero] means overlay display forever.
   final Duration duration;
 
-  ///overlay show/hide animation duration
+  /// The duration overlay show/hide's animation.
   final Duration animationDuration;
 
   final AnimatedOverlayWidgetBuilder builder;

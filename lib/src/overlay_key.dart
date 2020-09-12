@@ -13,7 +13,7 @@ class _KeyedOverlay extends StatelessWidget {
   }
 }
 
-/// [showOverlay] with block other show with the same [ModalKey]
+/// [showOverlay] with block other show with the same [ModalKey].
 ///
 /// for example
 /// ```dart
@@ -56,11 +56,11 @@ class _OverlayKey extends ValueKey<Key> {
 ///
 /// final key = const TransientKey('transient');
 ///
-/// showSimpleNotification(Text('modal example'), key: modalKey);
+/// showSimpleNotification(Text('modal example'), key: key);
 ///
 /// // The previous notification will be dismiss immediately, instead of have
 /// // a disappearing animation effect.
-/// showSimpleNotification(Text('modal example 2'), key: modalKey);
+/// showSimpleNotification(Text('modal example 2'), key: key);
 ///
 /// ```
 class TransientKey<T> extends ValueKey<T> {

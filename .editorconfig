@@ -11,6 +11,8 @@ tab_width = 4
 
 [*.dart]
 max_line_length = 120
+tab_width = 2
 
-[*.yaml]
+[{*.yaml, *.yml}]
 indent_size = 2
+tab_width = 2

@@ -9,44 +9,42 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:overlay_support/src/theme.dart';
 
 part 'overlay_animation.dart';
-
 part 'overlay_entry.dart';
-
 part 'overlay_key.dart';
 
-/// to build a widget with animated value
+/// To build a widget with animated value.
 /// [progress] : the progress of overlay animation from 0 - 1
 ///
-/// a simple use case is [TopSlideNotification] in [showOverlayNotification]
+/// A simple use case is [TopSlideNotification] in [showOverlayNotification].
 ///
 typedef Widget AnimatedOverlayWidgetBuilder(BuildContext context, double progress);
 
-///basic api to show overlay widget
+/// Basic api to show overlay widget.
 ///
-///[duration] the overlay display duration , overlay will auto dismiss after [duration]
-///if null , will be set to [kNotificationDuration]
-///if zero , will not auto dismiss in the future
+/// [duration] : the overlay display duration , overlay will auto dismiss after [duration].
+/// if null , will be set to [kNotificationDuration].
+/// if zero , will not auto dismiss in the future.
 ///
-///[builder], see [AnimatedOverlayWidgetBuilder]
+/// [builder] : see [AnimatedOverlayWidgetBuilder].
 ///
-///[curve], adjust the rate of change of an animation
+/// [curve] : adjust the rate of change of an animation.
 ///
-///[key] to identify a OverlayEntry.
+/// [key] : to identify a OverlayEntry.
 ///
 /// for example:
 /// ```dart
 /// final key = ValueKey('my overlay');
 ///
-/// //step 1: popup a overlay
+/// // step 1: popup a overlay
 /// showOverlay(builder, key: key);
 ///
-/// //step 2: popup a overlay use the same key
+/// // step 2: popup a overlay use the same key
 /// showOverlay(builder2, key: key);
 /// ```
 ///
-/// if the notification1 of step1 is showing, the step2 will dismiss previous notification1.
+/// If the notification1 of step1 is showing, the step2 will dismiss previous notification1.
 ///
-/// if you want notification1' exist to prevent step2, please see [ModalKey]
+/// If you want notification1' exist to prevent step2, please see [ModalKey]
 ///
 ///
 OverlaySupportEntry showOverlay(
@@ -63,7 +61,7 @@ OverlaySupportEntry showOverlay(
   final OverlayState overlay = _overlayState;
   if (overlay == null) {
     assert(() {
-      debugPrint('overlay not avaliable, dispose this call : $key');
+      debugPrint('overlay not available, dispose this call : $key');
       return true;
     }());
     return OverlaySupportEntry.empty();
@@ -153,7 +151,7 @@ class OverlaySupport extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     assert(() {
-      if (context.ancestorWidgetOfExactType(OverlaySupport) != null) {
+      if (context.findAncestorWidgetOfExactType<OverlaySupport>() != null) {
         throw FlutterError('There is already an OverlaySupport in the Widget tree.');
       }
       return true;
