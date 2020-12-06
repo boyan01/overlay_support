@@ -15,9 +15,9 @@ class MessageNotification extends StatelessWidget {
   final String message;
 
   const MessageNotification({
-    Key key,
-    @required this.onReply,
-    @required this.message,
+    Key? key,
+    required this.onReply,
+    required this.message,
   }) : super(key: key);
 
   @override

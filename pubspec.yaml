@@ -5,7 +5,7 @@ author: YangBin <yangbinyhbn@gmail.com>
 homepage: https://github.com/boyan01/overlay_support
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: '>=2.12.0-29.10.beta <3.0.0'
 
 dependencies:
   flutter:

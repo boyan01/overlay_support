@@ -5,7 +5,7 @@ part of 'overlay.dart';
 class _KeyedOverlay extends StatelessWidget {
   final Widget child;
 
-  const _KeyedOverlay({_OverlayKey key, this.child}) : super(key: key);
+  const _KeyedOverlay({required _OverlayKey key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class ModalKey<T> extends ValueKey<T> {
   @override
   bool operator ==(other) {
     if (other.runtimeType != runtimeType) return false;
-    final ModalKey<T> typedOther = other;
+    final ModalKey<T> typedOther = other as ModalKey<T>;
     return value == typedOther.value;
   }
 
@@ -42,7 +42,7 @@ class ModalKey<T> extends ValueKey<T> {
 }
 
 class _OverlayKey extends ValueKey<Key> {
-  _OverlayKey(Key key) : super(key ?? UniqueKey());
+  _OverlayKey(Key? key) : super(key ?? UniqueKey());
 }
 
 ///
@@ -69,7 +69,7 @@ class TransientKey<T> extends ValueKey<T> {
   @override
   bool operator ==(other) {
     if (other.runtimeType != runtimeType) return false;
-    final TransientKey<T> typedOther = other;
+    final TransientKey<T> typedOther = other as TransientKey<T>;
     return value == typedOther.value;
   }
 

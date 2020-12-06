@@ -14,8 +14,8 @@ import 'package:overlay_support/src/overlay.dart';
 ///
 OverlaySupportEntry showOverlayNotification(
   WidgetBuilder builder, {
-  Duration duration,
-  Key key,
+  Duration? duration,
+  Key? key,
   NotificationPosition position = NotificationPosition.top,
 }) {
   if (duration == null) {
@@ -55,15 +55,15 @@ OverlaySupportEntry showOverlayNotification(
 /// can be [NotificationPosition.top] or [NotificationPosition.bottom].
 ///
 OverlaySupportEntry showSimpleNotification(Widget content,
-    {Widget leading,
-    Widget subtitle,
-    Widget trailing,
-    EdgeInsetsGeometry contentPadding,
-    Color background,
-    Color foreground,
+    {Widget? leading,
+    Widget? subtitle,
+    Widget? trailing,
+    EdgeInsetsGeometry? contentPadding,
+    Color? background,
+    Color? foreground,
     double elevation = 16,
-    Duration duration,
-    Key key,
+    Duration? duration,
+    Key? key,
     bool autoDismiss = true,
     bool slideDismiss = false,
     NotificationPosition position = NotificationPosition.top}) {
@@ -73,14 +73,14 @@ OverlaySupportEntry showSimpleNotification(Widget content,
         enable: slideDismiss,
         key: ValueKey(key),
         child: Material(
-          color: background ?? Theme.of(context)?.accentColor,
+          color: background ?? Theme.of(context).accentColor,
           elevation: elevation,
           child: SafeArea(
               bottom: position == NotificationPosition.bottom,
               top: position == NotificationPosition.top,
               child: ListTileTheme(
-                textColor: foreground ?? Theme.of(context)?.accentTextTheme?.headline6?.color,
-                iconColor: foreground ?? Theme.of(context)?.accentTextTheme?.headline6?.color,
+                textColor: foreground ?? Theme.of(context).accentTextTheme.headline6?.color,
+                iconColor: foreground ?? Theme.of(context).accentTextTheme.headline6?.color,
                 child: ListTile(
                   leading: leading,
                   title: content,

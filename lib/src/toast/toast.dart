@@ -33,7 +33,7 @@ void toast(String message, {Duration duration = Toast.LENGTH_SHORT}) {
 class _Toast extends StatelessWidget {
   final Widget content;
 
-  const _Toast({Key key, this.content}) : super(key: key);
+  const _Toast({Key? key, required this.content}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class _Toast extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Container(
-                  color: toastTheme?.background,
+                  color: toastTheme.background,
                   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   child: content,
                 ),

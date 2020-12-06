@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
                   return FlatButton(
                       textColor: Colors.yellow,
                       onPressed: () {
-                        OverlaySupportEntry.of(context).dismiss();
+                        OverlaySupportEntry.of(context)!.dismiss();
                       },
                       child: Text('Dismiss'));
                 }),
@@ -57,7 +57,7 @@ class HomePage extends StatelessWidget {
                 return MessageNotification(
                   message: messages[3],
                   onReply: () {
-                    OverlaySupportEntry.of(context).dismiss();
+                    OverlaySupportEntry.of(context)!.dismiss();
                     toast('you checked this message');
                   },
                 );
@@ -74,7 +74,7 @@ class HomePage extends StatelessWidget {
                   return MessageNotification(
                     message: messages[i],
                     onReply: () {
-                      OverlaySupportEntry.of(context).dismiss();
+                      OverlaySupportEntry.of(context)!.dismiss();
                       toast('you checked this message');
                     },
                   );
@@ -121,13 +121,13 @@ class HomePage extends StatelessWidget {
                 return Container(
                   color: Color.lerp(Colors.transparent, Colors.black54, t),
                   child: FractionalTranslation(
-                    translation: Offset.lerp(const Offset(0, -1), const Offset(0, 0), t),
+                    translation: Offset.lerp(const Offset(0, -1), const Offset(0, 0), t)!,
                     child: Column(
                       children: <Widget>[
                         MessageNotification(
                           message: "Hello",
                           onReply: () {
-                            OverlaySupportEntry.of(context).dismiss();
+                            OverlaySupportEntry.of(context)!.dismiss();
                           },
                           key: ModalKey(const Object()),
                         ),
@@ -150,7 +150,7 @@ class _Section extends StatelessWidget {
 
   final List<Widget> children;
 
-  const _Section({Key key, @required this.title, @required this.children}) : super(key: key);
+  const _Section({Key? key, required this.title, required this.children}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +171,7 @@ class _Section extends StatelessWidget {
 class _Title extends StatelessWidget {
   final String title;
 
-  const _Title({Key key, @required this.title}) : super(key: key);
+  const _Title({Key? key, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

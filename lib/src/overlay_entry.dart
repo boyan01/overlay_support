@@ -1,24 +1,19 @@
 part of 'overlay.dart';
 
-///
-/// [OverlaySupportEntry] represent a overlay popup by [showOverlay].
-///
-/// Provide function [dismiss] to dismiss a Notification/Overlay.
-///
-class OverlaySupportEntry {
-  static final _entries = HashMap<_OverlayKey, OverlaySupportEntry>();
-  static final _entriesGlobal = HashMap<GlobalKey, OverlaySupportEntry>();
+abstract class OverlaySupportEntry {
+  factory OverlaySupportEntry.create(OverlayEntry entry, _OverlayKey key, GlobalKey<_AnimatedOverlayState> stateKey) {
+    return _OverlaySupportEntryImpl._(entry, key, stateKey);
+  }
 
-  final OverlayEntry _entry;
-  final _OverlayKey _key;
-  final GlobalKey<_AnimatedOverlayState> _stateKey;
+  factory OverlaySupportEntry.empty() {
+    return _OverlaySupportEntryEmpty();
+  }
 
   /// Find OverlaySupportEntry by [context].
   ///
   /// The [context] should be the BuildContext which build a element in Notification.
   ///
-  /// deprecated parameter `requireForDebug` because it is useless.
-  static OverlaySupportEntry of(BuildContext context, {@deprecated Widget requireForDebug}) {
+  static OverlaySupportEntry? of(BuildContext context) {
     final animatedOverlay = context.findAncestorWidgetOfExactType<_AnimatedOverlay>();
     assert(() {
       if (animatedOverlay == null) {
@@ -29,16 +24,37 @@ class OverlaySupportEntry {
       return true;
     }());
 
-    final key = animatedOverlay.key;
+    final key = animatedOverlay!.key!;
     assert(key is GlobalKey);
 
-    return OverlaySupportEntry._entriesGlobal[key];
+    return _OverlaySupportEntryImpl._entriesGlobal[key as GlobalKey<State<StatefulWidget>>];
   }
 
-  OverlaySupportEntry(this._entry, this._key, this._stateKey) {
+  /// Dismiss the Overlay which associated with this entry.
+  /// If [animate] is false , remove entry immediately.
+  /// If [animate] is true, remove entry after [_AnimatedOverlayState.hide]
+  void dismiss({bool animate = true});
+
+  Future get dismissed;
+}
+
+///
+/// [OverlaySupportEntry] represent a overlay popup by [showOverlay].
+///
+/// Provide function [dismiss] to dismiss a Notification/Overlay.
+///
+class _OverlaySupportEntryImpl implements OverlaySupportEntry {
+  static final _entries = HashMap<_OverlayKey, OverlaySupportEntry>();
+  static final _entriesGlobal = HashMap<GlobalKey, OverlaySupportEntry>();
+
+  final OverlayEntry _entry;
+  final _OverlayKey _key;
+  final GlobalKey<_AnimatedOverlayState> _stateKey;
+
+  _OverlaySupportEntryImpl._(this._entry, this._key, this._stateKey) {
     assert(() {
       if (_entries[_key] != null) {
-        throw FlutterError('there still a OverlaySupportEntry associactd with $_key');
+        throw FlutterError('there still a OverlaySupportEntry associated with $_key');
       }
       return true;
     }());
@@ -46,13 +62,10 @@ class OverlaySupportEntry {
     _entriesGlobal[_stateKey] = this;
   }
 
-  factory OverlaySupportEntry.empty() {
-    return _OverlaySupportEntryEmpty();
-  }
-
   // To known when notification has been dismissed.
   final Completer _dismissedCompleter = Completer();
 
+  @override
   Future get dismissed => _dismissedCompleter.future;
 
   // OverlayEntry has been scheduled to dismiss,
@@ -62,9 +75,7 @@ class OverlaySupportEntry {
   // OverlayEntry has been removed from Overlay
   bool _dismissed = false;
 
-  /// Dismiss the Overlay which associated with this entry.
-  /// If [animate] is false , remove entry immediately.
-  /// If [animate] is true, remove entry after [_AnimatedOverlayState.hide]
+  @override
   void dismiss({bool animate = true}) {
     if (_dismissed || (_dismissScheduled && animate)) {
       return;
@@ -83,13 +94,13 @@ class OverlaySupportEntry {
 
     void animateRemove() {
       if (_stateKey.currentState != null) {
-        _stateKey.currentState.hide().whenComplete(() {
+        _stateKey.currentState!.hide().whenComplete(() {
           _dismissEntry();
         });
       } else {
         //we need show animation before remove this entry
         //so need ensure entry has been inserted into screen
-        WidgetsBinding.instance.scheduleFrameCallback((_) => animateRemove());
+        WidgetsBinding.instance?.scheduleFrameCallback((_) => animateRemove());
       }
     }
 
@@ -111,29 +122,8 @@ class OverlaySupportEntry {
 
 class _OverlaySupportEntryEmpty implements OverlaySupportEntry {
   @override
-  void _dismissEntry() {}
-
-  @override
-  Completer get _dismissedCompleter => null;
-
-  @override
-  OverlayEntry get _entry => null;
-
-  @override
-  _OverlayKey get _key => null;
-
-  @override
-  GlobalKey<_AnimatedOverlayState> get _stateKey => null;
-
-  @override
   void dismiss({bool animate = true}) {}
 
   @override
   Future get dismissed => Future.value(null);
-
-  @override
-  bool _dismissScheduled = true;
-
-  @override
-  bool _dismissed = true;
 }

@@ -9,12 +9,12 @@ class TopSlideNotification extends StatelessWidget {
 
   final double progress;
 
-  const TopSlideNotification({Key key, @required this.builder, this.progress}) : super(key: key);
+  const TopSlideNotification({Key? key, required this.builder, required this.progress}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FractionalTranslation(
-      translation: Offset.lerp(const Offset(0, -1), const Offset(0, 0), progress),
+      translation: Offset.lerp(const Offset(0, -1), const Offset(0, 0), progress)!,
       child: builder(context),
     );
   }
@@ -27,12 +27,12 @@ class BottomSlideNotification extends StatelessWidget {
 
   final double progress;
 
-  const BottomSlideNotification({Key key, @required this.builder, this.progress}) : super(key: key);
+  const BottomSlideNotification({Key? key, required this.builder,required this.progress}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FractionalTranslation(
-      translation: Offset.lerp(const Offset(0, 1), const Offset(0, 0), progress),
+      translation: Offset.lerp(const Offset(0, 1), const Offset(0, 0), progress)!,
       child: builder(context),
     );
   }
@@ -45,9 +45,9 @@ class SlideDismissible extends StatelessWidget {
   final bool enable;
 
   const SlideDismissible({
-    @required Key key,
-    @required this.child,
-    @required this.enable,
+    required Key key,
+    required this.child,
+    required this.enable,
   }) : super(key: key);
 
   @override
@@ -55,9 +55,9 @@ class SlideDismissible extends StatelessWidget {
     if (!enable) return child;
     return Dismissible(
       child: child,
-      key: key,
+      key: key!,
       onDismissed: (direction) {
-        OverlaySupportEntry.of(context).dismiss(animate: false);
+        OverlaySupportEntry.of(context)!.dismiss(animate: false);
       },
     );
   }

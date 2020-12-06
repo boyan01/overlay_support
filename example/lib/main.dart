@@ -50,7 +50,7 @@ class _ExampleDrawerState extends State<_ExampleDrawer> {
                 color: Theme.of(context).primaryIconTheme.color,
                 progress: ProxyAnimation(kAlwaysDismissedAnimation)),
             onPressed: () {
-              _scaffoldKey.currentState.openDrawer();
+              _scaffoldKey.currentState?.openDrawer();
             }),
       ),
       body: HomePage(),
@@ -76,14 +76,14 @@ class _NavigationTiles extends StatelessWidget {
               title: Text("Main"),
               selected: true,
               onTap: () {
-                Navigator.of(context).pop();
+                Navigator.of(context)?.pop();
               },
             ),
             Divider(height: 0, indent: 16),
             ListTile(
               title: Text("Star On GitHub"),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => PageWithIme()));
+                Navigator.of(context)?.push(MaterialPageRoute(builder: (context) => PageWithIme()));
               },
             )
           ],
