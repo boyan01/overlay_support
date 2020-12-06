@@ -88,6 +88,7 @@ OverlaySupportEntry showOverlay(
         curve: curve,
         animationDuration: kNotificationSlideDuration,
         duration: duration ?? kNotificationDuration,
+        overlayKey: overlayKey,
       ),
     );
   });

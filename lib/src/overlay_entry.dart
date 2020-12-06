@@ -14,20 +14,24 @@ abstract class OverlaySupportEntry {
   /// The [context] should be the BuildContext which build a element in Notification.
   ///
   static OverlaySupportEntry? of(BuildContext context) {
-    final animatedOverlay = context.findAncestorWidgetOfExactType<_AnimatedOverlay>();
+    final animatedOverlay = context.findAncestorWidgetOfExactType<_KeyedOverlay>();
     assert(() {
       if (animatedOverlay == null) {
-        throw FlutterError('No _AnimatedOverlay widget found.\n'
+        throw FlutterError('No _KeyedOverlay widget found.\n'
             'The [context] should be the BuildContext which build a element in Notification.\n'
             'is that you called this method from the right scope? ');
       }
       return true;
     }());
 
-    final key = animatedOverlay!.key!;
-    assert(key is GlobalKey);
+    final key = animatedOverlay?.key;
+    assert(key is _OverlayKey);
 
-    return _OverlaySupportEntryImpl._entriesGlobal[key as GlobalKey<State<StatefulWidget>>];
+    return _overlayEntry(key: key as _OverlayKey);
+  }
+
+  static OverlaySupportEntry? _overlayEntry({required _OverlayKey key}) {
+    return _OverlaySupportEntryImpl._entries[key];
   }
 
   /// Dismiss the Overlay which associated with this entry.
@@ -45,7 +49,6 @@ abstract class OverlaySupportEntry {
 ///
 class _OverlaySupportEntryImpl implements OverlaySupportEntry {
   static final _entries = HashMap<_OverlayKey, OverlaySupportEntry>();
-  static final _entriesGlobal = HashMap<GlobalKey, OverlaySupportEntry>();
 
   final OverlayEntry _entry;
   final _OverlayKey _key;
@@ -59,7 +62,6 @@ class _OverlaySupportEntryImpl implements OverlaySupportEntry {
       return true;
     }());
     _entries[_key] = this;
-    _entriesGlobal[_stateKey] = this;
   }
 
   // To known when notification has been dismissed.
@@ -114,7 +116,6 @@ class _OverlaySupportEntryImpl implements OverlaySupportEntry {
       return;
     }
     _dismissed = true;
-    _entriesGlobal.remove(_stateKey);
     _entry.remove();
     _dismissedCompleter.complete();
   }

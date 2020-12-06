@@ -12,9 +12,16 @@ class _AnimatedOverlay extends StatefulWidget {
 
   final Curve curve;
 
-  _AnimatedOverlay(
-      {required Key key, required this.animationDuration, Curve? curve, required this.builder, required this.duration})
-      : curve = curve ?? Curves.easeInOut,
+  final _OverlayKey overlayKey;
+
+  _AnimatedOverlay({
+    required Key key,
+    required this.animationDuration,
+    Curve? curve,
+    required this.builder,
+    required this.duration,
+    required this.overlayKey,
+  })   : curve = curve ?? Curves.easeInOut,
         assert(animationDuration >= Duration.zero),
         assert(duration >= Duration.zero),
         super(key: key);
@@ -24,24 +31,24 @@ class _AnimatedOverlay extends StatefulWidget {
 }
 
 class _AnimatedOverlayState extends State<_AnimatedOverlay> with TickerProviderStateMixin {
-  AnimationController? _controller;
+  late AnimationController _controller;
 
   CancelableOperation? _autoHideOperation;
 
   void show() {
     _autoHideOperation?.cancel();
-    _controller!.forward(from: _controller!.value);
+    _controller.forward(from: _controller.value);
   }
 
   ///
   /// [immediately] True to dismiss notification immediately.
   ///
   Future hide({bool immediately = false}) async {
-    if (!immediately && !_controller!.isDismissed && _controller!.status == AnimationStatus.forward) {
-      await _controller!.forward(from: _controller!.value);
+    if (!immediately && !_controller.isDismissed && _controller.status == AnimationStatus.forward) {
+      await _controller.forward(from: _controller.value);
     }
     _autoHideOperation?.cancel();
-    await _controller!.reverse(from: _controller!.value);
+    await _controller.reverse(from: _controller.value);
   }
 
   @override
@@ -49,12 +56,11 @@ class _AnimatedOverlayState extends State<_AnimatedOverlay> with TickerProviderS
     _controller = AnimationController(
         vsync: this, duration: widget.animationDuration, debugLabel: 'AnimatedOverlayShowHideAnimation');
     super.initState();
-    _controller!.addStatusListener((status) {
+    _controller.addStatusListener((status) {
       if (status == AnimationStatus.dismissed) {
-        _OverlaySupportEntryImpl._entriesGlobal[widget.key as GlobalKey<State<StatefulWidget>>]!
-            .dismiss(animate: false);
+        OverlaySupportEntry._overlayEntry(key: widget.overlayKey)?.dismiss(animate: false);
       } else if (status == AnimationStatus.completed) {
-        if (widget.duration> Duration.zero) {
+        if (widget.duration > Duration.zero) {
           _autoHideOperation = CancelableOperation.fromFuture(Future.delayed(widget.duration))
             ..value.whenComplete(() {
               hide();
@@ -67,7 +73,7 @@ class _AnimatedOverlayState extends State<_AnimatedOverlay> with TickerProviderS
 
   @override
   void dispose() {
-    _controller?.dispose();
+    _controller.dispose();
     _autoHideOperation?.cancel();
     super.dispose();
   }
@@ -75,9 +81,9 @@ class _AnimatedOverlayState extends State<_AnimatedOverlay> with TickerProviderS
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-        animation: _controller!,
+        animation: _controller,
         builder: (context, _) {
-          return widget.builder(context, widget.curve.transform(_controller!.value));
+          return widget.builder(context, widget.curve.transform(_controller.value));
         });
   }
 }
