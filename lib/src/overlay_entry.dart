@@ -1,7 +1,7 @@
 part of 'overlay.dart';
 
 abstract class OverlaySupportEntry {
-  factory OverlaySupportEntry.create(OverlayEntry entry, _OverlayKey key, GlobalKey<_AnimatedOverlayState> stateKey) {
+  factory OverlaySupportEntry(OverlayEntry entry, Key key, GlobalKey<_AnimatedOverlayState> stateKey) {
     return _OverlaySupportEntryImpl._(entry, key, stateKey);
   }
 
@@ -14,7 +14,7 @@ abstract class OverlaySupportEntry {
   /// The [context] should be the BuildContext which build a element in Notification.
   ///
   static OverlaySupportEntry? of(BuildContext context) {
-    final animatedOverlay = context.findAncestorWidgetOfExactType<_KeyedOverlay>();
+    final animatedOverlay = context.findAncestorWidgetOfExactType<KeyedOverlay>();
     assert(() {
       if (animatedOverlay == null) {
         throw FlutterError('No _KeyedOverlay widget found.\n'
@@ -23,14 +23,10 @@ abstract class OverlaySupportEntry {
       }
       return true;
     }());
-
-    final key = animatedOverlay?.key;
-    assert(key is _OverlayKey);
-
-    return _overlayEntry(key: key as _OverlayKey);
+    return _overlayEntry(key: animatedOverlay?.key as Key);
   }
 
-  static OverlaySupportEntry? _overlayEntry({required _OverlayKey key}) {
+  static OverlaySupportEntry? _overlayEntry({required Key key}) {
     return _OverlaySupportEntryImpl._entries[key];
   }
 
@@ -48,20 +44,20 @@ abstract class OverlaySupportEntry {
 /// Provide function [dismiss] to dismiss a Notification/Overlay.
 ///
 class _OverlaySupportEntryImpl implements OverlaySupportEntry {
-  static final _entries = HashMap<_OverlayKey, OverlaySupportEntry>();
+  static final _entries = HashMap<Key, OverlaySupportEntry>();
 
   final OverlayEntry _entry;
-  final _OverlayKey _key;
+  final Key _overlayKey;
   final GlobalKey<_AnimatedOverlayState> _stateKey;
 
-  _OverlaySupportEntryImpl._(this._entry, this._key, this._stateKey) {
+  _OverlaySupportEntryImpl._(this._entry, this._overlayKey, this._stateKey) {
     assert(() {
-      if (_entries[_key] != null) {
-        throw FlutterError('there still a OverlaySupportEntry associated with $_key');
+      if (_entries[_overlayKey] != null) {
+        throw FlutterError('there still a OverlaySupportEntry associated with $_overlayKey');
       }
       return true;
     }());
-    _entries[_key] = this;
+    _entries[_overlayKey] = this;
   }
 
   // To known when notification has been dismissed.
@@ -85,7 +81,7 @@ class _OverlaySupportEntryImpl implements OverlaySupportEntry {
     if (!_dismissScheduled) {
       // Remove this from _entries, be seems _key'overlay entry is scheduled to dismiss
       // so we can popup another overlay entry with the same key
-      _entries.remove(_key);
+      _entries.remove(_overlayKey);
     }
     _dismissScheduled = true;
 

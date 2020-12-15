@@ -3,6 +3,7 @@ library overlay_support;
 export 'src/notification/notification.dart';
 export 'src/notification/overlay_notification.dart';
 export 'src/overlay.dart';
+export 'src/overlay_keys.dart' hide KeyedOverlay;
 export 'src/theme.dart';
 export 'src/toast/toast.dart';
 

@@ -12,7 +12,7 @@ class _AnimatedOverlay extends StatefulWidget {
 
   final Curve curve;
 
-  final _OverlayKey overlayKey;
+  final Key overlayKey;
 
   _AnimatedOverlay({
     required Key key,

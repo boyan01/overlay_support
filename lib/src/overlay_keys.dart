@@ -1,11 +1,11 @@
-part of 'overlay.dart';
+import 'package:flutter/widgets.dart';
 
 /// A widget that builds its child.
 /// The same as [KeyedSubtree]
-class _KeyedOverlay extends StatelessWidget {
+class KeyedOverlay extends StatelessWidget {
   final Widget child;
 
-  const _KeyedOverlay({required _OverlayKey key, required this.child}) : super(key: key);
+  const KeyedOverlay({required Key key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +39,6 @@ class ModalKey<T> extends ValueKey<T> {
 
   @override
   int get hashCode => hashValues(runtimeType, value);
-}
-
-class _OverlayKey extends ValueKey<Key> {
-  _OverlayKey(Key? key) : super(key ?? UniqueKey());
 }
 
 ///

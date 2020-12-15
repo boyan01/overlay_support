@@ -5,6 +5,8 @@ import 'package:overlay_support/overlay_support.dart';
 import 'pages/page_main.dart';
 import 'pages/page_with_ime.dart';
 
+import 'pages/page_multi_overlay_support.dart';
+
 void main() {
   debugDefaultTargetPlatformOverride = TargetPlatform.android;
 
@@ -16,7 +18,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return OverlaySupport(
+    return GlobalOverlaySupport(
       child: MaterialApp(
         title: 'Overlay Support Example',
         theme: ThemeData(
@@ -82,11 +84,18 @@ class _NavigationTiles extends StatelessWidget {
             ),
             Divider(height: 0, indent: 16),
             ListTile(
+              title: Text("Multi Screen"),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => PageMultiOverlaySupport()));
+              },
+            ),
+            Divider(height: 0, indent: 16),
+            ListTile(
               title: Text("Star On GitHub"),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => PageWithIme()));
               },
-            )
+            ),
           ],
         ),
       ),

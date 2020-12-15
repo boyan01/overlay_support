@@ -284,7 +284,7 @@ class _FakeOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OverlaySupport(
+    return GlobalOverlaySupport(
       child: MaterialApp(
         home: child,
       ),

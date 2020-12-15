@@ -8,9 +8,11 @@ import 'package:flutter/widgets.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:overlay_support/src/theme.dart';
 
+import 'overlay_keys.dart';
+import 'overlay_state_finder.dart';
+
 part 'overlay_animation.dart';
 part 'overlay_entry.dart';
-part 'overlay_key.dart';
 
 /// To build a widget with animated value.
 /// [progress] : the progress of overlay animation from 0 - 1
@@ -52,11 +54,14 @@ OverlaySupportEntry showOverlay(
   Curve? curve,
   Duration? duration,
   Key? key,
+  BuildContext? context,
 }) {
   assert(key is! GlobalKey);
-  assert(_debugInitialized, 'OverlaySupport Not Initialized ! \nensure your app wrapped widget OverlaySupport');
 
-  final OverlayState? overlay = _overlayState;
+  assert(context != null || _debugInitialized,
+      'OverlaySupport Not Initialized ! \nensure your app wrapped widget OverlaySupport');
+
+  final OverlayState? overlay = findOverlayState(context: context);
   if (overlay == null) {
     assert(() {
       debugPrint('overlay not available, dispose this call : $key');
@@ -65,9 +70,9 @@ OverlaySupportEntry showOverlay(
     return OverlaySupportEntry.empty();
   }
 
-  final overlayKey = _OverlayKey(key);
+  final overlayKey = key ?? UniqueKey();
 
-  final oldSupportEntry = _OverlaySupportEntryImpl._entries[overlayKey];
+  final oldSupportEntry = OverlaySupportEntry._overlayEntry(key: overlayKey);
   if (oldSupportEntry != null && key is ModalKey) {
     // Do nothing for modal key if there be a OverlayEntry hold the same model key
     // and it is showing.
@@ -80,7 +85,7 @@ OverlaySupportEntry showOverlay(
 
   final stateKey = GlobalKey<_AnimatedOverlayState>();
   final OverlayEntry entry = OverlayEntry(builder: (context) {
-    return _KeyedOverlay(
+    return KeyedOverlay(
       key: overlayKey,
       child: _AnimatedOverlay(
         key: stateKey,
@@ -92,43 +97,9 @@ OverlaySupportEntry showOverlay(
       ),
     );
   });
-  final OverlaySupportEntry supportEntry = OverlaySupportEntry.create(entry, overlayKey, stateKey);
+  final OverlaySupportEntry supportEntry = OverlaySupportEntry(entry, overlayKey, stateKey);
   overlay.insert(entry);
   return supportEntry;
-}
-
-final GlobalKey<_OverlayFinderState> _keyFinder = GlobalKey(debugLabel: 'overlay_support');
-
-OverlayState? get _overlayState {
-  final context = _keyFinder.currentContext;
-  if (context == null) return null;
-
-  NavigatorState? navigator;
-  void visitor(Element element) {
-    if (navigator != null) return;
-
-    if (element.widget is Navigator) {
-      navigator = (element as StatefulElement).state as NavigatorState?;
-    } else {
-      element.visitChildElements(visitor);
-    }
-  }
-
-  context.visitChildElements(visitor);
-
-  assert(navigator != null, '''It looks like you are not using Navigator in your app.
-         
-         do you wrapped you app widget like this?
-         
-         OverlaySupport(
-           child: MaterialApp(
-             title: 'Overlay Support Example',
-             home: HomePage(),
-           ),
-         )
-      
-      ''');
-  return navigator?.overlay;
 }
 
 bool _debugInitialized = false;
@@ -140,40 +111,88 @@ class OverlaySupport extends StatelessWidget {
 
   const OverlaySupport({Key? key, required this.child, this.toastTheme}) : super(key: key);
 
+  OverlaySupportState? of(BuildContext context) {
+    return context.findAncestorStateOfType<OverlaySupportState>();
+  }
+
   @override
-  StatelessElement createElement() {
+  Widget build(BuildContext context) {
+    return GlobalOverlaySupport(
+      toastTheme: toastTheme ?? ToastThemeData(),
+      child: OverlayFinder(child: child),
+    );
+  }
+}
+
+class GlobalOverlaySupport extends StatefulWidget {
+  final Widget child;
+
+  final ToastThemeData? toastTheme;
+
+  const GlobalOverlaySupport({Key? key, this.toastTheme, required this.child}) : super(key: key);
+
+  @override
+  StatefulElement createElement() {
     _debugInitialized = true;
     return super.createElement();
   }
 
   @override
+  _GlobalOverlaySupportState createState() => _GlobalOverlaySupportState();
+}
+
+class _GlobalOverlaySupportState extends State<GlobalOverlaySupport> {
+  @override
   Widget build(BuildContext context) {
     assert(() {
-      if (context.findAncestorWidgetOfExactType<OverlaySupport>() != null) {
-        throw FlutterError('There is already an OverlaySupport in the Widget tree.');
+      if (context.findAncestorWidgetOfExactType<GlobalOverlaySupport>() != null) {
+        throw FlutterError('There is already an GlobalOverlaySupport in the Widget tree.');
       }
       return true;
     }());
     return OverlaySupportTheme(
-      toastTheme: toastTheme ?? ToastThemeData(),
-      child: _OverlayFinder(key: _keyFinder, child: child),
+      toastTheme: widget.toastTheme ?? ToastThemeData(),
+      child: OverlayFinder(child: widget.child),
     );
   }
 }
 
-/// Used to find the [Overlay] in decedents tree.
-class _OverlayFinder extends StatefulWidget {
+class LocalOverlaySupport extends StatefulWidget {
   final Widget child;
 
-  const _OverlayFinder({Key? key, required this.child}) : super(key: key);
+  final ToastThemeData? toastTheme;
+
+  const LocalOverlaySupport({
+    Key? key,
+    this.toastTheme,
+    required this.child,
+  }) : super(key: key);
 
   @override
-  _OverlayFinderState createState() => _OverlayFinderState();
+  _LocalOverlaySupportState createState() => _LocalOverlaySupportState();
 }
 
-class _OverlayFinderState extends State<_OverlayFinder> {
+class _LocalOverlaySupportState extends OverlaySupportState<LocalOverlaySupport> {
   @override
   Widget build(BuildContext context) {
-    return widget.child;
+    return OverlaySupportTheme(
+      toastTheme: widget.toastTheme ?? OverlaySupportTheme.toast(context) ?? ToastThemeData(),
+      child: Overlay(
+        initialEntries: [OverlayEntry(builder: (context) => widget.child)],
+      ),
+    );
+  }
+}
+
+abstract class OverlaySupportState<T extends StatefulWidget> extends State<T> {
+  final Map<Key, OverlaySupportEntry> _entries = HashMap();
+
+  OverlaySupportEntry? getEntry({required Key key}) {
+    assert(_entries.containsKey(key));
+    return _entries[key];
+  }
+
+  void removeEntry({required Key key}) {
+    _entries.remove(key);
   }
 }
