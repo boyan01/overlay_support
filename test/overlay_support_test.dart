@@ -66,7 +66,7 @@ void main() {
     });
 
     testWidgets('notification hide manually', (tester) async {
-      OverlaySupportEntry entry;
+      OverlaySupportEntry? entry;
       await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
             onPressed: () {
@@ -81,7 +81,7 @@ void main() {
       assert(entry != null, 'entry has been inited by tap event');
       expect(find.text('message'), findsOneWidget);
 
-      entry.dismiss(animate: false);
+      entry!.dismiss(animate: false);
       await tester.pump();
 
       //already hidden
@@ -227,7 +227,7 @@ void main() {
 
   group('overlay support entry', () {
     testWidgets('find OverlaySupportEntry by context', (tester) async {
-      OverlaySupportEntry entry;
+      OverlaySupportEntry? entry;
       await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
             onPressed: () {
@@ -254,7 +254,7 @@ void main() {
     });
 
     testWidgets('overlay support entry dimissed', (tester) async {
-      OverlaySupportEntry entry;
+      OverlaySupportEntry? entry;
       await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
             onPressed: () {
@@ -268,7 +268,7 @@ void main() {
 
       assert(entry != null);
       bool dismissed = false;
-      entry.dismissed.whenComplete(() {
+      entry!.dismissed.whenComplete(() {
         dismissed = true;
       });
       await tester.pump(Duration(milliseconds: 100));
@@ -280,7 +280,7 @@ void main() {
 class _FakeOverlay extends StatelessWidget {
   final Widget child;
 
-  const _FakeOverlay({Key key, @required this.child}) : super(key: key);
+  const _FakeOverlay({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

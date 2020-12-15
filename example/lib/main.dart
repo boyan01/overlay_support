@@ -1,8 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:overlay_support_example/pages/page_main.dart';
-import 'package:overlay_support_example/pages/page_with_ime.dart';
+
+import 'pages/page_main.dart';
+import 'pages/page_with_ime.dart';
 
 void main() {
   debugDefaultTargetPlatformOverride = TargetPlatform.android;
@@ -50,7 +51,7 @@ class _ExampleDrawerState extends State<_ExampleDrawer> {
                 color: Theme.of(context).primaryIconTheme.color,
                 progress: ProxyAnimation(kAlwaysDismissedAnimation)),
             onPressed: () {
-              _scaffoldKey.currentState.openDrawer();
+              _scaffoldKey.currentState?.openDrawer();
             }),
       ),
       body: HomePage(),

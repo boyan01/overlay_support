@@ -49,16 +49,14 @@ typedef Widget AnimatedOverlayWidgetBuilder(BuildContext context, double progres
 ///
 OverlaySupportEntry showOverlay(
   AnimatedOverlayWidgetBuilder builder, {
-  Curve curve,
-  Duration duration,
-  Key key,
+  Curve? curve,
+  Duration? duration,
+  Key? key,
 }) {
   assert(key is! GlobalKey);
   assert(_debugInitialized, 'OverlaySupport Not Initialized ! \nensure your app wrapped widget OverlaySupport');
 
-  duration ??= kNotificationDuration;
-
-  final OverlayState overlay = _overlayState;
+  final OverlayState? overlay = _overlayState;
   if (overlay == null) {
     assert(() {
       debugPrint('overlay not available, dispose this call : $key');
@@ -69,19 +67,19 @@ OverlaySupportEntry showOverlay(
 
   final overlayKey = _OverlayKey(key);
 
-  final supportEntry = OverlaySupportEntry._entries[overlayKey];
-  if (supportEntry != null && key is ModalKey) {
+  final oldSupportEntry = _OverlaySupportEntryImpl._entries[overlayKey];
+  if (oldSupportEntry != null && key is ModalKey) {
     // Do nothing for modal key if there be a OverlayEntry hold the same model key
     // and it is showing.
-    return supportEntry;
+    return oldSupportEntry;
   }
 
   final dismissImmediately = key is TransientKey;
   // If we got a showing overlay with [key], we should dismiss it before showing a new.
-  supportEntry?.dismiss(animate: !dismissImmediately);
+  oldSupportEntry?.dismiss(animate: !dismissImmediately);
 
   final stateKey = GlobalKey<_AnimatedOverlayState>();
-  OverlaySupportEntry entry = OverlaySupportEntry(OverlayEntry(builder: (context) {
+  final OverlayEntry entry = OverlayEntry(builder: (context) {
     return _KeyedOverlay(
       key: overlayKey,
       child: _AnimatedOverlay(
@@ -89,28 +87,27 @@ OverlaySupportEntry showOverlay(
         builder: builder,
         curve: curve,
         animationDuration: kNotificationSlideDuration,
-        duration: duration,
+        duration: duration ?? kNotificationDuration,
       ),
     );
-  }), overlayKey, stateKey);
-
-  overlay.insert(entry._entry);
-
-  return entry;
+  });
+  final OverlaySupportEntry supportEntry = OverlaySupportEntry.create(entry, overlayKey, stateKey);
+  overlay.insert(entry);
+  return supportEntry;
 }
 
 final GlobalKey<_OverlayFinderState> _keyFinder = GlobalKey(debugLabel: 'overlay_support');
 
-OverlayState get _overlayState {
+OverlayState? get _overlayState {
   final context = _keyFinder.currentContext;
   if (context == null) return null;
 
-  NavigatorState navigator;
+  NavigatorState? navigator;
   void visitor(Element element) {
     if (navigator != null) return;
 
     if (element.widget is Navigator) {
-      navigator = (element as StatefulElement).state;
+      navigator = (element as StatefulElement).state as NavigatorState?;
     } else {
       element.visitChildElements(visitor);
     }
@@ -130,7 +127,7 @@ OverlayState get _overlayState {
          )
       
       ''');
-  return navigator.overlay;
+  return navigator?.overlay;
 }
 
 bool _debugInitialized = false;
@@ -138,9 +135,9 @@ bool _debugInitialized = false;
 class OverlaySupport extends StatelessWidget {
   final Widget child;
 
-  final ToastThemeData toastTheme;
+  final ToastThemeData? toastTheme;
 
-  const OverlaySupport({Key key, @required this.child, this.toastTheme}) : super(key: key);
+  const OverlaySupport({Key? key, required this.child, this.toastTheme}) : super(key: key);
 
   @override
   StatelessElement createElement() {
@@ -167,7 +164,7 @@ class OverlaySupport extends StatelessWidget {
 class _OverlayFinder extends StatefulWidget {
   final Widget child;
 
-  const _OverlayFinder({Key key, this.child}) : super(key: key);
+  const _OverlayFinder({Key? key, required this.child}) : super(key: key);
 
   @override
   _OverlayFinderState createState() => _OverlayFinderState();

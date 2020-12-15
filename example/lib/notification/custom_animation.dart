@@ -9,7 +9,7 @@ class CustomAnimationToast extends StatelessWidget {
 
   static final Tween<double> tweenOpacity = Tween<double>(begin: 0, end: 1);
 
-  const CustomAnimationToast({Key key, @required this.value}) : super(key: key);
+  const CustomAnimationToast({Key? key, required this.value}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
