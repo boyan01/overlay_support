@@ -1,8 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:overlay_support_example/pages/page_main.dart';
-import 'package:overlay_support_example/pages/page_with_ime.dart';
+
+import 'pages/page_main.dart';
+import 'pages/page_with_ime.dart';
 
 void main() {
   debugDefaultTargetPlatformOverride = TargetPlatform.android;
@@ -76,14 +77,14 @@ class _NavigationTiles extends StatelessWidget {
               title: Text("Main"),
               selected: true,
               onTap: () {
-                Navigator.of(context)?.pop();
+                Navigator.of(context).pop();
               },
             ),
             Divider(height: 0, indent: 16),
             ListTile(
               title: Text("Star On GitHub"),
               onTap: () {
-                Navigator.of(context)?.push(MaterialPageRoute(builder: (context) => PageWithIme()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => PageWithIme()));
               },
             )
           ],

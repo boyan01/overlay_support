@@ -116,7 +116,7 @@ void main() {
     await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
       return FlatButton(
           onPressed: () {
-            Navigator.of(context)!.push(MaterialPageRoute(builder: (context) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
               return Overlay(initialEntries: [
                 OverlayEntry(builder: (context) {
                   return Builder(
