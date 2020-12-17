@@ -12,6 +12,7 @@ import 'overlay_keys.dart';
 import 'overlay_state_finder.dart';
 
 part 'overlay_animation.dart';
+
 part 'overlay_entry.dart';
 
 /// To build a widget with animated value.
@@ -61,8 +62,9 @@ OverlaySupportEntry showOverlay(
   assert(context != null || _debugInitialized,
       'OverlaySupport Not Initialized ! \nensure your app wrapped widget OverlaySupport');
 
-  final OverlayState? overlay = findOverlayState(context: context);
-  if (overlay == null) {
+  final OverlaySupportState? overlaySupport = findOverlayState(context: context);
+  final OverlayState? overlay = overlaySupport?.overlayState;
+  if (overlaySupport == null || overlay == null) {
     assert(() {
       debugPrint('overlay not available, dispose this call : $key');
       return true;
@@ -72,7 +74,7 @@ OverlaySupportEntry showOverlay(
 
   final overlayKey = key ?? UniqueKey();
 
-  final oldSupportEntry = OverlaySupportEntry._overlayEntry(key: overlayKey);
+  final oldSupportEntry = overlaySupport.getEntry(key: overlayKey);
   if (oldSupportEntry != null && key is ModalKey) {
     // Do nothing for modal key if there be a OverlayEntry hold the same model key
     // and it is showing.
@@ -80,7 +82,7 @@ OverlaySupportEntry showOverlay(
   }
 
   final dismissImmediately = key is TransientKey;
-  // If we got a showing overlay with [key], we should dismiss it before showing a new.
+  // If we got a showing overlaySupport with [key], we should dismiss it before showing a new.
   oldSupportEntry?.dismiss(animate: !dismissImmediately);
 
   final stateKey = GlobalKey<_AnimatedOverlayState>();
@@ -94,10 +96,12 @@ OverlaySupportEntry showOverlay(
         animationDuration: kNotificationSlideDuration,
         duration: duration ?? kNotificationDuration,
         overlayKey: overlayKey,
+        overlaySupportState: overlaySupport,
       ),
     );
   });
-  final OverlaySupportEntry supportEntry = OverlaySupportEntry(entry, overlayKey, stateKey);
+  final OverlaySupportEntry supportEntry = OverlaySupportEntry(entry, overlayKey, stateKey, overlaySupport);
+  overlaySupport.addEntry(supportEntry, key: overlayKey);
   overlay.insert(entry);
   return supportEntry;
 }
@@ -119,7 +123,7 @@ class OverlaySupport extends StatelessWidget {
   Widget build(BuildContext context) {
     return GlobalOverlaySupport(
       toastTheme: toastTheme ?? ToastThemeData(),
-      child: OverlayFinder(child: child),
+      child: child,
     );
   }
 }
@@ -129,7 +133,7 @@ class GlobalOverlaySupport extends StatefulWidget {
 
   final ToastThemeData? toastTheme;
 
-  const GlobalOverlaySupport({Key? key, this.toastTheme, required this.child}) : super(key: key);
+  GlobalOverlaySupport({this.toastTheme, required this.child}) : super(key: keyFinder);
 
   @override
   StatefulElement createElement() {
@@ -141,7 +145,7 @@ class GlobalOverlaySupport extends StatefulWidget {
   _GlobalOverlaySupportState createState() => _GlobalOverlaySupportState();
 }
 
-class _GlobalOverlaySupportState extends State<GlobalOverlaySupport> {
+class _GlobalOverlaySupportState extends OverlaySupportState<GlobalOverlaySupport> {
   @override
   Widget build(BuildContext context) {
     assert(() {
@@ -151,9 +155,39 @@ class _GlobalOverlaySupportState extends State<GlobalOverlaySupport> {
       return true;
     }());
     return OverlaySupportTheme(
-      toastTheme: widget.toastTheme ?? ToastThemeData(),
-      child: OverlayFinder(child: widget.child),
+      toastTheme: widget.toastTheme ?? OverlaySupportTheme.toast(context) ?? ToastThemeData(),
+      child: widget.child,
     );
+  }
+
+  @override
+  OverlayState? get overlayState {
+    NavigatorState? navigator;
+    void visitor(Element element) {
+      if (navigator != null) return;
+
+      if (element.widget is Navigator) {
+        navigator = (element as StatefulElement).state as NavigatorState?;
+      } else {
+        element.visitChildElements(visitor);
+      }
+    }
+
+    context.visitChildElements(visitor);
+
+    assert(navigator != null, '''It looks like you are not using Navigator in your app.
+         
+         do you wrapped you app widget like this?
+         
+         OverlaySupport(
+           child: MaterialApp(
+             title: 'Overlay Support Example',
+             home: HomePage(),
+           ),
+         )
+      
+      ''');
+    return navigator?.overlay;
   }
 }
 
@@ -173,11 +207,17 @@ class LocalOverlaySupport extends StatefulWidget {
 }
 
 class _LocalOverlaySupportState extends OverlaySupportState<LocalOverlaySupport> {
+  final GlobalKey<OverlayState> _overlayStateKey = GlobalKey();
+
+  @override
+  OverlayState? get overlayState => _overlayStateKey.currentState;
+
   @override
   Widget build(BuildContext context) {
     return OverlaySupportTheme(
       toastTheme: widget.toastTheme ?? OverlaySupportTheme.toast(context) ?? ToastThemeData(),
       child: Overlay(
+        key: _overlayStateKey,
         initialEntries: [OverlayEntry(builder: (context) => widget.child)],
       ),
     );
@@ -187,9 +227,14 @@ class _LocalOverlaySupportState extends OverlaySupportState<LocalOverlaySupport>
 abstract class OverlaySupportState<T extends StatefulWidget> extends State<T> {
   final Map<Key, OverlaySupportEntry> _entries = HashMap();
 
+  OverlayState? get overlayState;
+
   OverlaySupportEntry? getEntry({required Key key}) {
-    assert(_entries.containsKey(key));
     return _entries[key];
+  }
+
+  void addEntry(OverlaySupportEntry entry, {required Key key}) {
+    _entries[key] = entry;
   }
 
   void removeEntry({required Key key}) {

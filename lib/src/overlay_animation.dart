@@ -14,6 +14,8 @@ class _AnimatedOverlay extends StatefulWidget {
 
   final Key overlayKey;
 
+  final OverlaySupportState overlaySupportState;
+
   _AnimatedOverlay({
     required Key key,
     required this.animationDuration,
@@ -21,6 +23,7 @@ class _AnimatedOverlay extends StatefulWidget {
     required this.builder,
     required this.duration,
     required this.overlayKey,
+    required this.overlaySupportState,
   })   : curve = curve ?? Curves.easeInOut,
         assert(animationDuration >= Duration.zero),
         assert(duration >= Duration.zero),
@@ -56,9 +59,10 @@ class _AnimatedOverlayState extends State<_AnimatedOverlay> with TickerProviderS
     _controller = AnimationController(
         vsync: this, duration: widget.animationDuration, debugLabel: 'AnimatedOverlayShowHideAnimation');
     super.initState();
+    final overlayEntry = widget.overlaySupportState.getEntry(key: widget.overlayKey);
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.dismissed) {
-        OverlaySupportEntry._overlayEntry(key: widget.overlayKey)?.dismiss(animate: false);
+        overlayEntry?.dismiss(animate: false);
       } else if (status == AnimationStatus.completed) {
         if (widget.duration > Duration.zero) {
           _autoHideOperation = CancelableOperation.fromFuture(Future.delayed(widget.duration))

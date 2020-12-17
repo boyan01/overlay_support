@@ -1,36 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:overlay_support/overlay_support.dart';
 
-OverlayState? findOverlayState({BuildContext? context}) {
+OverlaySupportState? findOverlayState({BuildContext? context}) {
   if (context == null) {
     return _globalOverlayState;
   }
-  return Navigator.of(context).overlay;
+  final OverlaySupportState? overlaySupportState = context.findAncestorStateOfType<OverlaySupportState>();
+  return overlaySupportState;
 }
 
-final GlobalKey<_OverlayFinderState> _keyFinder = GlobalKey(debugLabel: 'overlay_support');
+final GlobalKey<OverlaySupportState> keyFinder = GlobalKey(debugLabel: 'overlay_support');
 
-OverlayState? get _globalOverlayState {
-  final context = _keyFinder.currentContext;
-  if (context == null) return null;
-
-  NavigatorState? navigator;
-  void visitor(Element element) {
-    if (navigator != null) return;
-
-    if (element.widget is Navigator) {
-      navigator = (element as StatefulElement).state as NavigatorState?;
-    } else {
-      element.visitChildElements(visitor);
-    }
-  }
-
-  context.visitChildElements(visitor);
-
-  assert(navigator != null, '''It looks like you are not using Navigator in your app.
+OverlaySupportState? get _globalOverlayState {
+  final OverlaySupportState? state = keyFinder.currentState;
+  assert(() {
+    if (state == null) {
+      throw FlutterError('''we can not find OverlaySupportState in your app.
          
-         do you wrapped you app widget like this?
+         do you declare GlobalOverlaySupport you app widget tree like this?
          
-         OverlaySupport(
+         GlobalOverlaySupport(
            child: MaterialApp(
              title: 'Overlay Support Example',
              home: HomePage(),
@@ -38,22 +27,8 @@ OverlayState? get _globalOverlayState {
          )
       
       ''');
-  return navigator?.overlay;
-}
-
-/// Used to find the [Overlay] in decedents tree.
-class OverlayFinder extends StatefulWidget {
-  final Widget child;
-
-  OverlayFinder({required this.child}) : super(key: _keyFinder);
-
-  @override
-  _OverlayFinderState createState() => _OverlayFinderState();
-}
-
-class _OverlayFinderState extends State<OverlayFinder> {
-  @override
-  Widget build(BuildContext context) {
-    return widget.child;
-  }
+    }
+    return true;
+  }());
+  return state;
 }
