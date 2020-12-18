@@ -9,45 +9,9 @@ void main() {
     kNotificationDuration = const Duration(milliseconds: 1);
   });
 
-  group('toast', () {
-    testWidgets('toast functional test', (tester) async {
-      await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
-        return FlatButton(
-            onPressed: () {
-              toast('message', duration: const Duration(milliseconds: 1));
-            },
-            child: Text('toast'));
-      })));
-      await tester.pump();
-      await tester.tap(find.byType(FlatButton));
-      await tester.pump();
-
-      expect(find.text('message'), findsOneWidget);
-
-      await tester.pump(const Duration(milliseconds: 50));
-      //already hidden
-      expect(find.text('message'), findsNothing);
-    });
-
-    testWidgets('toast zero duration', (tester) async {
-      await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
-        return FlatButton(
-            onPressed: () {
-              toast('message', duration: Duration.zero);
-            },
-            child: Text('toast'));
-      })));
-      await tester.pump();
-      await tester.tap(find.byType(FlatButton));
-      await tester.pump();
-
-      expect(find.text('message'), findsNothing);
-    });
-  });
-
   group('notification', () {
     testWidgets('notification functional test', (tester) async {
-      await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
+      await tester.pumpWidget(FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
             onPressed: () {
               showSimpleNotification(Text('message'));
@@ -67,7 +31,7 @@ void main() {
 
     testWidgets('notification hide manually', (tester) async {
       OverlaySupportEntry? entry;
-      await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
+      await tester.pumpWidget(FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
             onPressed: () {
               entry = showSimpleNotification(Text('message'), autoDismiss: false);
@@ -91,7 +55,7 @@ void main() {
     });
 
     testWidgets('notification hide by manual immediately', (tester) async {
-      await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
+      await tester.pumpWidget(FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
             onPressed: () {
               final entry = showSimpleNotification(Text('message'), autoDismiss: false);
@@ -113,7 +77,7 @@ void main() {
   });
 
   testWidgets('notification dismiss in duplicate Overlay', (tester) async {
-    await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
+    await tester.pumpWidget(FakeOverlay(child: Builder(builder: (context) {
       return FlatButton(
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
@@ -156,7 +120,7 @@ void main() {
     testWidgets('overlay with the normal key', (tester) async {
       kNotificationSlideDuration = Duration(milliseconds: 200);
       kNotificationDuration = const Duration(milliseconds: 1000);
-      await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
+      await tester.pumpWidget(FakeOverlay(child: Builder(builder: (context) {
         return Column(
           children: <Widget>[
             FlatButton(
@@ -194,7 +158,7 @@ void main() {
     testWidgets('overlay with the modal key', (tester) async {
       kNotificationSlideDuration = Duration(milliseconds: 200);
       kNotificationDuration = const Duration(milliseconds: 1000);
-      await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
+      await tester.pumpWidget(FakeOverlay(child: Builder(builder: (context) {
         return Column(
           children: <Widget>[
             FlatButton(
@@ -228,7 +192,7 @@ void main() {
   group('overlay support entry', () {
     testWidgets('find OverlaySupportEntry by context', (tester) async {
       OverlaySupportEntry? entry;
-      await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
+      await tester.pumpWidget(FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
             onPressed: () {
               showSimpleNotification(Text('message'), trailing: Builder(builder: (context) {
@@ -255,7 +219,7 @@ void main() {
 
     testWidgets('overlay support entry dimissed', (tester) async {
       OverlaySupportEntry? entry;
-      await tester.pumpWidget(_FakeOverlay(child: Builder(builder: (context) {
+      await tester.pumpWidget(FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
             onPressed: () {
               entry = showSimpleNotification(Text('message'), autoDismiss: true);
@@ -277,16 +241,20 @@ void main() {
   });
 }
 
-class _FakeOverlay extends StatelessWidget {
+class FakeOverlay extends StatelessWidget {
   final Widget child;
 
-  const _FakeOverlay({Key? key, required this.child}) : super(key: key);
+  const FakeOverlay({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GlobalOverlaySupport(
       child: MaterialApp(
-        home: child,
+        home: LocalOverlaySupport(
+          child: Scaffold(
+            body: child,
+          ),
+        ),
       ),
     );
   }
