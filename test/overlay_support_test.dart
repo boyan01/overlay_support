@@ -282,8 +282,36 @@ void main() {
 
       //find nothing because message2 was been rejected
       expect(find.text('message2'), findsNothing);
+    });
 
-      await tester.pump(const Duration(milliseconds: 1250));
+    testWidgets('overlay with the transient key', (tester) async {
+      kNotificationSlideDuration = Duration(milliseconds: 200);
+      kNotificationDuration = const Duration(milliseconds: 1000);
+      await tester.pumpWidget(FakeOverlay(child: Builder(builder: (context) {
+        return Column(
+          children: <Widget>[
+            FlatButton(
+                onPressed: () {
+                  showSimpleNotification(Text('message'), autoDismiss: false, key: TransientKey('transient'));
+                },
+                child: Text('notification')),
+            FlatButton(
+                onPressed: () {
+                  showSimpleNotification(Text('message2'), autoDismiss: false, key: TransientKey('transient'));
+                },
+                child: Text('notification2')),
+          ],
+        );
+      })));
+      await tester.tap(find.text('notification'));
+      await tester.pump();
+      expect(find.text('message'), findsOneWidget);
+
+      await tester.tap(find.text('notification2'));
+      await tester.pump();
+      // "message2" popup, "message" dismissed.
+      expect(find.text('message2'), findsOneWidget);
+      expect(find.text('message'), findsNothing);
     });
   });
 
@@ -315,7 +343,7 @@ void main() {
       assert(entry != null);
     });
 
-    testWidgets('overlay support entry dimissed', (tester) async {
+    testWidgets('overlay support entry dismissed', (tester) async {
       OverlaySupportEntry? entry;
       await tester.pumpWidget(FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
@@ -346,9 +374,9 @@ class FakeOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GlobalOverlaySupport(
+    return OverlaySupport.global(
       child: MaterialApp(
-        home: LocalOverlaySupport(
+        home: OverlaySupport.local(
           child: Scaffold(
             body: child,
           ),

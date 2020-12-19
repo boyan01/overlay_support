@@ -17,7 +17,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GlobalOverlaySupport(
+    return OverlaySupport.global(
       child: MaterialApp(
         title: 'Overlay Support Example',
         theme: ThemeData(

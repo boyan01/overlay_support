@@ -39,7 +39,7 @@ class _Screen extends StatelessWidget {
         ),
       ),
       child: ClipRect(
-        child: LocalOverlaySupport(
+        child: OverlaySupport.local(
           child: ScreenAppWidget(),
         ),
       ),
