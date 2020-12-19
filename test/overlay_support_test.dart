@@ -9,8 +9,8 @@ void main() {
     kNotificationDuration = const Duration(milliseconds: 1);
   });
 
-  group('notification', () {
-    testWidgets('notification functional test', (tester) async {
+  group("simple notification", () {
+    testWidgets("global", (tester) async {
       await tester.pumpWidget(FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
             onPressed: () {
@@ -29,7 +29,28 @@ void main() {
       expect(find.text('message'), findsNothing);
     });
 
-    testWidgets('notification hide manually', (tester) async {
+    testWidgets("local", (tester) async {
+      await tester.pumpWidget(FakeOverlay(child: Builder(builder: (context) {
+        return FlatButton(
+            onPressed: () {
+              showSimpleNotification(Text('message'), context: context);
+            },
+            child: Text('notification'));
+      })));
+      await tester.pump();
+      await tester.tap(find.byType(FlatButton));
+      await tester.pump();
+
+      expect(find.text('message'), findsOneWidget);
+      await tester.pump(const Duration(milliseconds: 50));
+
+      //already hidden
+      expect(find.text('message'), findsNothing);
+    });
+  });
+
+  group("simple notification hide by returned entry", () {
+    testWidgets("global", (tester) async {
       OverlaySupportEntry? entry;
       await tester.pumpWidget(FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
@@ -54,7 +75,34 @@ void main() {
       await tester.pump(const Duration(milliseconds: 50));
     });
 
-    testWidgets('notification hide by manual immediately', (tester) async {
+    testWidgets("local", (tester) async {
+      OverlaySupportEntry? entry;
+      await tester.pumpWidget(FakeOverlay(child: Builder(builder: (context) {
+        return FlatButton(
+            onPressed: () {
+              entry = showSimpleNotification(Text('message'), autoDismiss: false, context: context);
+            },
+            child: Text('notification'));
+      })));
+      await tester.pump();
+      await tester.tap(find.byType(FlatButton));
+      await tester.pump();
+
+      assert(entry != null, 'entry has been inited by tap event');
+      expect(find.text('message'), findsOneWidget);
+
+      entry!.dismiss(animate: false);
+      await tester.pump();
+
+      //already hidden
+      expect(find.text('message'), findsNothing);
+
+      await tester.pump(const Duration(milliseconds: 50));
+    });
+  });
+
+  group("simple notification hide immediately", () {
+    testWidgets('global', (tester) async {
       await tester.pumpWidget(FakeOverlay(child: Builder(builder: (context) {
         return FlatButton(
             onPressed: () {
@@ -74,46 +122,96 @@ void main() {
       await tester.pump(const Duration(milliseconds: 100));
       expect(find.text('message'), findsNothing);
     });
+
+    testWidgets('local', (tester) async {
+      await tester.pumpWidget(FakeOverlay(child: Builder(builder: (context) {
+        return FlatButton(
+            onPressed: () {
+              final entry = showSimpleNotification(Text('message'), autoDismiss: false, context: context);
+              //dismiss immediately
+              entry.dismiss();
+            },
+            child: Text('notification'));
+      })));
+      await tester.pump();
+      await tester.tap(find.byType(FlatButton));
+
+      await tester.pump();
+      //we got a notification in first frame
+      expect(find.text('message'), findsOneWidget);
+
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(find.text('message'), findsNothing);
+    });
   });
 
-  testWidgets('notification dismiss in duplicate Overlay', (tester) async {
-    await tester.pumpWidget(FakeOverlay(child: Builder(builder: (context) {
-      return FlatButton(
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return Overlay(initialEntries: [
-                OverlayEntry(builder: (context) {
-                  return Builder(
-                    builder: (context) {
-                      return RaisedButton(
-                          onPressed: () {
-                            showSimpleNotification(Text('message'));
-                            Navigator.pop(context);
-                          },
-                          child: Text('popup'));
-                    },
-                  );
-                })
-              ]);
-            }));
-          },
-          child: Text('new'));
-    })));
-    await tester.pump();
-    await tester.tap(find.byType(FlatButton));
+  group("simple notification behavior on back pressed", () {
+    Widget _buildTestTree({required void show(BuildContext context, Widget child)}) {
+      return FakeOverlay(child: Builder(builder: (context) {
+        return FlatButton(
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return Overlay(initialEntries: [
+                  OverlayEntry(builder: (context) {
+                    return Builder(
+                      builder: (context) {
+                        return RaisedButton(
+                            onPressed: () {
+                              show(context, Text('message'));
+                              Navigator.pop(context);
+                            },
+                            child: Text('popup'));
+                      },
+                    );
+                  })
+                ]);
+              }));
+            },
+            child: Text('new'));
+      }));
+    }
 
-    await tester.pump();
-    await tester.pump();
-    await tester.tap(find.byType(RaisedButton));
+    testWidgets('global', (tester) async {
+      await tester.pumpWidget(_buildTestTree(show: (context, child) {
+        showSimpleNotification(child);
+      }));
+      await tester.pump();
+      await tester.tap(find.byType(FlatButton));
 
-    await tester.pump();
-    await tester.pump();
-    expect(find.text('popup'), findsNothing);
-    expect(find.text('message'), findsOneWidget);
+      await tester.pump();
+      await tester.pump();
+      await tester.tap(find.byType(RaisedButton));
 
-    await tester.pump(const Duration(milliseconds: 50));
-    //already hidden
-    expect(find.text('message'), findsNothing);
+      await tester.pump();
+      await tester.pump();
+      expect(find.text('popup'), findsNothing);
+      expect(find.text('message'), findsOneWidget);
+
+      await tester.pump(const Duration(milliseconds: 50));
+      //already hidden
+      expect(find.text('message'), findsNothing);
+    });
+
+    testWidgets('local', (tester) async {
+      await tester.pumpWidget(_buildTestTree(show: (context, child) {
+        showSimpleNotification(child, context: context);
+      }));
+      await tester.pump();
+      await tester.tap(find.byType(FlatButton));
+
+      await tester.pump();
+      await tester.pump();
+      await tester.tap(find.byType(RaisedButton));
+
+      await tester.pump();
+      await tester.pump();
+      expect(find.text('popup'), findsNothing);
+      expect(find.text('message'), findsOneWidget);
+
+      await tester.pump(const Duration(milliseconds: 50));
+      //already hidden
+      expect(find.text('message'), findsNothing);
+    });
   });
 
   group('key', () {
