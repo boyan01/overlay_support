@@ -47,16 +47,13 @@ class OverlaySupportTheme extends InheritedWidget {
     required this.toastTheme,
   }) : super(key: key, child: child);
 
-  static OverlaySupportTheme of(BuildContext context) {
+  static OverlaySupportTheme? of(BuildContext context) {
     final OverlaySupportTheme? theme = context.dependOnInheritedWidgetOfExactType<OverlaySupportTheme>();
-    if (theme == null) {
-      throw FlutterError("Can not find OverlaySupportTheme.");
-    }
     return theme;
   }
 
-  static ToastThemeData toast(BuildContext context) {
-    return of(context).toastTheme;
+  static ToastThemeData? toast(BuildContext context) {
+    return of(context)?.toastTheme;
   }
 
   @override

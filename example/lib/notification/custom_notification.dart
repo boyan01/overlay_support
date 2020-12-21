@@ -33,7 +33,7 @@ class MessageNotification extends StatelessWidget {
           trailing: IconButton(
               icon: Icon(Icons.reply),
               onPressed: () {
-                if (onReply != null) onReply();
+                onReply();
               }),
         ),
       ),

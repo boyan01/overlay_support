@@ -17,22 +17,28 @@ OverlaySupportEntry showOverlayNotification(
   Duration? duration,
   Key? key,
   NotificationPosition position = NotificationPosition.top,
+  BuildContext? context,
 }) {
   if (duration == null) {
     duration = kNotificationDuration;
   }
-  return showOverlay((context, t) {
-    MainAxisAlignment alignment = MainAxisAlignment.start;
-    if (position == NotificationPosition.bottom) alignment = MainAxisAlignment.end;
-    return Column(
-      mainAxisAlignment: alignment,
-      children: <Widget>[
-        position == NotificationPosition.top
-            ? TopSlideNotification(builder: builder, progress: t)
-            : BottomSlideNotification(builder: builder, progress: t)
-      ],
-    );
-  }, duration: duration, key: key);
+  return showOverlay(
+    (context, t) {
+      MainAxisAlignment alignment = MainAxisAlignment.start;
+      if (position == NotificationPosition.bottom) alignment = MainAxisAlignment.end;
+      return Column(
+        mainAxisAlignment: alignment,
+        children: <Widget>[
+          position == NotificationPosition.top
+              ? TopSlideNotification(builder: builder, progress: t)
+              : BottomSlideNotification(builder: builder, progress: t)
+        ],
+      );
+    },
+    duration: duration,
+    key: key,
+    context: context,
+  );
 }
 
 ///
@@ -54,19 +60,22 @@ OverlaySupportEntry showOverlayNotification(
 /// [position] the position of notification, default is [NotificationPosition.top],
 /// can be [NotificationPosition.top] or [NotificationPosition.bottom].
 ///
-OverlaySupportEntry showSimpleNotification(Widget content,
-    {Widget? leading,
-    Widget? subtitle,
-    Widget? trailing,
-    EdgeInsetsGeometry? contentPadding,
-    Color? background,
-    Color? foreground,
-    double elevation = 16,
-    Duration? duration,
-    Key? key,
-    bool autoDismiss = true,
-    bool slideDismiss = false,
-    NotificationPosition position = NotificationPosition.top}) {
+OverlaySupportEntry showSimpleNotification(
+  Widget content, {
+  Widget? leading,
+  Widget? subtitle,
+  Widget? trailing,
+  EdgeInsetsGeometry? contentPadding,
+  Color? background,
+  Color? foreground,
+  double elevation = 16,
+  Duration? duration,
+  Key? key,
+  bool autoDismiss = true,
+  bool slideDismiss = false,
+  NotificationPosition position = NotificationPosition.top,
+  BuildContext? context,
+}) {
   final entry = showOverlayNotification(
     (context) {
       return SlideDismissible(
@@ -95,6 +104,7 @@ OverlaySupportEntry showSimpleNotification(Widget content,
     duration: autoDismiss ? duration : Duration.zero,
     key: key,
     position: position,
+    context: context,
   );
   return entry;
 }
