@@ -1,5 +1,6 @@
 # overlay_support 
 [![Pub](https://img.shields.io/pub/v/overlay_support.svg)](https://pub.dev/packages/overlay_support)
+[![Pub](https://img.shields.io/pub/v/overlay_support.svg?include_prereleases)](https://pub.dev/packages/overlay_support)
 [![CI](https://github.com/boyan01/overlay_support/workflows/CI/badge.svg)](https://github.com/boyan01/overlay_support/actions)
 [![codecov](https://codecov.io/gh/boyan01/overlay_support/branch/master/graph/badge.svg)](https://codecov.io/gh/boyan01/overlay_support)
 
