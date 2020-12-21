@@ -1,4 +1,11 @@
+# Chnage Log
+
+## [1.2.0-nullsafety.0] - 2020/12/21
+
+* Support multi OverlaySupport. add `OverlaySupport.local()` for local notificatiton.
+
 ## [1.1.0-nullsafety.0]
+
 * migrate to nullsafety.
 
 ## [1.0.5] - 2020/7/20
