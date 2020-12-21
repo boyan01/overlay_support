@@ -44,42 +44,65 @@ OverlaySupportEntry showOverlayNotification(
 ///
 /// Show a simple notification above the top of window.
 ///
-///
-/// [content] see more [ListTile.title].
-/// [leading] see more [ListTile.leading].
-/// [subtitle] see more [ListTile.subtitle].
-/// [trailing] see more [ListTile.trailing].
-/// [contentPadding] see more [ListTile.contentPadding].
-///
-/// [background] the background color for notification , default is [ThemeData.accentColor].
-/// [foreground] see more [ListTileTheme.textColor],[ListTileTheme.iconColor].
-///
-/// [elevation] the elevation of notification, see more [Material.elevation].
-/// [autoDismiss] true to auto hide after duration [kNotificationDuration].
-/// [slideDismiss] support left/right to dismiss notification.
-/// [position] the position of notification, default is [NotificationPosition.top],
-/// can be [NotificationPosition.top] or [NotificationPosition.bottom].
-///
 OverlaySupportEntry showSimpleNotification(
   Widget content, {
+  /**
+   * See more [ListTile.leading].
+   */
   Widget? leading,
+  /**
+   * See more [ListTile.subtitle].
+   */
   Widget? subtitle,
+  /**
+   * See more [ListTile.trailing].
+   */
   Widget? trailing,
+  /**
+   * See more [ListTile.contentPadding].
+   */
   EdgeInsetsGeometry? contentPadding,
+  /**
+   * The background color for notification, default to [ThemeData.accentColor].
+   */
   Color? background,
+  /**
+   * See more [ListTileTheme.textColor],[ListTileTheme.iconColor].
+   */
   Color? foreground,
+  /**
+   * The elevation of notification, see more [Material.elevation].
+   */
   double elevation = 16,
   Duration? duration,
   Key? key,
+  /**
+   * True to auto hide after duration [kNotificationDuration].
+   */
   bool autoDismiss = true,
-  bool slideDismiss = false,
+  /**
+   * Support left/right to dismiss notification.
+   */
+  @Deprecated("use slideDismissDirection instead") bool slideDismiss = false,
+  /**
+   * The position of notification, default is [NotificationPosition.top],
+   */
   NotificationPosition position = NotificationPosition.top,
   BuildContext? context,
+  /**
+   * The direction in which the notification can be dismissed.
+   */
+  DismissDirection? slideDismissDirection = null,
 }) {
+  final dismissDirection = slideDismissDirection != null
+      ? slideDismissDirection
+      : slideDismiss
+          ? DismissDirection.horizontal
+          : DismissDirection.none;
   final entry = showOverlayNotification(
     (context) {
       return SlideDismissible(
-        enable: slideDismiss,
+        direction: dismissDirection,
         key: ValueKey(key),
         child: Material(
           color: background ?? Theme.of(context).accentColor,
