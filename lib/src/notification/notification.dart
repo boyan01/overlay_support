@@ -27,7 +27,7 @@ class BottomSlideNotification extends StatelessWidget {
 
   final double progress;
 
-  const BottomSlideNotification({Key? key, required this.builder,required this.progress}) : super(key: key);
+  const BottomSlideNotification({Key? key, required this.builder, required this.progress}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,20 +42,26 @@ class BottomSlideNotification extends StatelessWidget {
 class SlideDismissible extends StatelessWidget {
   final Widget child;
 
-  final bool enable;
+  final DismissDirection direction;
 
-  const SlideDismissible({
-    required Key key,
+  SlideDismissible({
+    Key? key,
     required this.child,
-    required this.enable,
-  }) : super(key: key);
+    @Deprecated("use directions instead.") bool enable = true,
+    DismissDirection? direction = null,
+  })  : this.direction = direction != null
+            ? direction
+            : enable
+                ? DismissDirection.horizontal
+                : DismissDirection.none,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (!enable) return child;
     return Dismissible(
       child: child,
       key: key!,
+      direction: direction,
       onDismissed: (direction) {
         OverlaySupportEntry.of(context)!.dismiss(animate: false);
       },
