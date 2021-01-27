@@ -47,6 +47,10 @@ OverlaySupportEntry showOverlayNotification(
 OverlaySupportEntry showSimpleNotification(
   Widget content, {
   /**
+   * See more [ListTile.onTap].
+   */
+  Function? onTap,
+  /**
    * See more [ListTile.leading].
    */
   Widget? leading,
@@ -114,6 +118,7 @@ OverlaySupportEntry showSimpleNotification(
                 textColor: foreground ?? Theme.of(context).accentTextTheme.headline6?.color,
                 iconColor: foreground ?? Theme.of(context).accentTextTheme.headline6?.color,
                 child: ListTile(
+                  onTap: onTap,
                   leading: leading,
                   title: content,
                   subtitle: subtitle,
