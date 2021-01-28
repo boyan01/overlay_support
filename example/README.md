@@ -24,7 +24,7 @@ showOverlayNotification((context) {
     message: 'i love you',
     onReplay: () {
       OverlaySupportEntry.of(context).dismiss(); //use OverlaySupportEntry to dismiss overlay
-      toast(context, 'you checked this message');
+      toast('you checked this message');
     },
   );
 ```
