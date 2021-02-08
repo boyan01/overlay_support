@@ -1,3 +1,6 @@
+## [1.0.5-hotfix1] - 20201/2/9
+* remove the deprecated method which from v1.12.x in `BuildContext` , fix [#64](https://github.com/boyan01/overlay_support/issues/64)
+
 ## [1.0.5] - 2020/7/20
 * Expose duration to `showSimpleNotification` [#46](https://github.com/boyan01/overlay_support/pull/46) by [Elvis Sun](https://github.com/elvisun)
 
