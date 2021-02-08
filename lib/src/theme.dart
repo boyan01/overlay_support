@@ -50,7 +50,7 @@ class OverlaySupportTheme extends InheritedWidget {
         super(key: key, child: child);
 
   static OverlaySupportTheme of(BuildContext context) {
-    return context.inheritFromWidgetOfExactType(OverlaySupportTheme) as OverlaySupportTheme;
+    return context.dependOnInheritedWidgetOfExactType<OverlaySupportTheme>();
   }
 
   static ToastThemeData toast(BuildContext context) {
