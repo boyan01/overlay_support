@@ -11,5 +11,6 @@
         "editor.tabCompletion": "onlySnippets",
         "editor.wordBasedSuggestions": false
     },
-    "dart.lineLength": 120
+    "dart.lineLength": 120,
+    "cmake.configureOnOpen": false
 }

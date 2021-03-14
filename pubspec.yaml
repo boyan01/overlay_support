@@ -1,16 +1,16 @@
 name: overlay_support
 description: proivder support for overlay, easy to build toast and internal notification
-version: 1.2.0-nullsafety.0
+version: 1.2.0
 author: YangBin <yangbinyhbn@gmail.com>
 homepage: https://github.com/boyan01/overlay_support
 
 environment:
-  sdk: '>=2.12.0-0 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  async: ^2.5.0-nullsafety.3
+  async: ^2.5.0
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,14 @@
 # Chnage Log
 
+## 1.2.0 - 2021/3/14
+
+* The same as 1.2.0-nullsafety.0.
+* Recreate example.
+
+## [1.0.5-hotfix1] - 20201/2/9
+
+* remove the deprecated method which from v1.12.x in BuildContext , fix #64
+
 ## [1.2.0-nullsafety.0] - 2020/12/21
 
 * Support multi OverlaySupport. add `OverlaySupport.local()` for local notificatiton.
