@@ -31,7 +31,7 @@ here [https://boyan01.github.io/overlay_support/#/](https://boyan01.github.io/ov
 2. wrap your AppWidget with `OverlaySupport`
 
 ```dart #build()
-  return OverlaySupport(child: MaterialApp());
+  return OverlaySupport.global(child: MaterialApp());
 ```
 
 3. show toast or simple notifications
