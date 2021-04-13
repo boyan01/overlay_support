@@ -1,18 +1,15 @@
 import 'dart:async';
-import 'dart:collection';
 
 import 'package:async/async.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:overlay_support/src/theme.dart';
 
 import 'overlay_keys.dart';
 import 'overlay_state_finder.dart';
 
 part 'overlay_animation.dart';
-
 part 'overlay_entry.dart';
 
 /// To build a widget with animated value.
@@ -56,6 +53,8 @@ OverlaySupportEntry showOverlay(
   Duration? duration,
   Key? key,
   BuildContext? context,
+  Duration? animationDuration,
+  Duration? reverseAnimationDuration,
 }) {
   assert(key is! GlobalKey);
 
@@ -90,7 +89,8 @@ OverlaySupportEntry showOverlay(
         key: stateKey,
         builder: builder,
         curve: curve,
-        animationDuration: kNotificationSlideDuration,
+        animationDuration: animationDuration ?? kNotificationSlideDuration,
+        reverseAnimationDuration: reverseAnimationDuration ?? kNotificationSlideDuration,
         duration: duration ?? kNotificationDuration,
         overlayKey: overlayKey,
         overlaySupportState: overlaySupport,

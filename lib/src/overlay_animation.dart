@@ -5,8 +5,11 @@ class _AnimatedOverlay extends StatefulWidget {
   /// [Duration.zero] means overlay display forever.
   final Duration duration;
 
-  /// The duration overlay show/hide's animation.
+  /// The duration overlay show animation.
   final Duration animationDuration;
+
+  /// The duration overlay hide animation.
+  final Duration reverseAnimationDuration;
 
   final AnimatedOverlayWidgetBuilder builder;
 
@@ -19,6 +22,7 @@ class _AnimatedOverlay extends StatefulWidget {
   _AnimatedOverlay({
     required Key key,
     required this.animationDuration,
+    required this.reverseAnimationDuration,
     Curve? curve,
     required this.builder,
     required this.duration,
@@ -26,6 +30,7 @@ class _AnimatedOverlay extends StatefulWidget {
     required this.overlaySupportState,
   })   : curve = curve ?? Curves.easeInOut,
         assert(animationDuration >= Duration.zero),
+        assert(reverseAnimationDuration >= Duration.zero),
         assert(duration >= Duration.zero),
         super(key: key);
 
@@ -57,7 +62,10 @@ class _AnimatedOverlayState extends State<_AnimatedOverlay> with TickerProviderS
   @override
   void initState() {
     _controller = AnimationController(
-        vsync: this, duration: widget.animationDuration, debugLabel: 'AnimatedOverlayShowHideAnimation');
+        vsync: this,
+        duration: widget.animationDuration,
+        reverseDuration: widget.reverseAnimationDuration,
+        debugLabel: 'AnimatedOverlayShowHideAnimation');
     super.initState();
     final overlayEntry = widget.overlaySupportState.getEntry(key: widget.overlayKey);
     _controller.addStatusListener((status) {
