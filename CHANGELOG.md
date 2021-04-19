@@ -1,5 +1,15 @@
 # Chnage Log
 
+## Next Version
+
+* add your change here.
+
+## 1.2.1 - 2021/4/19
+
+* added reverse animation duration and implicit parameter for
+  animation. [#66](https://github.com/boyan01/overlay_support/pull/66)
+  by [petro-i](https://github.com/petro-i)
+
 ## 1.2.0 - 2021/3/14
 
 * The same as 1.2.0-nullsafety.0.
@@ -18,13 +28,20 @@
 * migrate to nullsafety.
 
 ## [1.0.5] - 2020/7/20
-* Expose duration to `showSimpleNotification` [#46](https://github.com/boyan01/overlay_support/pull/46) by [Elvis Sun](https://github.com/elvisun)
+
+* Expose duration
+  to `showSimpleNotification` [#46](https://github.com/boyan01/overlay_support/pull/46)
+  by [Elvis Sun](https://github.com/elvisun)
 
 ## [1.0.4] - 2020/5/26
-* Support for `BottomSlideNotification`. [#40](https://github.com/boyan01/overlay_support/pull/40) by [Giles Correia Morton](https://github.com/gilescm)
-* Upgrade min dart sdk version to 2.1.0. [Policy](https://dart.dev/tools/pub/publishing#publishing-prereleases)
+
+* Support for `BottomSlideNotification`. [#40](https://github.com/boyan01/overlay_support/pull/40)
+  by [Giles Correia Morton](https://github.com/gilescm)
+* Upgrade min dart sdk version to
+  2.1.0. [Policy](https://dart.dev/tools/pub/publishing#publishing-prereleases)
 
 ## [1.0.3] - 2020/3/13
+
 * expose toastTheme. by [juvs](https://github.com/juvs)
 
 ## [1.0.2] - 2019/10/23
@@ -64,7 +81,6 @@
 ## [0.0.2] - 2019/2/17
 
 * remove line limit of toast
-
 
 ## [0.0.1] - 2019/2/16
 
