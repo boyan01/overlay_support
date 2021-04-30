@@ -5,11 +5,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:pedantic/pedantic.dart';
 
 import 'overlay_keys.dart';
 import 'overlay_state_finder.dart';
 
 part 'overlay_animation.dart';
+
 part 'overlay_entry.dart';
 
 /// To build a widget with animated value.
@@ -17,7 +19,7 @@ part 'overlay_entry.dart';
 ///
 /// A simple use case is [TopSlideNotification] in [showOverlayNotification].
 ///
-typedef Widget AnimatedOverlayWidgetBuilder(BuildContext context, double progress);
+typedef AnimatedOverlayWidgetBuilder = Widget Function(BuildContext context, double progress);
 
 /// Basic api to show overlay widget.
 ///
@@ -58,8 +60,8 @@ OverlaySupportEntry showOverlay(
 }) {
   assert(key is! GlobalKey);
 
-  final OverlaySupportState? overlaySupport = findOverlayState(context: context);
-  final OverlayState? overlay = overlaySupport?.overlayState;
+  final overlaySupport = findOverlayState(context: context);
+  final overlay = overlaySupport?.overlayState;
   if (overlaySupport == null || overlay == null) {
     assert(() {
       debugPrint('overlay not available, dispose this call : $key');
@@ -82,7 +84,7 @@ OverlaySupportEntry showOverlay(
   oldSupportEntry?.dismiss(animate: !dismissImmediately);
 
   final stateKey = GlobalKey<_AnimatedOverlayState>();
-  final OverlayEntry entry = OverlayEntry(builder: (context) {
+  final entry = OverlayEntry(builder: (context) {
     return KeyedOverlay(
       key: overlayKey,
       child: _AnimatedOverlay(
@@ -97,7 +99,7 @@ OverlaySupportEntry showOverlay(
       ),
     );
   });
-  final OverlaySupportEntry supportEntry = OverlaySupportEntry(entry, overlayKey, stateKey, overlaySupport);
+  final supportEntry = OverlaySupportEntry(entry, overlayKey, stateKey, overlaySupport);
   overlaySupport.addEntry(supportEntry, key: overlayKey);
   overlay.insert(entry);
   return supportEntry;

@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
     return ListView(
       children: <Widget>[
         _Section(title: 'Notification', children: <Widget>[
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               showSimpleNotification(
                 Text("this is a message from simple notification"),
@@ -24,17 +24,16 @@ class HomePage extends StatelessWidget {
               "Auto Dimiss Notification",
             ),
           ),
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               showSimpleNotification(
                 Text("you got a simple message"),
                 trailing: Builder(builder: (context) {
-                  return FlatButton(
-                      textColor: Colors.yellow,
+                  return TextButton(
                       onPressed: () {
                         OverlaySupportEntry.of(context)!.dismiss();
                       },
-                      child: Text('Dismiss'));
+                      child: Text('Dismiss', style: TextStyle(color: Colors.amber)));
                 }),
                 background: Colors.green,
                 autoDismiss: false,
@@ -43,7 +42,7 @@ class HomePage extends StatelessWidget {
             },
             child: Text("Fixed Notification"),
           ),
-          RaisedButton(
+          ElevatedButton(
             child: Text("Bottom Notification"),
             onPressed: () {
               showSimpleNotification(
@@ -55,7 +54,7 @@ class HomePage extends StatelessWidget {
           )
         ]),
         _Section(title: 'Custom notification', children: <Widget>[
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               showOverlayNotification((context) {
                 return MessageNotification(
@@ -69,7 +68,7 @@ class HomePage extends StatelessWidget {
             },
             child: Text('custom message notification'),
           ),
-          RaisedButton(
+          ElevatedButton(
             onPressed: () async {
               final random = Random();
               for (var i = 0; i < messages.length; i++) {
@@ -89,7 +88,7 @@ class HomePage extends StatelessWidget {
           ),
         ]),
         _Section(title: 'toast', children: [
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               toast('this is a message from toast');
             },
@@ -97,7 +96,7 @@ class HomePage extends StatelessWidget {
           )
         ]),
         _Section(title: 'custom', children: [
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               showOverlay((_, t) {
                 return Theme(
@@ -111,7 +110,7 @@ class HomePage extends StatelessWidget {
             },
             child: Text('show iOS Style Dialog'),
           ),
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               showOverlay((context, t) {
                 return CustomAnimationToast(value: t);
@@ -119,7 +118,7 @@ class HomePage extends StatelessWidget {
             },
             child: Text('show custom animation overlay'),
           ),
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               showOverlay((context, t) {
                 return Container(

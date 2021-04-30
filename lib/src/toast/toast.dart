@@ -7,11 +7,11 @@ class Toast {
 
   /// Show the view or text notification for a short period of time.
   /// This time could be user-definable.
-  static const LENGTH_SHORT = const Duration(milliseconds: 2000);
+  static const LENGTH_SHORT = Duration(milliseconds: 2000);
 
   /// Show the view or text notification for a long period of time.
   /// This time could be user-definable.
-  static const LENGTH_LONG = const Duration(milliseconds: 3500);
+  static const LENGTH_LONG = Duration(milliseconds: 3500);
 }
 
 /// Popup a message in front of screen.

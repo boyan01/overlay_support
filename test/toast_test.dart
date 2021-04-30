@@ -1,6 +1,6 @@
-import 'package:overlay_support/overlay_support.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 import 'overlay_support_test.dart';
 
@@ -20,11 +20,11 @@ void main() {
     });
   });
 
-  group("zero duration", () {
+  group('zero duration', () {
     testWidgets('global', (tester) async {
       await tester.pumpWidget(FakeOverlay(
         child: Builder(builder: (context) {
-          return FlatButton(
+          return TextButton(
               onPressed: () {
                 toast('message', duration: Duration.zero);
               },
@@ -32,7 +32,7 @@ void main() {
         }),
       ));
       await tester.pump();
-      await tester.tap(find.byType(FlatButton));
+      await tester.tap(find.byType(TextButton));
       await tester.pump();
 
       expect(find.text('message'), findsNothing);
@@ -41,7 +41,7 @@ void main() {
     testWidgets('local', (tester) async {
       await tester.pumpWidget(FakeOverlay(
         child: Builder(builder: (context) {
-          return FlatButton(
+          return TextButton(
               onPressed: () {
                 toast('message', duration: Duration.zero, context: context);
               },
@@ -49,7 +49,7 @@ void main() {
         }),
       ));
       await tester.pump();
-      await tester.tap(find.byType(FlatButton));
+      await tester.tap(find.byType(TextButton));
       await tester.pump();
 
       expect(find.text('message'), findsNothing);
@@ -61,7 +61,7 @@ Future<void> basicFunction(WidgetTester tester, bool global) async {
   await tester.pumpWidget(
     FakeOverlay(
       child: Builder(builder: (context) {
-        return FlatButton(
+        return TextButton(
             onPressed: () {
               if (global) {
                 toast('message', duration: const Duration(milliseconds: 1));
@@ -74,7 +74,7 @@ Future<void> basicFunction(WidgetTester tester, bool global) async {
     ),
   );
   await tester.pump();
-  await tester.tap(find.byType(FlatButton));
+  await tester.tap(find.byType(TextButton));
   await tester.pump();
 
   expect(find.text('message'), findsOneWidget);

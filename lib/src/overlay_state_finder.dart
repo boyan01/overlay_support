@@ -12,7 +12,7 @@ OverlaySupportState? findOverlayState({BuildContext? context}) {
       'Global OverlaySupport Not Initialized ! \n'
       'ensure your app wrapped widget OverlaySupport.global',
     );
-    final OverlaySupportState? state = _keyFinder.currentState;
+    final state = _keyFinder.currentState;
     assert(() {
       if (state == null) {
         throw FlutterError('''we can not find OverlaySupportState in your app.
@@ -32,7 +32,7 @@ OverlaySupportState? findOverlayState({BuildContext? context}) {
     }());
     return state;
   }
-  final OverlaySupportState? overlaySupportState = context.findAncestorStateOfType<OverlaySupportState>();
+  final overlaySupportState = context.findAncestorStateOfType<OverlaySupportState>();
   return overlaySupportState;
 }
 
@@ -53,14 +53,14 @@ class OverlaySupport extends StatelessWidget {
   }) : super(key: key);
 
   const OverlaySupport.global({Key? key, required Widget child, ToastThemeData? toastTheme})
-      : this.child = child,
-        this.global = true,
-        this.toastTheme = toastTheme;
+      : child = child,
+        global = true,
+        toastTheme = toastTheme;
 
   const OverlaySupport.local({Key? key, required Widget child, ToastThemeData? toastTheme})
-      : this.child = child,
-        this.global = false,
-        this.toastTheme = toastTheme;
+      : child = child,
+        global = false,
+        toastTheme = toastTheme;
 
   OverlaySupportState? of(BuildContext context) {
     return context.findAncestorStateOfType<OverlaySupportState>();

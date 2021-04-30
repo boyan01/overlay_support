@@ -1,5 +1,6 @@
+include: package:pedantic/analysis_options.yaml
+
 linter:
-  # TODO: add more rules
   rules:
     - avoid_empty_else
     # - lines_longer_than_80_chars # not yet tested
