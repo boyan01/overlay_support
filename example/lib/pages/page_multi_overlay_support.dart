@@ -58,7 +58,7 @@ class ScreenAppWidget extends StatelessWidget {
       home: Container(
         color: Colors.amber,
         child: Center(
-          child: RaisedButton(
+          child: TextButton(
             child: Text("click me."),
             onPressed: () {
               toast("Hello world!", context: context);

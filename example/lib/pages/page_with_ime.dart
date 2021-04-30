@@ -10,7 +10,7 @@ class PageWithIme extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          RaisedButton(
+          ElevatedButton(
               child: Text("show toast"),
               onPressed: () {
                 toast("message");

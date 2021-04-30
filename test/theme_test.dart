@@ -18,7 +18,7 @@ void main() {
       child: MaterialApp(home: Scaffold(
         body: Center(
           child: Builder(builder: (context) {
-            return FlatButton(
+            return TextButton(
               onPressed: () {
                 theme = OverlaySupportTheme.of(context);
               },
@@ -62,6 +62,7 @@ void main() {
         )),
       );
     }
+
     await tester.pumpWidget(createWidget(theme1));
     expect(currentToastTheme, equals(theme1));
     await tester.pumpWidget(createWidget(theme2));

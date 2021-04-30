@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
     return ListView(
       children: <Widget>[
         _Section(title: 'Notification', children: <Widget>[
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               showSimpleNotification(
                 Text("this is a message from simple notification"),
@@ -24,17 +24,17 @@ class HomePage extends StatelessWidget {
               "Auto Dimiss Notification",
             ),
           ),
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               showSimpleNotification(
                 Text("you got a simple message"),
                 trailing: Builder(builder: (context) {
-                  return FlatButton(
-                      textColor: Colors.yellow,
+                  return TextButton(
                       onPressed: () {
                         OverlaySupportEntry.of(context)!.dismiss();
                       },
-                      child: Text('Dismiss'));
+                      child: Text('Dismiss',
+                          style: TextStyle(color: Colors.amber)));
                 }),
                 background: Colors.green,
                 autoDismiss: false,
@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
             },
             child: Text("Fixed Notification"),
           ),
-          RaisedButton(
+          ElevatedButton(
             child: Text("Bottom Notification"),
             onPressed: () {
               showSimpleNotification(
@@ -55,7 +55,7 @@ class HomePage extends StatelessWidget {
           )
         ]),
         _Section(title: 'Custom notification', children: <Widget>[
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               showOverlayNotification((context) {
                 return MessageNotification(
@@ -69,11 +69,12 @@ class HomePage extends StatelessWidget {
             },
             child: Text('custom message notification'),
           ),
-          RaisedButton(
+          ElevatedButton(
             onPressed: () async {
               final random = Random();
               for (var i = 0; i < messages.length; i++) {
-                await Future.delayed(Duration(milliseconds: 200 + random.nextInt(200)));
+                await Future.delayed(
+                    Duration(milliseconds: 200 + random.nextInt(200)));
                 showOverlayNotification((context) {
                   return MessageNotification(
                     message: messages[i],
@@ -82,14 +83,16 @@ class HomePage extends StatelessWidget {
                       toast('you checked this message');
                     },
                   );
-                }, duration: Duration(milliseconds: 4000), key: const ValueKey('message'));
+                },
+                    duration: Duration(milliseconds: 4000),
+                    key: const ValueKey('message'));
               }
             },
             child: Text('message sequence'),
           ),
         ]),
         _Section(title: 'toast', children: [
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               toast('this is a message from toast');
             },
@@ -97,7 +100,7 @@ class HomePage extends StatelessWidget {
           )
         ]),
         _Section(title: 'custom', children: [
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               showOverlay((_, t) {
                 return Theme(
@@ -111,7 +114,7 @@ class HomePage extends StatelessWidget {
             },
             child: Text('show iOS Style Dialog'),
           ),
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               showOverlay((context, t) {
                 return CustomAnimationToast(value: t);
@@ -119,13 +122,14 @@ class HomePage extends StatelessWidget {
             },
             child: Text('show custom animation overlay'),
           ),
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               showOverlay((context, t) {
                 return Container(
                   color: Color.lerp(Colors.transparent, Colors.black54, t),
                   child: FractionalTranslation(
-                    translation: Offset.lerp(const Offset(0, -1), const Offset(0, 0), t)!,
+                    translation: Offset.lerp(
+                        const Offset(0, -1), const Offset(0, 0), t)!,
                     child: Column(
                       children: <Widget>[
                         MessageNotification(
@@ -154,7 +158,8 @@ class _Section extends StatelessWidget {
 
   final List<Widget> children;
 
-  const _Section({Key? key, required this.title, required this.children}) : super(key: key);
+  const _Section({Key? key, required this.title, required this.children})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
