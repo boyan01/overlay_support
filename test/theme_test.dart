@@ -3,10 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 void main() {
-  testWidgets("theme", (tester) async {
-    final Color presetTextColor = Colors.white38;
+  testWidgets('theme', (tester) async {
+    final presetTextColor = Colors.white38;
     final Color presetBackground = Colors.amber;
-    final Alignment presetToastAlignment = Alignment(0.2, 0.2);
+    final presetToastAlignment = Alignment(0.2, 0.2);
 
     OverlaySupportTheme? theme;
     await tester.pumpWidget(OverlaySupport.global(
@@ -22,14 +22,14 @@ void main() {
               onPressed: () {
                 theme = OverlaySupportTheme.of(context);
               },
-              child: Text("Button"),
+              child: Text('Button'),
             );
           }),
         ),
       )),
     ));
     await tester.pump();
-    await tester.tap(find.text("Button"));
+    await tester.tap(find.text('Button'));
     await tester.pump();
     expect(theme, isNotNull);
     expect(theme?.toastTheme.textColor, equals(presetTextColor));
@@ -37,7 +37,7 @@ void main() {
     expect(theme?.toastTheme.alignment, equals(presetToastAlignment));
   });
 
-  testWidgets("theme change", (tester) async {
+  testWidgets('theme change', (tester) async {
     final theme1 = ToastThemeData(
       textColor: Colors.amber,
       background: Colors.white,
@@ -56,7 +56,7 @@ void main() {
           body: Center(
             child: Builder(builder: (context) {
               currentToastTheme = OverlaySupportTheme.toast(context);
-              return Text("Test");
+              return Text('Test');
             }),
           ),
         )),

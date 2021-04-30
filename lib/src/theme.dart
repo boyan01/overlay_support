@@ -48,8 +48,7 @@ class OverlaySupportTheme extends InheritedWidget {
   }) : super(key: key, child: child);
 
   static OverlaySupportTheme? of(BuildContext context) {
-    final OverlaySupportTheme? theme = context.dependOnInheritedWidgetOfExactType<OverlaySupportTheme>();
-    return theme;
+    return context.dependOnInheritedWidgetOfExactType<OverlaySupportTheme>();
   }
 
   static ToastThemeData? toast(BuildContext context) {

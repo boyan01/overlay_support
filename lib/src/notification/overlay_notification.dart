@@ -19,12 +19,10 @@ OverlaySupportEntry showOverlayNotification(
   NotificationPosition position = NotificationPosition.top,
   BuildContext? context,
 }) {
-  if (duration == null) {
-    duration = kNotificationDuration;
-  }
+  duration ??= kNotificationDuration;
   return showOverlay(
     (context, t) {
-      MainAxisAlignment alignment = MainAxisAlignment.start;
+      var alignment = MainAxisAlignment.start;
       if (position == NotificationPosition.bottom) alignment = MainAxisAlignment.end;
       return Column(
         mainAxisAlignment: alignment,
@@ -83,7 +81,7 @@ OverlaySupportEntry showSimpleNotification(
   /**
    * Support left/right to dismiss notification.
    */
-  @Deprecated("use slideDismissDirection instead") bool slideDismiss = false,
+  @Deprecated('use slideDismissDirection instead') bool slideDismiss = false,
   /**
    * The position of notification, default is [NotificationPosition.top],
    */
@@ -92,13 +90,10 @@ OverlaySupportEntry showSimpleNotification(
   /**
    * The direction in which the notification can be dismissed.
    */
-  DismissDirection? slideDismissDirection = null,
+  DismissDirection? slideDismissDirection,
 }) {
-  final dismissDirection = slideDismissDirection != null
-      ? slideDismissDirection
-      : slideDismiss
-          ? DismissDirection.horizontal
-          : DismissDirection.none;
+  final dismissDirection =
+      slideDismissDirection ?? (slideDismiss ? DismissDirection.horizontal : DismissDirection.none);
   final entry = showOverlayNotification(
     (context) {
       return SlideDismissible(

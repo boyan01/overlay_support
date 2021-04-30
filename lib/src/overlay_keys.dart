@@ -33,7 +33,7 @@ class ModalKey<T> extends ValueKey<T> {
   @override
   bool operator ==(other) {
     if (other.runtimeType != runtimeType) return false;
-    final ModalKey<T> typedOther = other as ModalKey<T>;
+    final typedOther = other as ModalKey<T>;
     return value == typedOther.value;
   }
 
@@ -65,7 +65,7 @@ class TransientKey<T> extends ValueKey<T> {
   @override
   bool operator ==(other) {
     if (other.runtimeType != runtimeType) return false;
-    final TransientKey<T> typedOther = other as TransientKey<T>;
+    final typedOther = other as TransientKey<T>;
     return value == typedOther.value;
   }
 

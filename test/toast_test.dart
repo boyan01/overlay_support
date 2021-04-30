@@ -20,7 +20,7 @@ void main() {
     });
   });
 
-  group("zero duration", () {
+  group('zero duration', () {
     testWidgets('global', (tester) async {
       await tester.pumpWidget(FakeOverlay(
         child: Builder(builder: (context) {
