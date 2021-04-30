@@ -55,7 +55,7 @@ class _AnimatedOverlayState extends State<_AnimatedOverlay> with TickerProviderS
     if (!immediately && !_controller.isDismissed && _controller.status == AnimationStatus.forward) {
       await _controller.forward(from: _controller.value);
     }
-    _autoHideOperation?.cancel();
+    unawaited(_autoHideOperation?.cancel());
     await _controller.reverse(from: _controller.value);
   }
 

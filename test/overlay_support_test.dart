@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:overlay_support/src/overlay.dart';
+import 'package:pedantic/pedantic.dart';
 
 void main() {
   setUp(() {
@@ -358,9 +359,9 @@ void main() {
 
       assert(entry != null);
       var dismissed = false;
-      entry!.dismissed.whenComplete(() {
+      unawaited(entry!.dismissed.whenComplete(() {
         dismissed = true;
-      });
+      }));
       await tester.pump(Duration(milliseconds: 100));
       assert(dismissed);
     });
