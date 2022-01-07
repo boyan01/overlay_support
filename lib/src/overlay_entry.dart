@@ -35,14 +35,13 @@ abstract class OverlaySupportEntry {
   }
 
   /// Dismiss the Overlay which associated with this entry.
-  /// If [animate] is false , remove entry immediately.
+  /// If [animate] is false, remove entry immediately.
   /// If [animate] is true, remove entry after [_AnimatedOverlayState.hide]
   void dismiss({bool animate = true});
 
   Future get dismissed;
 }
 
-///
 /// [OverlaySupportEntry] represent a overlay popup by [showOverlay].
 ///
 /// Provide function [dismiss] to dismiss a Notification/Overlay.
