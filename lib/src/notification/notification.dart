@@ -9,12 +9,15 @@ class TopSlideNotification extends StatelessWidget {
 
   final double progress;
 
-  const TopSlideNotification({Key? key, required this.builder, required this.progress}) : super(key: key);
+  const TopSlideNotification(
+      {Key? key, required this.builder, required this.progress})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FractionalTranslation(
-      translation: Offset.lerp(const Offset(0, -1), const Offset(0, 0), progress)!,
+      translation:
+          Offset.lerp(const Offset(0, -1), const Offset(0, 0), progress)!,
       child: builder(context),
     );
   }
@@ -27,12 +30,15 @@ class BottomSlideNotification extends StatelessWidget {
 
   final double progress;
 
-  const BottomSlideNotification({Key? key, required this.builder, required this.progress}) : super(key: key);
+  const BottomSlideNotification(
+      {Key? key, required this.builder, required this.progress})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FractionalTranslation(
-      translation: Offset.lerp(const Offset(0, 1), const Offset(0, 0), progress)!,
+      translation:
+          Offset.lerp(const Offset(0, 1), const Offset(0, 0), progress)!,
       child: builder(context),
     );
   }
@@ -49,7 +55,8 @@ class SlideDismissible extends StatelessWidget {
     required this.child,
     @Deprecated('use directions instead.') bool enable = true,
     DismissDirection? direction,
-  })  : direction = direction ?? (enable ? DismissDirection.horizontal : DismissDirection.none),
+  })  : direction = direction ??
+            (enable ? DismissDirection.horizontal : DismissDirection.none),
         super(key: key);
 
   @override

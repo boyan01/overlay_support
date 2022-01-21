@@ -23,7 +23,8 @@ OverlaySupportEntry showOverlayNotification(
   return showOverlay(
     (context, t) {
       var alignment = MainAxisAlignment.start;
-      if (position == NotificationPosition.bottom) alignment = MainAxisAlignment.end;
+      if (position == NotificationPosition.bottom)
+        alignment = MainAxisAlignment.end;
       return Column(
         mainAxisAlignment: alignment,
         children: <Widget>[
@@ -92,8 +93,8 @@ OverlaySupportEntry showSimpleNotification(
    */
   DismissDirection? slideDismissDirection,
 }) {
-  final dismissDirection =
-      slideDismissDirection ?? (slideDismiss ? DismissDirection.horizontal : DismissDirection.none);
+  final dismissDirection = slideDismissDirection ??
+      (slideDismiss ? DismissDirection.horizontal : DismissDirection.none);
   final entry = showOverlayNotification(
     (context) {
       return SlideDismissible(
@@ -106,8 +107,10 @@ OverlaySupportEntry showSimpleNotification(
               bottom: position == NotificationPosition.bottom,
               top: position == NotificationPosition.top,
               child: ListTileTheme(
-                textColor: foreground ?? Theme.of(context).accentTextTheme.headline6?.color,
-                iconColor: foreground ?? Theme.of(context).accentTextTheme.headline6?.color,
+                textColor: foreground ??
+                    Theme.of(context).accentTextTheme.headline6?.color,
+                iconColor: foreground ??
+                    Theme.of(context).accentTextTheme.headline6?.color,
                 child: ListTile(
                   leading: leading,
                   title: content,

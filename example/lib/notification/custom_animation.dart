@@ -5,7 +5,8 @@ import 'package:overlay_support_example/notification/ios_toast.dart';
 class CustomAnimationToast extends StatelessWidget {
   final double value;
 
-  static final Tween<Offset> tweenOffset = Tween<Offset>(begin: Offset(0, 40), end: Offset(0, 0));
+  static final Tween<Offset> tweenOffset =
+      Tween<Offset>(begin: Offset(0, 40), end: Offset(0, 0));
 
   static final Tween<double> tweenOpacity = Tween<double>(begin: 0, end: 1);
 

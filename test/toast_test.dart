@@ -66,7 +66,9 @@ Future<void> basicFunction(WidgetTester tester, bool global) async {
               if (global) {
                 toast('message', duration: const Duration(milliseconds: 1));
               } else {
-                toast('message', duration: const Duration(milliseconds: 1), context: context);
+                toast('message',
+                    duration: const Duration(milliseconds: 1),
+                    context: context);
               }
             },
             child: Text('toast'));
