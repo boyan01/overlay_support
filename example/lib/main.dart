@@ -45,7 +45,7 @@ class _ExampleDrawerState extends State<_ExampleDrawer> {
         child: _NavigationTiles(),
       ),
       appBar: AppBar(
-        title: Text("Overlay Support Example"),
+        title: Text('Overlay Support Example'),
         leading: IconButton(
             icon: AnimatedIcon(
                 icon: AnimatedIcons.menu_arrow,
@@ -71,11 +71,11 @@ class _NavigationTiles extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             DrawerHeader(
-              child: Container(color: Theme.of(context).accentColor),
               padding: EdgeInsets.all(0),
+              child: Container(color: Theme.of(context).colorScheme.secondary),
             ),
             ListTile(
-              title: Text("Main"),
+              title: Text('Main'),
               selected: true,
               onTap: () {
                 Navigator.of(context).pop();
@@ -83,7 +83,7 @@ class _NavigationTiles extends StatelessWidget {
             ),
             Divider(height: 0, indent: 16),
             ListTile(
-              title: Text("Multi Screen"),
+              title: Text('Multi Screen'),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => PageMultiOverlaySupport()));
@@ -91,7 +91,7 @@ class _NavigationTiles extends StatelessWidget {
             ),
             Divider(height: 0, indent: 16),
             ListTile(
-              title: Text("Star On GitHub"),
+              title: Text('Star On GitHub'),
               onTap: () {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => PageWithIme()));

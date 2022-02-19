@@ -16,18 +16,18 @@ class HomePage extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               showSimpleNotification(
-                Text("this is a message from simple notification"),
+                Text('this is a message from simple notification'),
                 background: Colors.green,
               );
             },
             child: Text(
-              "Auto Dimiss Notification",
+              'Auto Dismiss Notification',
             ),
           ),
           ElevatedButton(
             onPressed: () {
               showSimpleNotification(
-                Text("you got a simple message"),
+                Text('you got a simple message'),
                 trailing: Builder(builder: (context) {
                   return TextButton(
                       onPressed: () {
@@ -41,13 +41,13 @@ class HomePage extends StatelessWidget {
                 slideDismissDirection: DismissDirection.up,
               );
             },
-            child: Text("Fixed Notification"),
+            child: Text('Fixed Notification'),
           ),
           ElevatedButton(
-            child: Text("Bottom Notification"),
+            child: Text('Bottom Notification'),
             onPressed: () {
               showSimpleNotification(
-                Text("Hello"),
+                Text('Hello'),
                 position: NotificationPosition.bottom,
                 slideDismissDirection: DismissDirection.down,
               );
@@ -133,7 +133,7 @@ class HomePage extends StatelessWidget {
                     child: Column(
                       children: <Widget>[
                         MessageNotification(
-                          message: "Hello",
+                          message: 'Hello',
                           onReply: () {
                             OverlaySupportEntry.of(context)!.dismiss();
                           },

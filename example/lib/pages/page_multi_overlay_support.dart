@@ -5,7 +5,7 @@ class PageMultiOverlaySupport extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("multi screen.")),
+      appBar: AppBar(title: Text('multi screen.')),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Wrap(
@@ -59,9 +59,9 @@ class ScreenAppWidget extends StatelessWidget {
         color: Colors.amber,
         child: Center(
           child: TextButton(
-            child: Text("click me."),
+            child: Text('click me.'),
             onPressed: () {
-              toast("Hello world!", context: context);
+              toast('Hello world!', context: context);
             },
           ),
         ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:overlay_support/src/overlay.dart';
 import 'package:pedantic/pedantic.dart';
 
 void main() {

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:overlay_support/src/notification/notification.dart';
-import 'package:overlay_support/src/overlay.dart';
 
 /// Popup a notification at the top of screen.
 ///
@@ -23,8 +21,9 @@ OverlaySupportEntry showOverlayNotification(
   return showOverlay(
     (context, t) {
       var alignment = MainAxisAlignment.start;
-      if (position == NotificationPosition.bottom)
+      if (position == NotificationPosition.bottom) {
         alignment = MainAxisAlignment.end;
+      }
       return Column(
         mainAxisAlignment: alignment,
         children: <Widget>[
@@ -62,7 +61,7 @@ OverlaySupportEntry showSimpleNotification(
    */
   EdgeInsetsGeometry? contentPadding,
   /**
-   * The background color for notification, default to [ThemeData.accentColor].
+   * The background color for notification, default to [ColorScheme.secondary].
    */
   Color? background,
   /**
@@ -101,16 +100,16 @@ OverlaySupportEntry showSimpleNotification(
         direction: dismissDirection,
         key: ValueKey(key),
         child: Material(
-          color: background ?? Theme.of(context).accentColor,
+          color: background ?? Theme.of(context).colorScheme.secondary,
           elevation: elevation,
           child: SafeArea(
               bottom: position == NotificationPosition.bottom,
               top: position == NotificationPosition.top,
               child: ListTileTheme(
-                textColor: foreground ??
-                    Theme.of(context).accentTextTheme.headline6?.color,
-                iconColor: foreground ??
-                    Theme.of(context).accentTextTheme.headline6?.color,
+                textColor:
+                    foreground ?? Theme.of(context).colorScheme.onSecondary,
+                iconColor:
+                    foreground ?? Theme.of(context).colorScheme.onSecondary,
                 child: ListTile(
                   leading: leading,
                   title: content,

@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 class PageWithIme extends StatelessWidget {
@@ -6,14 +6,14 @@ class PageWithIme extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      appBar: AppBar(title: Text("toast with ime")),
+      appBar: AppBar(title: Text('toast with ime')),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           ElevatedButton(
-              child: Text("show toast"),
+              child: Text('show toast'),
               onPressed: () {
-                toast("message");
+                toast('message');
               }),
           TextField(autofocus: true)
         ],

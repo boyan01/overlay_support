@@ -17,8 +17,8 @@ class CustomAnimationToast extends StatelessWidget {
     return Transform.translate(
       offset: tweenOffset.transform(value),
       child: Opacity(
-        child: IosStyleToast(),
         opacity: tweenOpacity.transform(value),
+        child: IosStyleToast(),
       ),
     );
   }
