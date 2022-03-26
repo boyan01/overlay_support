@@ -18,8 +18,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
         with:
-          # only dev channel support web.
-          channel: 'dev'
+          channel: 'beta'
       - run: flutter config --enable-web
       - run: flutter pub get
 
