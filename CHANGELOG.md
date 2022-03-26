@@ -7,6 +7,8 @@
 ## 2.0.0-beta.0
 
 * fix null-aware operator unnecessary warning. [#76](https://github.com/boyan01/overlay_support/issues/76)
+* update dart sdk min version to `2.14.0`.
+* remove pedantic dependency, replace with lint instead.
 
 ## 1.2.1
 
