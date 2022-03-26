@@ -7,10 +7,12 @@ class Toast {
 
   /// Show the view or text notification for a short period of time.
   /// This time could be user-definable.
+  // ignore: constant_identifier_names
   static const LENGTH_SHORT = Duration(milliseconds: 2000);
 
   /// Show the view or text notification for a long period of time.
   /// This time could be user-definable.
+  // ignore: constant_identifier_names
   static const LENGTH_LONG = Duration(milliseconds: 3500);
 }
 

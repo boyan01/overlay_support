@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:pedantic/pedantic.dart';
 
 import 'overlay_keys.dart';
 import 'overlay_state_finder.dart';

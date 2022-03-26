@@ -57,7 +57,7 @@ class OverlaySupportTheme extends InheritedWidget {
   }
 
   @override
-  bool updateShouldNotify(OverlaySupportTheme old) {
-    return toastTheme != old.toastTheme;
+  bool updateShouldNotify(OverlaySupportTheme oldWidget) {
+    return toastTheme != oldWidget.toastTheme;
   }
 }

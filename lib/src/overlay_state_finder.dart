@@ -54,17 +54,17 @@ class OverlaySupport extends StatelessWidget {
     this.global = true,
   }) : super(key: key);
 
-  const OverlaySupport.global(
-      {Key? key, required Widget child, ToastThemeData? toastTheme})
-      : child = child,
-        global = true,
-        toastTheme = toastTheme;
+  const OverlaySupport.global({
+    Key? key,
+    required this.child,
+    this.toastTheme,
+  }) : global = true;
 
-  const OverlaySupport.local(
-      {Key? key, required Widget child, ToastThemeData? toastTheme})
-      : child = child,
-        global = false,
-        toastTheme = toastTheme;
+  const OverlaySupport.local({
+    Key? key,
+    required this.child,
+    this.toastTheme,
+  }) : global = false;
 
   OverlaySupportState? of(BuildContext context) {
     return context.findAncestorStateOfType<OverlaySupportState>();
