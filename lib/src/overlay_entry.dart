@@ -99,7 +99,7 @@ class _OverlaySupportEntryImpl implements OverlaySupportEntry {
       } else {
         //we need show animation before remove this entry
         //so need ensure entry has been inserted into screen
-        WidgetsBinding.instance?.scheduleFrameCallback((_) => animateRemove());
+        WidgetsBinding.instance.scheduleFrameCallback((_) => animateRemove());
       }
     }
 
