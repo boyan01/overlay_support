@@ -3,27 +3,31 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
+  "favicon.png": "5dcef449791fa27946b3d35ad8803796",
+"main.dart.js": "d64960e66972265b8897241f5b417995",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
-"favicon.png": "5dcef449791fa27946b3d35ad8803796",
-"manifest.json": "8bcb1590e3093567bbe238e5aeeacb40",
-"index.html": "a94334a7c061cb638acb37117313a5f0",
-"/": "a94334a7c061cb638acb37117313a5f0",
+"icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
+"canvaskit/canvaskit.js": "c2b4e5f3d7a3d82aed024e7249a78487",
+"canvaskit/profiling/canvaskit.js": "ae2949af4efc61d28a4a80fffa1db900",
+"canvaskit/profiling/canvaskit.wasm": "95e736ab31147d1b2c7b25f11d4c32cd",
+"canvaskit/canvaskit.wasm": "4b83d89d9fecbea8ca46f2f760c5a9ba",
+"version.json": "6e3af06830634fa5e15b439b09beb305",
 "assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "115e937bb829a890521f72d2e664b632",
-"assets/NOTICES": "7b2dc2509f792564191ad50804c2548e",
-"assets/fonts/MaterialIcons-Regular.otf": "4e6447691c9509f7acdbf8a931a85ca1",
+"assets/fonts/MaterialIcons-Regular.otf": "95db9098c58fd6db106f1116bae85a0b",
 "assets/AssetManifest.json": "8908ab68ab345718267adefd9fab9e9d",
-"assets/assets/avatar.png": "4fdbcd550e80841735cd6be3ce4a27d9",
+"assets/NOTICES": "444ce5d2c7eda576bdf8a553b4edf956",
 "assets/FontManifest.json": "dc3d03800ccca4601324923c0b1d6d57",
-"main.dart.js": "5e2939507002df4f8ea87353e50a8e47",
-"version.json": "2bc4e4d2013565744d7abc6e54af3e73"
+"assets/assets/avatar.png": "4fdbcd550e80841735cd6be3ce4a27d9",
+"flutter.js": "0816e65a103ba8ba51b174eeeeb2cb67",
+"index.html": "dffc795f4cc6983d70ee9e6f50161c17",
+"/": "dffc795f4cc6983d70ee9e6f50161c17",
+"manifest.json": "8bcb1590e3093567bbe238e5aeeacb40"
 };
 
 // The application shell files that are downloaded before a service worker can
 // start.
 const CORE = [
-  "/",
-"main.dart.js",
+  "main.dart.js",
 "index.html",
 "assets/NOTICES",
 "assets/AssetManifest.json",
