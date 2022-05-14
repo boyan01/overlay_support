@@ -18,9 +18,9 @@ OverlaySupportState? findOverlayState({BuildContext? context}) {
       if (state == null) {
         throw FlutterError('''we can not find OverlaySupportState in your app.
          
-         do you declare GlobalOverlaySupport you app widget tree like this?
+         do you declare OverlaySupport.global you app widget tree like this?
          
-         GlobalOverlaySupport(
+         OverlaySupport.global(
            child: MaterialApp(
              title: 'Overlay Support Example',
              home: HomePage(),
@@ -105,7 +105,7 @@ class _GlobalOverlaySupportState
       if (context.findAncestorWidgetOfExactType<_GlobalOverlaySupport>() !=
           null) {
         throw FlutterError(
-            'There is already an GlobalOverlaySupport in the Widget tree.');
+            'There is already an OverlaySupport.global in the Widget tree.');
       }
       return true;
     }());

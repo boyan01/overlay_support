@@ -1,8 +1,10 @@
 # Change Log
 
-## Next Version
+## 2.0.0
 
-* add your change here.
+* update dart sdk min version to `2.14.0`.
+* compat with flutter 3, fix null-aware operator unnecessary warning. [#76](https://github.com/boyan01/overlay_support/issues/76)
+* update docs.
 
 ## 2.0.0-beta.0
 
