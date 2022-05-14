@@ -100,8 +100,8 @@ OverlaySupportEntry showOverlay(
       ),
     );
   });
-  final supportEntry =
-      OverlaySupportEntry(entry, overlayKey, stateKey, overlaySupport);
+  final supportEntry = OverlaySupportEntry._internal(
+      entry, overlayKey, stateKey, overlaySupport);
   overlaySupport.addEntry(supportEntry, key: overlayKey);
   overlay.insert(entry);
   return supportEntry;

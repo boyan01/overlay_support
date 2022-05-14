@@ -149,7 +149,7 @@ void main() {
   });
 
   group('simple notification behavior on back pressed', () {
-    Widget _buildTestTree(
+    Widget buildTestTree(
         {required void Function(BuildContext context, Widget child) show}) {
       return FakeOverlay(child: Builder(builder: (context) {
         return TextButton(
@@ -176,7 +176,7 @@ void main() {
     }
 
     testWidgets('global', (tester) async {
-      await tester.pumpWidget(_buildTestTree(show: (context, child) {
+      await tester.pumpWidget(buildTestTree(show: (context, child) {
         showSimpleNotification(child);
       }));
       await tester.pump();
@@ -197,7 +197,7 @@ void main() {
     });
 
     testWidgets('local', (tester) async {
-      await tester.pumpWidget(_buildTestTree(show: (context, child) {
+      await tester.pumpWidget(buildTestTree(show: (context, child) {
         showSimpleNotification(child, context: context);
       }));
       await tester.pump();

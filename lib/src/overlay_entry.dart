@@ -1,7 +1,7 @@
 part of 'overlay.dart';
 
 abstract class OverlaySupportEntry {
-  factory OverlaySupportEntry(
+  factory OverlaySupportEntry._internal(
     OverlayEntry entry,
     Key key,
     GlobalKey<_AnimatedOverlayState> stateKey,
