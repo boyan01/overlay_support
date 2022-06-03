@@ -25,7 +25,6 @@ here [https://boyan01.github.io/overlay_support/#/](https://boyan01.github.io/ov
 
    * the latest version is [![Pub](https://img.shields.io/pub/v/overlay_support.svg)](https://pub.dev/packages/overlay_support)
    * For project without migrate to null safety, please use version `overlay_support: 1.0.5-hotfix1`
-   * For project works for flutter 2.x, please use version `overlay_support: ^1.2.1` 
 
 2. wrap your AppWidget with `OverlaySupport`
 
