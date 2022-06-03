@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 /// A widget that builds its child.
 /// The same as [KeyedSubtree]
@@ -32,9 +33,7 @@ class ModalKey<T> extends ValueKey<T> {
 
   @override
   bool operator ==(other) {
-    if (other.runtimeType != runtimeType) return false;
-    final typedOther = other as ModalKey<T>;
-    return value == typedOther.value;
+    return other is ModalKey<T> && value == other.value;
   }
 
   @override
@@ -64,9 +63,7 @@ class TransientKey<T> extends ValueKey<T> {
 
   @override
   bool operator ==(other) {
-    if (other.runtimeType != runtimeType) return false;
-    final typedOther = other as TransientKey<T>;
-    return value == typedOther.value;
+    return other is TransientKey<T> && value == other.value;
   }
 
   @override

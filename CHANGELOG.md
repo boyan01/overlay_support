@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.0.1
+
+* compat with version before flutter3.
+
 ## 2.0.0
 
 * update dart sdk min version to `2.14.0`.

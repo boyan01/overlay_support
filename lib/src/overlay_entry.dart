@@ -99,7 +99,8 @@ class _OverlaySupportEntryImpl implements OverlaySupportEntry {
       } else {
         //we need show animation before remove this entry
         //so need ensure entry has been inserted into screen
-        WidgetsBinding.instance.scheduleFrameCallback((_) => animateRemove());
+        _ambiguate(WidgetsBinding.instance)
+            ?.scheduleFrameCallback((_) => animateRemove());
       }
     }
 
@@ -117,6 +118,14 @@ class _OverlaySupportEntryImpl implements OverlaySupportEntry {
     _dismissedCompleter.complete();
   }
 }
+
+/// This allows a value of type T or T?
+/// to be treated as a value of type T?.
+///
+/// We use this so that APIs that have become
+/// non-nullable can still be used with `!` and `?`
+/// to support older versions of the API as well.
+T? _ambiguate<T>(T? value) => value;
 
 class _OverlaySupportEntryEmpty implements OverlaySupportEntry {
   @override
