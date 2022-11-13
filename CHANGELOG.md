@@ -1,5 +1,8 @@
 # Change Log
 
+## 2.1.0
+* toast now didn't interrupt pointer event anymore.
+
 ## 2.0.1
 
 * compat with version before flutter3.
