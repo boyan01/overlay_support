@@ -21,8 +21,11 @@ class Toast {
 /// [duration] : the duration to show a toast,
 /// for most situation, you can use [Toast.LENGTH_SHORT] and [Toast.LENGTH_LONG]
 ///
-void toast(String message,
-    {Duration duration = Toast.LENGTH_SHORT, BuildContext? context}) {
+void toast(
+  String message, {
+  Duration duration = Toast.LENGTH_SHORT,
+  BuildContext? context,
+}) {
   if (duration <= Duration.zero) {
     //fast fail
     return;
@@ -30,7 +33,12 @@ void toast(String message,
 
   showOverlay(
     (context, t) {
-      return Opacity(opacity: t, child: _Toast(content: Text(message)));
+      return IgnorePointer(
+        child: Opacity(
+          opacity: t,
+          child: _Toast(content: Text(message)),
+        ),
+      );
     },
     curve: Curves.ease,
     key: const ValueKey('overlay_toast'),
