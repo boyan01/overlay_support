@@ -37,7 +37,7 @@ class ModalKey<T> extends ValueKey<T> {
   }
 
   @override
-  int get hashCode => hashValues(runtimeType, value);
+  int get hashCode => Object.hash(runtimeType, value);
 }
 
 ///
@@ -67,5 +67,5 @@ class TransientKey<T> extends ValueKey<T> {
   }
 
   @override
-  int get hashCode => hashValues(runtimeType, value);
+  int get hashCode => Object.hash(runtimeType, value);
 }
