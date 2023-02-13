@@ -7,17 +7,23 @@ import 'package:overlay_support/overlay_support.dart';
 /// if null , will be set to [kNotificationDuration].
 /// if zero , will not auto dismiss in the future.
 ///
+/// [animationDuration] the notification display or hidden animation duration..
+/// if null , will be set to [kNotificationSlideDuration].
+/// if zero , will display/hide immediately.
+///
 /// [position] the position of notification, default is [NotificationPosition.top],
 /// can be [NotificationPosition.top] or [NotificationPosition.bottom].
 ///
 OverlaySupportEntry showOverlayNotification(
   WidgetBuilder builder, {
   Duration? duration,
+  Duration? animationDuration,
   Key? key,
   NotificationPosition position = NotificationPosition.top,
   BuildContext? context,
 }) {
   duration ??= kNotificationDuration;
+  animationDuration ??= kNotificationSlideDuration;
   return showOverlay(
     (context, t) {
       var alignment = MainAxisAlignment.start;
@@ -34,6 +40,7 @@ OverlaySupportEntry showOverlayNotification(
       );
     },
     duration: duration,
+    animationDuration: animationDuration,
     key: key,
     context: context,
   );
@@ -73,6 +80,7 @@ OverlaySupportEntry showSimpleNotification(
    */
   double elevation = 16,
   Duration? duration,
+  Duration? animationDuration,
   Key? key,
   /**
    * True to auto hide after duration [kNotificationDuration].
@@ -122,6 +130,7 @@ OverlaySupportEntry showSimpleNotification(
       );
     },
     duration: autoDismiss ? duration : Duration.zero,
+    animationDuration: animationDuration,
     key: key,
     position: position,
     context: context,
