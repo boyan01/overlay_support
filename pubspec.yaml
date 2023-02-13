@@ -1,6 +1,6 @@
 name: overlay_support
 description: provider support for overlay, easy to build toast and internal notification
-version: 2.1.1
+version: 2.1.2
 homepage: https://github.com/boyan01/overlay_support
 
 environment:
