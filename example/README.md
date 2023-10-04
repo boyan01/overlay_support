@@ -112,6 +112,50 @@ class IosStyleToast extends StatelessWidget {
 
 ```
 
+## Binding to BuildContext
+
+overlay could be binded to BuildContext so it's not shown when we push another route above and is shown again when we pop it.
+
+for it you should use OverlaySupport.local, wrap your screen with it and then use context which is under OverlaySupport.local to showOverlay
+
+```dart OverlaySupport.local example
+class OverlaySupportExample extends StatelessWidget {
+  const OverlaySupportExample({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext upperContext) {
+    return OverlaySupport.local(
+      child: Builder(builder: (context) {/// be sure you use this context and not upperContext 
+        return Card(
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          child: SafeArea(
+            child: ListTile(
+              leading: SizedBox.fromSize(
+                  size: const Size(40, 40),
+                  child: ClipOval(child: Image.asset('assets/avatar.png'))),
+              title: Text('Lily MacDonald'),
+              subtitle: Text('Do you want to see a movie?'),
+              trailing: IconButton(
+                icon: Icon(Icons.reply),
+                onPressed: () {
+                  showOverlayNotification(
+                    context: context,
+                    duration: Duration.zero,
+                    (context) {
+                      return Container();
+                    },
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      }),
+    );
+  }
+}
+```
+
 ## End
 
 if you have some suggestion or advice, please open an issue to let me known. 
